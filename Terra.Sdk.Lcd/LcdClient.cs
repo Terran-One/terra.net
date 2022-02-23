@@ -1,12 +1,19 @@
-﻿namespace Terra.Sdk.Lcd
+using System;
+using System.Net.Http;
+using Terra.Sdk.Lcd.Api;
+
+namespace Terra.Sdk.Lcd
 {
     public class LcdClient
     {
-        private readonly LcdClientConfig _config;
+        public BankApi Bank { get; }
 
         public LcdClient(LcdClientConfig config)
         {
-            _config = config;
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(config.Url);
+
+            Bank = new BankApi(httpClient);
         }
     }
 }
