@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Terra.Sdk.Lcd.Dto
+namespace Terra.Sdk.Lcd.Models
 {
     public class Pagination
     {
@@ -8,6 +8,6 @@ namespace Terra.Sdk.Lcd.Dto
         public string NextKey { get; set; }
 
         [JsonProperty("total")]
-        public int Total { get; set; }
+        public int? TotalCount { get; set; }
     }
 }

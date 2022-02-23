@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using Terra.Sdk.Lcd.Api;
 
 namespace Terra.Sdk.Lcd
@@ -10,10 +8,7 @@ namespace Terra.Sdk.Lcd
 
         public LcdClient(LcdClientConfig config)
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(config.Url);
-
-            Bank = new BankApi(httpClient);
+            Bank = new BankApi(config.HttpClient);
         }
     }
 }

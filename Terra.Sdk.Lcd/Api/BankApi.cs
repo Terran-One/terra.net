@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
-using Newtonsoft.Json;
-using Terra.Sdk.Lcd.Dto;
 using Terra.Sdk.Lcd.Models;
+using Terra.Sdk.Lcd.Models.Entities;
 
 namespace Terra.Sdk.Lcd.Api
 {
@@ -18,51 +14,14 @@ namespace Terra.Sdk.Lcd.Api
             _httpClient = httpClient;
         }
 
-        public async Task<Result<Dto.Coin[]>> Balance(string address, PaginationOptions pagination = null, IDictionary<string, object> apiParams = null)
+        public async Task<Model<Coin[]>> Balance(string address, QueryParams queryParams = null)
         {
-            var response = await _httpClient.GetAsync($"/cosmos/bank/v1beta1/balances/{address}{GetParams(pagination, apiParams)}");
-            if (!response.IsSuccessStatusCode)
-                return new Result<Dto.Coin[]>($"Fetch failed: {response.ReasonPhrase}"); // ToDo: something better than this
-
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
-            {
-                data = Array.Empty<Dto.Coin>(),
-                pagination = new Pagination()
-            });
-
-            return new Result<Dto.Coin[]>(json.data, json.pagination);
+            return await Coin.Balance(address, _httpClient, queryParams);
         }
 
-        public async Task<Result<Dto.Coin[]>> Total(PaginationOptions pagination = null, IDictionary<string, object> apiParams = null)
+        public async Task<Model<Coin[]>> Total(QueryParams queryParams = null)
         {
-            var response = await _httpClient.GetAsync($"/cosmos/bank/v1beta1/supply{GetParams(pagination, apiParams)}");
-            if (!response.IsSuccessStatusCode)
-                return new Result<Dto.Coin[]>($"Fetch failed: {response.ReasonPhrase}");
-
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
-            {
-                supply = Array.Empty<Dto.Coin>(),
-                pagination = new Pagination()
-            });
-
-            return new Result<Dto.Coin[]>(json.supply, json.pagination);
-        }
-
-        private static string GetParams(PaginationOptions pagination = null,
-            IDictionary<string, object> apiParams = null)
-        {
-            var paginationParams = pagination?.ToString();
-            if (string.IsNullOrWhiteSpace(paginationParams))
-                paginationParams = "?";
-            else
-                paginationParams += "&";
-
-            var api = HttpUtility.ParseQueryString(string.Empty);
-            foreach (var kvp in apiParams)
-                api[kvp.Key] = kvp.Value.ToString();
-
-            paginationParams += api.ToString();
-            return paginationParams.TrimEnd('&');
+            return await Coin.Total(_httpClient, queryParams);
         }
     }
 }
