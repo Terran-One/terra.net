@@ -13,11 +13,11 @@ namespace Terra.Sdk.Lcd.Models.Entities
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
-        public static async Task<Model<Coin[]>> Balance(string address, HttpClient httpClient, QueryParams queryParams = null)
+        internal static async Task<Entity<Coin[]>> Balance(string address, HttpClient httpClient, QueryParams queryParams = null)
         {
             var response = await httpClient.GetAsync($"/cosmos/bank/v1beta1/balances/{address}{queryParams}");
             if (!response.IsSuccessStatusCode)
-                return new Model<Coin[]>($"Fetch failed: {response.ReasonPhrase}");
+                return new Entity<Coin[]>($"Fetch failed: {response.ReasonPhrase}");
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
@@ -25,14 +25,14 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new Pagination()
             });
 
-            return new Model<Coin[]>(json.data, json.pagination);
+            return new Entity<Coin[]>(json.data, json.pagination);
         }
 
-        public static async Task<Model<Coin[]>> Total(HttpClient httpClient, QueryParams queryParams = null)
+        internal static async Task<Entity<Coin[]>> Total(HttpClient httpClient, QueryParams queryParams = null)
         {
             var response = await httpClient.GetAsync($"/cosmos/bank/v1beta1/supply{queryParams}");
             if (!response.IsSuccessStatusCode)
-                return new Model<Coin[]>($"Fetch failed: {response.ReasonPhrase}");
+                return new Entity<Coin[]>($"Fetch failed: {response.ReasonPhrase}");
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
@@ -40,7 +40,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new Pagination()
             });
 
-            return new Model<Coin[]>(json.supply, json.pagination);
+            return new Entity<Coin[]>(json.supply, json.pagination);
         }
     }
 }
