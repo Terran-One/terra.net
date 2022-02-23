@@ -14,12 +14,12 @@ namespace Terra.Sdk.Lcd.Api
             _httpClient = httpClient;
         }
 
-        public async Task<Entity<Coin[]>> Balance(string address, QueryParams queryParams = null)
+        public async Task<Result<Coin[]>> Balance(string address, QueryParams queryParams = null)
         {
             return await Coin.Balance(address, _httpClient, queryParams);
         }
 
-        public async Task<Entity<Coin[]>> Total(QueryParams queryParams = null)
+        public async Task<Result<Coin[]>> Total(QueryParams queryParams = null)
         {
             return await Coin.Total(_httpClient, queryParams);
         }

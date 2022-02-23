@@ -1,15 +1,15 @@
 namespace Terra.Sdk.Lcd.Models
 {
-    public readonly struct Entity<T> where T: class
+    public readonly struct Result<T> where T: class
     {
-        public Entity(T value, Pagination pagination)
+        public Result(T value, Pagination pagination)
         {
             Value = value;
             Pagination = pagination;
             Error = null;
         }
 
-        public Entity(string error)
+        public Result(string error)
         {
             Value = null;
             Pagination = null;
