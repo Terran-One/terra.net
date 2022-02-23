@@ -28,7 +28,7 @@ namespace Terra.Sdk.Lcd
         /// <summary>
         /// Http client connecting to <see cref="Url" />.
         /// </summary>
-        public HttpClient HttpClient => _httpClient ?? (_httpClient = new HttpClient { BaseAddress = new Uri(Url) });
+        internal HttpClient HttpClient => _httpClient ?? (_httpClient = new HttpClient { BaseAddress = new Uri(Url) });
         private HttpClient _httpClient;
     }
 }
