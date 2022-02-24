@@ -1,14 +1,14 @@
-using Terra.Sdk.Lcd.Api;
+using Terra.Sdk.Lcd.Models.Entities;
 
 namespace Terra.Sdk.Lcd
 {
     public class LcdClient
     {
-        public BankApi Bank { get; }
+        public Coin Bank { get; }
 
         public LcdClient(LcdClientConfig config)
         {
-            Bank = new BankApi(config.HttpClient);
+            Bank = new Coin(config.HttpClient);
         }
     }
 }

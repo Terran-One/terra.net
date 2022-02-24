@@ -7,15 +7,22 @@ namespace Terra.Sdk.Lcd.Models.Entities
 {
     public class Coin
     {
+        private readonly HttpClient _httpClient;
+
         [JsonProperty("denom")]
         public string Denom { get; set; }
 
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
-        internal static async Task<Result<Coin[]>> Balance(string address, HttpClient httpClient, QueryParams queryParams = null)
+        public Coin(HttpClient httpClient)
         {
-            var response = await httpClient.GetAsync($"/cosmos/bank/v1beta1/balances/{address}{queryParams}");
+            _httpClient = httpClient;
+        }
+
+        public async Task<Result<Coin[]>> Balance(string address, QueryParams queryParams = null)
+        {
+            var response = await _httpClient.GetAsync($"/cosmos/bank/v1beta1/balances/{address}{queryParams}");
             if (!response.IsSuccessStatusCode)
                 return new Result<Coin[]>($"Fetch failed: {response.ReasonPhrase}");
 
@@ -27,12 +34,12 @@ namespace Terra.Sdk.Lcd.Models.Entities
 
             return new Result<Coin[]>(
                 json.data, json.pagination.next_key, json.pagination.total, queryParams,
-                qp => Balance(address, httpClient, qp));
+                qp => Balance(address, qp));
         }
 
-        internal static async Task<Result<Coin[]>> Total(HttpClient httpClient, QueryParams queryParams = null)
+        public async Task<Result<Coin[]>> Total(QueryParams queryParams = null)
         {
-            var response = await httpClient.GetAsync($"/cosmos/bank/v1beta1/supply{queryParams}");
+            var response = await _httpClient.GetAsync($"/cosmos/bank/v1beta1/supply{queryParams}");
             if (!response.IsSuccessStatusCode)
                 return new Result<Coin[]>($"Fetch failed: {response.ReasonPhrase}");
 
@@ -44,7 +51,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
 
             return new Result<Coin[]>(
                 json.supply, json.pagination.next_key, json.pagination.total, queryParams,
-                qp => Total(httpClient, qp));
+                qp => Total(qp));
         }
     }
 }
