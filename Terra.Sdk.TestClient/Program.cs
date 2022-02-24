@@ -2,12 +2,11 @@
 using System.Linq;
 using Terra.Sdk.Lcd;
 
-var config = new LcdClientConfig
+var lcdClient = new LcdClient(new LcdClientConfig
 {
     Url = "https://fcd.terra.dev",
     ChainId = "columbus-5"
-};
-var lcdClient = new LcdClient(config);
+});
 
 var result1 = await lcdClient.Bank.Total(isDescending: true, getTotalCount: true);
 var value1 = result1.Value;
