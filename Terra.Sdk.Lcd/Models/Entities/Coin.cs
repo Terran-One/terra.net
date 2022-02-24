@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -14,12 +14,19 @@ namespace Terra.Sdk.Lcd.Models.Entities
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
+        /// <remarks>
+        /// For serialization.
+        /// </remarks>
+        public Coin()
+        {
+        }
+
         public Coin(LcdClient lcdClient)
         {
             _lcdClient = lcdClient;
         }
 
-        public async Task<Result<Coin>> Balance(string address, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        public async Task<Result<Coin>> GetBalance(string address, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/bank/v1beta1/balances/{address}{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
             if (!response.IsSuccessStatusCode)
@@ -27,7 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
-                data = Array.Empty<Coin>(),
+                data = new List<Coin>(),
                 pagination = new { next_key = "", total = 0 }
             });
 
@@ -40,7 +47,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
             };
         }
 
-        public async Task<Result<Coin>> Total(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        public async Task<Result<Coin>> GetTotal(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/bank/v1beta1/supply{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
             if (!response.IsSuccessStatusCode)
@@ -48,7 +55,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
-                supply = Array.Empty<Coin>(),
+                supply = new List<Coin>(),
                 pagination = new { next_key = "", total = 0 }
             });
 

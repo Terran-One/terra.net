@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Terra.Sdk.Lcd.Models
 {
     public class Result<TEntity> where TEntity: class
@@ -5,7 +7,7 @@ namespace Terra.Sdk.Lcd.Models
         /// <summary>
         /// Returned entity, or null if there was an error.
         /// </summary>
-        public TEntity[] Value { get; set; }
+        public List<TEntity> Value { get; set; }
 
         /// <summary>
         /// Total record count, if returned.
