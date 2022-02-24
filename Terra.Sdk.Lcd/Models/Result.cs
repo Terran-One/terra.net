@@ -23,7 +23,7 @@ namespace Terra.Sdk.Lcd.Models
         {
             Value = value;
             NextPageQueryParams = GetNextPageQueryParams(queryParams, pagination);
-            NextPage = () => nextPage(NextPageQueryParams);
+            NextPage = () => NextPageQueryParams == null ? null : nextPage(NextPageQueryParams);
         }
 
         /// <summary>
