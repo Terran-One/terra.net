@@ -34,9 +34,9 @@ namespace Terra.Sdk.Lcd.Models
         public bool? GetTotalCount { get; set; }
 
         /// <summary>
-        /// Set to false if results are to be returned in the descending order. Defaults to true.
+        /// Set to true if results are to be returned in the descending order.
         /// </summary>
-        public bool? IsAscending { get; set; } = true;
+        public bool? IsDescending { get; set; } = true;
 
         /// <returns>
         /// A query string (including the '?' prefix), to be appended to a URL.
@@ -56,8 +56,8 @@ namespace Terra.Sdk.Lcd.Models
             if (GetTotalCount.HasValue)
                 query["pagination.count_total"] = GetTotalCount.ToString();
 
-            if (IsAscending.HasValue)
-                query["pagination.reverse"] = IsAscending.ToString();
+            if (IsDescending.HasValue)
+                query["pagination.reverse"] = IsDescending.ToString();
 
             var paramsString = query.ToString();
             return string.IsNullOrWhiteSpace(paramsString) ? null : $"?{paramsString}";
