@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-
 namespace Terra.Sdk.Lcd
 {
     public class LcdClientConfig
@@ -26,9 +23,8 @@ namespace Terra.Sdk.Lcd
         public decimal GasAdjustment { get; set; }
 
         /// <summary>
-        /// Http client connecting to <see cref="Url" />.
+        /// Total number of records to return in a page. Defaults to 10;
         /// </summary>
-        internal HttpClient HttpClient => _httpClient ?? (_httpClient = new HttpClient { BaseAddress = new Uri(Url) });
-        private HttpClient _httpClient;
+        public int PageSize { get; set; } = 10;
     }
 }

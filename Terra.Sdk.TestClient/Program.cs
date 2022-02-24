@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Terra.Sdk.Lcd;
-using Terra.Sdk.Lcd.Models;
 
 var config = new LcdClientConfig
 {
@@ -10,20 +9,14 @@ var config = new LcdClientConfig
 };
 var lcdClient = new LcdClient(config);
 
-var queryParams = new QueryParams
-{
-    IsDescending = true,
-    GetTotalCount = true
-};
-
-var result1 = await lcdClient.Bank.Total(queryParams);
+var result1 = await lcdClient.Bank.Total(isDescending: true, getTotalCount: true);
 var value1 = result1.Value;
 Console.WriteLine($"Page#1: {string.Join("; ", value1.Select(c => $"{c.Denom} {c.Amount}"))}");
 
-var result2 = await result1.NextPage();
+var result2 = await lcdClient.Bank.Total(isDescending: true, getTotalCount: true, paginationKey: result1.NextPageKey);
 var value2 = result2.Value;
 Console.WriteLine($"Page#2: {string.Join("; ", value2.Select(c => $"{c.Denom} {c.Amount}"))}");
 
-var result3 = await result2.NextPage();
+var result3 = await lcdClient.Bank.Total(isDescending: true, getTotalCount: true, paginationKey: result2.NextPageKey);
 var value3 = result3.Value;
 Console.WriteLine($"Page#3: {string.Join("; ", value3.Select(c => $"{c.Denom} {c.Amount}"))}");
