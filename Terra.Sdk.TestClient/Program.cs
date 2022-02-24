@@ -8,13 +8,13 @@ var config = new LcdClientConfig
     Url = "https://fcd.terra.dev",
     ChainId = "columbus-5"
 };
+var lcdClient = new LcdClient(config);
+
 var queryParams = new QueryParams
 {
     IsDescending = true,
     GetTotalCount = true
 };
-
-var lcdClient = new LcdClient(config);
 
 var result1 = await lcdClient.Bank.Total(queryParams);
 var value1 = result1.Value;
