@@ -25,7 +25,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new Pagination()
             });
 
-            return new Result<Coin[]>(json.data, json.pagination);
+            return new Result<Coin[]>(json.data, json.pagination, queryParams, qp => Balance(address, httpClient, qp));
         }
 
         internal static async Task<Result<Coin[]>> Total(HttpClient httpClient, QueryParams queryParams = null)
@@ -40,7 +40,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new Pagination()
             });
 
-            return new Result<Coin[]>(json.supply, json.pagination);
+            return new Result<Coin[]>(json.supply, json.pagination, queryParams, qp => Total(httpClient, qp));
         }
     }
 }
