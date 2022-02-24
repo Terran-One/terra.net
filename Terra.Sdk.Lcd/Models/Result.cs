@@ -7,22 +7,22 @@ namespace Terra.Sdk.Lcd.Models
     {
         public Result(string error)
         {
-            Value = null;
-            NextPageQueryParams = null;
             Error = error;
         }
 
-        public Result(T value, QueryParams nextPageQueryParams, Func<QueryParams, Task<Result<T>>> nextPage)
+        public Result(T value, int? totalCount, QueryParams nextPageQueryParams, Func<QueryParams, Task<Result<T>>> nextPage)
         {
             Value = value;
+            TotalCount = totalCount;
             NextPageQueryParams = nextPageQueryParams;
-            NextPage = () => nextPage(NextPageQueryParams);
+            NextPage = () => nextPageQueryParams == null ? null : nextPage(NextPageQueryParams);
         }
 
-        internal Result(T value, Pagination pagination, QueryParams queryParams, Func<QueryParams, Task<Result<T>>> nextPage)
+        internal Result(T value, string nextKey, int? totalCount, QueryParams queryParams, Func<QueryParams, Task<Result<T>>> nextPage)
         {
             Value = value;
-            NextPageQueryParams = GetNextPageQueryParams(queryParams, pagination);
+            TotalCount = totalCount;
+            NextPageQueryParams = GetNextPageQueryParams(queryParams, nextKey);
             NextPage = () => NextPageQueryParams == null ? null : nextPage(NextPageQueryParams);
         }
 
@@ -30,6 +30,11 @@ namespace Terra.Sdk.Lcd.Models
         /// Model value, or null if there was an error.
         /// </summary>
         public T Value { get; }
+
+        /// <summary>
+        /// Total record count, if returned.
+        /// </summary>
+        public int? TotalCount { get; }
 
         /// <summary>
         /// Query parameters for retrieving the next page.
@@ -47,18 +52,18 @@ namespace Terra.Sdk.Lcd.Models
         /// </summary>
         public Func<Task<Result<T>>> NextPage { get; }
 
-        private static QueryParams GetNextPageQueryParams(QueryParams queryParams, Pagination pagination)
+        private static QueryParams GetNextPageQueryParams(QueryParams queryParams, string nextKey)
         {
-            // If neither queryParams nor pagination supplied, return null
-            if (queryParams == null && string.IsNullOrWhiteSpace(pagination?.NextKey))
+            // If neither queryParams nor nextKey supplied, return null
+            if (queryParams == null && string.IsNullOrWhiteSpace(nextKey))
                 return null;
 
-            // If queryParams not supplied but pagination supplied, create new QueryParams and initialise with pagination
+            // If queryParams not supplied but pagination supplied, create new QueryParams and initialise with nextKey
             if (queryParams == null)
-                return new QueryParams { Key = pagination.NextKey };
+                return new QueryParams { Key = nextKey };
 
-            // If both supplied, update queryParams with pagination
-            return queryParams.Next(pagination);
+            // If both supplied, update queryParams with nextKey
+            return queryParams.Next(nextKey);
         }
     }
 }

@@ -63,10 +63,10 @@ namespace Terra.Sdk.Lcd.Models
             return string.IsNullOrWhiteSpace(paramsString) ? null : $"?{paramsString}";
         }
 
-        internal QueryParams Next(Pagination pagination)
+        internal QueryParams Next(string nextKey)
         {
             var next = (QueryParams)MemberwiseClone();
-            next.Key = pagination?.NextKey;
+            next.Key = nextKey;
 
             if (string.IsNullOrWhiteSpace(next.Key) && PageNumber.HasValue)
                 next.PageNumber = PageNumber + 1;
