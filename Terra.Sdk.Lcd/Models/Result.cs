@@ -50,7 +50,7 @@ namespace Terra.Sdk.Lcd.Models
         private static QueryParams GetNextPageQueryParams(QueryParams queryParams, Pagination pagination)
         {
             // If neither queryParams nor pagination supplied, return null
-            if (queryParams == null && pagination == null)
+            if (queryParams == null && string.IsNullOrWhiteSpace(pagination?.NextKey))
                 return null;
 
             // If queryParams not supplied but pagination supplied, create new QueryParams and initialise with pagination
