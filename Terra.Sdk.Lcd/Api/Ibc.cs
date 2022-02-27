@@ -5,11 +5,11 @@ using Terra.Sdk.Lcd.Models.Entities;
 
 namespace Terra.Sdk.Lcd.Api
 {
-    public class IbcClient
+    public class Ibc
     {
         private readonly LcdClient _client;
 
-        public IbcClient(LcdClient client)
+        public Ibc(LcdClient client)
         {
             _client = client;
         }

@@ -20,7 +20,8 @@ namespace Terra.Sdk.Lcd
             Distribution = new Distribution(this);
             FeeGrant = new FeeGrant(this);
             Gov = new Gov(this);
-            IbcClient = new IbcClient(this);
+            Ibc = new Ibc(this);
+            IbcTransfer = new IbcTransfer(this);
         }
 
         public Auth Auth { get; }
@@ -28,7 +29,8 @@ namespace Terra.Sdk.Lcd
         public Distribution Distribution { get; }
         public FeeGrant FeeGrant { get; }
         public Gov Gov { get; }
-        public IbcClient IbcClient { get; }
+        public Ibc Ibc { get; }
+        public IbcTransfer IbcTransfer { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
