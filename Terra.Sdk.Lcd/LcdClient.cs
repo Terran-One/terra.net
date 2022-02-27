@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Web;
+using Terra.Sdk.Lcd.Api;
 using Terra.Sdk.Lcd.Models.Entities;
 
 namespace Terra.Sdk.Lcd

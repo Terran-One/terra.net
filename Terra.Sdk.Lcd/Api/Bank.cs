@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Models;
 
-namespace Terra.Sdk.Lcd.Models.Entities
+namespace Terra.Sdk.Lcd.Api
 {
     /// <remarks>
     /// ToDo: I hate this - need to replace it with something better.
