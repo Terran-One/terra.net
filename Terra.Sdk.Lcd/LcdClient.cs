@@ -19,12 +19,16 @@ namespace Terra.Sdk.Lcd
             Bank = new Bank(this);
             Distribution = new Distribution(this);
             FeeGrant = new FeeGrant(this);
+            Gov = new Gov(this);
+            IbcClient = new IbcClient(this);
         }
 
         public Auth Auth { get; }
         public Bank Bank { get; }
         public Distribution Distribution { get; }
         public FeeGrant FeeGrant { get; }
+        public Gov Gov { get; }
+        public IbcClient IbcClient { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
