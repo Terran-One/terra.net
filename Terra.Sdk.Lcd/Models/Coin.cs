@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace Terra.Sdk.Lcd.Models.Entities
+namespace Terra.Sdk.Lcd.Models
 {
     [Serializable]
     public readonly struct Coin: ISerializable
