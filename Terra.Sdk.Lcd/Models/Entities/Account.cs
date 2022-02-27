@@ -19,12 +19,12 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
         }
 
-        public Account(LcdClient lcdClient)
+        internal Account(LcdClient lcdClient)
         {
             _lcdClient = lcdClient;
         }
 
-        public async Task<Result<Account>> Get(string address)
+        internal async Task<Result<Account>> Get(string address)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/auth/v1beta1/accounts/{address}");
             if (!response.IsSuccessStatusCode)

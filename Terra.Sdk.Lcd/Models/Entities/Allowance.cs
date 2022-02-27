@@ -24,12 +24,12 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
         }
 
-        public Allowance(LcdClient lcdClient)
+        internal Allowance(LcdClient lcdClient)
         {
             _lcdClient = lcdClient;
         }
 
-        public async Task<Result<Allowance>> Get(string granter, string grantee)
+        internal async Task<Result<Allowance>> Get(string granter, string grantee)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}");
             if (!response.IsSuccessStatusCode)
@@ -51,7 +51,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
             };
         }
 
-        public async Task<PaginatedResult<Allowance>> GetAll(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        internal async Task<PaginatedResult<Allowance>> GetAll(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/feegrant/v1beta1/allowances/{grantee}{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
             if (!response.IsSuccessStatusCode)

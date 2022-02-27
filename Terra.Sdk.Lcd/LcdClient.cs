@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Web;
 using Terra.Sdk.Lcd.Api;
-using Terra.Sdk.Lcd.Models.Entities;
 
 namespace Terra.Sdk.Lcd
 {
@@ -16,14 +15,16 @@ namespace Terra.Sdk.Lcd
             Config = config;
             HttpClient = new HttpClient {BaseAddress = new Uri(config.Url)};
 
+            Auth = new Auth(this);
             Bank = new Bank(this);
-            Allowance = new Allowance(this);
-            Account = new Account(this);
+            Distribution = new Distribution(this);
+            FeeGrant = new FeeGrant(this);
         }
 
+        public Auth Auth { get; }
         public Bank Bank { get; }
-        public Allowance Allowance { get; }
-        public Account Account { get; }
+        public Distribution Distribution { get; }
+        public FeeGrant FeeGrant { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {

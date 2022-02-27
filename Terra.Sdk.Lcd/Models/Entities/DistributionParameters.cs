@@ -8,7 +8,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
     {
         private readonly LcdClient _client;
 
-        public DistributionParameters(LcdClient client)
+        internal DistributionParameters(LcdClient client)
         {
             _client = client;
         }
@@ -25,7 +25,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         [JsonProperty("withdraw_addr_enabled")]
         public bool WithdrawAddrEnabled { get; set; }
 
-        public async Task<Result<DistributionParameters>> Get()
+        internal async Task<Result<DistributionParameters>> Get()
         {
             throw new NotImplementedException();
         }

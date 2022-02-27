@@ -8,7 +8,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
     {
         private readonly LcdClient _client;
 
-        public Rewards(LcdClient client)
+        internal Rewards(LcdClient client)
         {
             _client = client;
         }
@@ -16,7 +16,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         public IDictionary<string, List<Coin>> ValidatorRewards { get; set; }
         public List<Coin> Total { get; set; }
 
-        public async Task<Result<Rewards>> Get(string delegator)
+        internal async Task<Result<Rewards>> Get(string delegator)
         {
             throw new NotImplementedException();
         }
