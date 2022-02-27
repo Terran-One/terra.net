@@ -22,6 +22,7 @@ namespace Terra.Sdk.Lcd
             Gov = new Gov(this);
             Ibc = new Ibc(this);
             IbcTransfer = new IbcTransfer(this);
+            Market = new Market(this);
         }
 
         public Auth Auth { get; }
@@ -31,6 +32,7 @@ namespace Terra.Sdk.Lcd
         public Gov Gov { get; }
         public Ibc Ibc { get; }
         public IbcTransfer IbcTransfer { get; }
+        public Market Market { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
