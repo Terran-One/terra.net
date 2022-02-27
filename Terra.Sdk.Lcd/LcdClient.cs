@@ -15,12 +15,12 @@ namespace Terra.Sdk.Lcd
             Config = config;
             HttpClient = new HttpClient {BaseAddress = new Uri(config.Url)};
 
-            Coin = new Coin(this);
+            Bank = new Bank(this);
             Allowance = new Allowance(this);
             Account = new Account(this);
         }
 
-        public Coin Coin { get; }
+        public Bank Bank { get; }
         public Allowance Allowance { get; }
         public Account Account { get; }
 

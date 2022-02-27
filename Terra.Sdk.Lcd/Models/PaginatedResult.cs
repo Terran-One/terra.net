@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace Terra.Sdk.Lcd.Models
 {
-    public class PaginatedResult<TEntity> where TEntity: class
+    public class PaginatedResult<TEntity>
     {
         /// <summary>
-        /// Returned entity, or null if there was an error.
+        /// Returned entity.
         /// </summary>
         public List<TEntity> Value { get; set; }
 
@@ -37,10 +37,10 @@ namespace Terra.Sdk.Lcd.Models
         public string Error { get; set; }
     }
 
-    public class Result<TEntity> where TEntity: class
+    public class Result<TEntity>
     {
         /// <summary>
-        /// Returned entity, or null if there was an error.
+        /// Returned entity.
         /// </summary>
         public TEntity Value { get; set; }
 
