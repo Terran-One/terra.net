@@ -26,11 +26,11 @@ namespace Terra.Sdk.Lcd.Models.Entities
             _lcdClient = lcdClient;
         }
 
-        public async Task<Result<Coin>> GetBalance(string address, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        public async Task<PaginatedResult<Coin>> Get(string address, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/bank/v1beta1/balances/{address}{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
             if (!response.IsSuccessStatusCode)
-                return new Result<Coin> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new PaginatedResult<Coin> { Error = $"Fetch failed: {response.ReasonPhrase}" };
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
@@ -38,7 +38,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new { next_key = "", total = 0 }
             });
 
-            return new Result<Coin>
+            return new PaginatedResult<Coin>
             {
                 Value = json.data,
                 TotalCount = json.pagination?.total,
@@ -47,11 +47,11 @@ namespace Terra.Sdk.Lcd.Models.Entities
             };
         }
 
-        public async Task<Result<Coin>> GetTotal(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        public async Task<PaginatedResult<Coin>> GetAll(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/bank/v1beta1/supply{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
             if (!response.IsSuccessStatusCode)
-                return new Result<Coin> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new PaginatedResult<Coin> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
@@ -59,7 +59,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new { next_key = "", total = 0 }
             });
 
-            return new Result<Coin>
+            return new PaginatedResult<Coin>
             {
                 Value = json.supply,
                 TotalCount = json.pagination?.total,

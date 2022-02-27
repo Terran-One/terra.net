@@ -15,12 +15,14 @@ namespace Terra.Sdk.Lcd
             Config = config;
             HttpClient = new HttpClient {BaseAddress = new Uri(config.Url)};
 
-            Bank = new Coin(this);
-            FeeGrant = new Allowance(this);
+            Coin = new Coin(this);
+            Allowance = new Allowance(this);
+            Account = new Account(this);
         }
 
-        public Coin Bank { get; }
-        public Allowance FeeGrant { get; }
+        public Coin Coin { get; }
+        public Allowance Allowance { get; }
+        public Account Account { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {

@@ -29,11 +29,33 @@ namespace Terra.Sdk.Lcd.Models.Entities
             _lcdClient = lcdClient;
         }
 
-        public async Task<Result<Allowance>> GetAllowance(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        public async Task<Result<Allowance>> Get(string granter, string grantee)
         {
-            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/distribution/v1beta1/allowances/{grantee}{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
+            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}");
             if (!response.IsSuccessStatusCode)
                 return new Result<Allowance> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+
+            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
+            {
+                allowance = new
+                {
+                    granter = "",
+                    grantee = "",
+                    allowance = new Allowance()
+                }
+            });
+
+            return new Result<Allowance>
+            {
+                Value = json.allowance.allowance.WithGrantInfo(json.allowance.granter, json.allowance.grantee)
+            };
+        }
+
+        public async Task<PaginatedResult<Allowance>> GetAll(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        {
+            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/feegrant/v1beta1/allowances/{grantee}{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
+            if (!response.IsSuccessStatusCode)
+                return new PaginatedResult<Allowance> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
             var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
             {
@@ -49,7 +71,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 pagination = new { next_key = "", total = 0 }
             });
 
-            return new Result<Allowance>
+            return new PaginatedResult<Allowance>
             {
                 Value = json.allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(),
                 TotalCount = json.pagination?.total,
