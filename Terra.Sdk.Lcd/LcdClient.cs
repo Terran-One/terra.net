@@ -28,6 +28,7 @@ namespace Terra.Sdk.Lcd
             Slashing = new Slashing(this);
             Staking = new Staking(this);
             Tendermint = new Tendermint(this);
+            Treasury = new Treasury(this);
         }
 
         public Auth Auth { get; }
@@ -43,6 +44,7 @@ namespace Terra.Sdk.Lcd
         public Slashing Slashing { get; }
         public Staking Staking { get; }
         public Tendermint Tendermint { get; }
+        public Treasury Treasury { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
