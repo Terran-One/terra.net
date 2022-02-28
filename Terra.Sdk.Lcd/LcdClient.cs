@@ -25,6 +25,7 @@ namespace Terra.Sdk.Lcd
             Market = new Market(this);
             Mint = new Mint(this);
             Oracle = new Oracle(this);
+            Slashing = new Slashing(this);
         }
 
         public Auth Auth { get; }
@@ -37,6 +38,7 @@ namespace Terra.Sdk.Lcd
         public Market Market { get; }
         public Mint Mint { get; }
         public Oracle Oracle { get; }
+        public Slashing Slashing { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
