@@ -5,9 +5,6 @@ using Terra.Sdk.Lcd.Models;
 
 namespace Terra.Sdk.Lcd.Api
 {
-    /// <remarks>
-    /// ToDo: I hate this - need to replace it with something better.
-    /// </remarks>
     public class Bank
     {
         private readonly LcdClient _lcdClient;
