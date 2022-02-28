@@ -24,6 +24,7 @@ namespace Terra.Sdk.Lcd
             IbcTransfer = new IbcTransfer(this);
             Market = new Market(this);
             Mint = new Mint(this);
+            Oracle = new Oracle(this);
         }
 
         public Auth Auth { get; }
@@ -35,6 +36,7 @@ namespace Terra.Sdk.Lcd
         public IbcTransfer IbcTransfer { get; }
         public Market Market { get; }
         public Mint Mint { get; }
+        public Oracle Oracle { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
