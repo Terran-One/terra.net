@@ -26,6 +26,7 @@ namespace Terra.Sdk.Lcd
             Mint = new Mint(this);
             Oracle = new Oracle(this);
             Slashing = new Slashing(this);
+            Staking = new Staking(this);
         }
 
         public Auth Auth { get; }
@@ -39,6 +40,7 @@ namespace Terra.Sdk.Lcd
         public Mint Mint { get; }
         public Oracle Oracle { get; }
         public Slashing Slashing { get; }
+        public Staking Staking { get; }
 
         internal string GetPaginationQueryString(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
