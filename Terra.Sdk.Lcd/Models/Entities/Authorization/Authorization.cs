@@ -13,6 +13,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Authorization
     {
         private readonly LcdClient _client;
 
+        [JsonProperty("@type")]
+        public string Type { get; set; }
+
         public Authorization()
         {
         }

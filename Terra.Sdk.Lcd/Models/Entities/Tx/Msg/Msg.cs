@@ -72,5 +72,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/cosmos.wasm.v1beta1.MsgUpdateContractAdmin")]
     public abstract class Msg
     {
+        [JsonProperty("@type")]
+        public string Type { get; set; }
     }
 }

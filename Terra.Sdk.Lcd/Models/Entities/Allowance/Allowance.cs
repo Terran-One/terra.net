@@ -13,6 +13,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
     {
         private readonly LcdClient _lcdClient;
 
+        [JsonProperty("@type")]
+        public string Type { get; set; }
+
         public string Granter { get; set; }
         public string Grantee { get; set; }
 

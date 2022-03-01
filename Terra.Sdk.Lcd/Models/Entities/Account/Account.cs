@@ -11,6 +11,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
     {
         private readonly LcdClient _lcdClient;
 
+        [JsonProperty("@type")]
+        public string Type { get; set; }
+
         /// <remarks>
         ///  For serialization.
         /// </remarks>
@@ -18,8 +21,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
         {
         }
 
-        [JsonProperty("@type")]
-        public string Type { get; set; }
 
         internal Account(LcdClient lcdClient)
         {

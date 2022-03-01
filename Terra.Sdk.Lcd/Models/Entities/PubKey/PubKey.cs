@@ -9,5 +9,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.PubKey
     [JsonSubtypes.KnownSubType(typeof(ValConsPublicKey), "/cosmos.crypto.ed25519.PubKey")]
     public class PubKey
     {
+        [JsonProperty("@type")]
+        public string Type { get; set; }
     }
 }
