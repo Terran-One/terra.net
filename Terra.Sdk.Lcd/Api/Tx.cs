@@ -60,7 +60,7 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public Task<Result<SyncTxBroadcastResult>> BroadcastSync(Models.Entities.Tx.Tx tx)
+        public Task<Result<BlockTxBroadcastResult>> BroadcastSync(Models.Entities.Tx.Tx tx)
         {
             throw new NotImplementedException();
         }
@@ -78,21 +78,21 @@ namespace Terra.Sdk.Lcd.Api
 
     public class SignerOptions
     {
-        
+
     }
 
     public class SignerData
     {
-        
+
     }
 
     public class CreateTxOptions
     {
-        
+
     }
 
     public class TxSearchOptions
     {
-        
+
     }
 }
