@@ -5,15 +5,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
     public class ModeInfo
     {
-        [JsonProperty("single")]
         public SingleMode Single { get; set; }
-
-        [JsonProperty("multi")]
         public MultiMode Multi { get; set; }
 
         public class SingleMode
         {
-            [JsonProperty("mode")]
             public ModeInfo Mode { get; set; }
         }
 

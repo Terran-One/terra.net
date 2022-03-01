@@ -34,15 +34,18 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
             if (!response.IsSuccessStatusCode)
                 return new Result<Allowance> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
-            {
-                allowance = new
+            var json = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new
                 {
-                    granter = "",
-                    grantee = "",
-                    allowance = new Allowance()
-                }
-            });
+                    allowance = new
+                    {
+                        granter = "",
+                        grantee = "",
+                        allowance = new Allowance()
+                    }
+                },
+                _lcdClient.JsonSerializerSettings);
 
             return new Result<Allowance>
             {
@@ -56,19 +59,22 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
             if (!response.IsSuccessStatusCode)
                 return new PaginatedResult<Allowance> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
-            {
-                allowances = new[]
+            var json = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new
                 {
-                    new
+                    allowances = new[]
                     {
-                        granter = "",
-                        grantee = "",
-                        allowance = new Allowance()
-                    }
+                        new
+                        {
+                            granter = "",
+                            grantee = "",
+                            allowance = new Allowance()
+                        }
+                    },
+                    pagination = new { next_key = "", total = 0 }
                 },
-                pagination = new { next_key = "", total = 0 }
-            });
+                _lcdClient.JsonSerializerSettings);
 
             return new PaginatedResult<Allowance>
             {

@@ -1,6 +1,8 @@
 using System;
 using System.Net.Http;
 using System.Web;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Terra.Sdk.Lcd.Api;
 
 namespace Terra.Sdk.Lcd
@@ -9,6 +11,13 @@ namespace Terra.Sdk.Lcd
     {
         internal LcdClientConfig Config { get; }
         internal HttpClient HttpClient { get; }
+        internal JsonSerializerSettings JsonSerializerSettings { get; } = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }
+        };
 
         public LcdClient(LcdClientConfig config)
         {

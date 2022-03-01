@@ -29,8 +29,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
             if (!response.IsSuccessStatusCode)
                 return new Result<Account> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new { account = new Account() });
-            return new Result<Account> { Value = json.account };
+            var json = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new { Account = new Account() },
+                _lcdClient.JsonSerializerSettings);
+            return new Result<Account> { Value = json.Account };
         }
     }
 }

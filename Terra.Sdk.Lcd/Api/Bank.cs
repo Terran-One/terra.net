@@ -20,11 +20,14 @@ namespace Terra.Sdk.Lcd.Api
             if (!response.IsSuccessStatusCode)
                 return new PaginatedResult<Coin> { Error = $"Fetch failed: {response.ReasonPhrase}" };
 
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
-            {
-                data = new List<Coin>(),
-                pagination = new { next_key = "", total = 0 }
-            });
+            var json = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new
+                {
+                    data = new List<Coin>(),
+                    pagination = new { next_key = "", total = 0 }
+                },
+                _lcdClient.JsonSerializerSettings);
 
             return new PaginatedResult<Coin>
             {
@@ -41,11 +44,14 @@ namespace Terra.Sdk.Lcd.Api
             if (!response.IsSuccessStatusCode)
                 return new PaginatedResult<Coin> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
-            var json = JsonConvert.DeserializeAnonymousType(await response.Content.ReadAsStringAsync(), new
-            {
-                supply = new List<Coin>(),
-                pagination = new { next_key = "", total = 0 }
-            });
+            var json = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new
+                {
+                    supply = new List<Coin>(),
+                    pagination = new { next_key = "", total = 0 }
+                },
+                _lcdClient.JsonSerializerSettings);
 
             return new PaginatedResult<Coin>
             {
