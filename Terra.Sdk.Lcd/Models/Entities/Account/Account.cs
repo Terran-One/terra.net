@@ -18,6 +18,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
         {
         }
 
+        [JsonProperty("@type")]
+        public string Type { get; set; }
+
         internal Account(LcdClient lcdClient)
         {
             _lcdClient = lcdClient;
