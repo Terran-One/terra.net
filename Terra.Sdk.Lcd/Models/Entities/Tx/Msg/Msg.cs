@@ -1,5 +1,75 @@
+using JsonSubTypes;
+using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.BankMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.FeeGrantMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcTransferMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MarketMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.SlashingMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg;
+
 namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
 {
+    [JsonConverter(typeof(JsonSubtypes), "@type")]
+    [JsonSubtypes.KnownSubType(typeof(MsgSend), "/cosmos.bank.v1beta1.MsgSend")]
+    [JsonSubtypes.KnownSubType(typeof(MsgMultiSend), "/cosmos.bank.v1beta1.MsgMultiSend")]
+    [JsonSubtypes.KnownSubType(typeof(MsgFundCommunityPool), "/cosmos.distribution.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgSetWithdrawAddress), "/cosmos.distribution.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawDelegatorReward), "/cosmos.distribution.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawValidatorCommission), "/cosmos.distribution.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgGrantAllowance), "/cosmos.feegrant.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgRevokeAllowance), "/cosmos.feegrant.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgDeposit), "/cosmos.gov.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgSubmitProposal), "/cosmos..v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgVote), "/cosmos.gov.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgVoteWeighted), "/cosmos.gov.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgAcknowledgement), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgChannelCloseConfirm), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgChannelCloseInit), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgChannelOpenAck), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgChannelOpenConfirm), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgChannelOpenInit), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgChannelOpenTry), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgRecvPacket), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgTimeout), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgTimeoutOnClose), "/ibc.core.channel.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgCreateClient), "/ibc.core.client.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgSubmitMisbehaviour), "/ibc.core.client.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgUpdateClient), "/ibc.core.client.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgUpgradeClient), "/ibc.core.client.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgConnectionOpenAck), "/ibc.core.connection.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgConnectionOpenConfirm), "/ibc.core.connection.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgConnectionOpenInit), "/ibc.core.connection.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgConnectionOpenTry), "/ibc.core.connection.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgTransfer), "/ibc.applications.transfer.v1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgSwap), "/cosmos.market.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgSwapSend), "/cosmos.market.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgExecAuthorized), "/cosmos.authz.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgGrantAuthorization), "/cosmos.authz.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgRevokeAuthorization), "/cosmos.authz.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgAggregateExchangeRatePrevote), "/cosmos.oracle.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgAggregateExchangeRateVote), "/cosmos.oracle.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgDelegateFeedConsent), "/cosmos.oracle.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgUnjail), "/cosmos.slashing.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgBeginRedelegate), "/cosmos.staking.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgCreateValidator), "/cosmos.staking.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgDelegate), "/cosmos.staking.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgEditValidator), "/cosmos.staking.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgUndelegate), "/cosmos.staking.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgClearContractAdmin), "/cosmos.wasm.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgExecuteContract), "/cosmos.wasm.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgInstantiateContract), "/cosmos.wasm.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgMigrateCode), "/cosmos.wasm.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgMigrateContract), "/cosmos.wasm.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgStoreCode), "/cosmos.wasm.v1beta1.")]
+    [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/cosmos.wasm.v1beta1.")]
     public abstract class Msg
     {
     }

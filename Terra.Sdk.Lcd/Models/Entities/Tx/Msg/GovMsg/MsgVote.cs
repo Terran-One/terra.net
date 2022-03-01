@@ -1,6 +1,6 @@
 namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
 {
-    public class MsgDeposit : Msg
+    public class MsgVote : Msg
     {
 
     }
