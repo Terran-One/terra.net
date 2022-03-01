@@ -5,7 +5,7 @@ using System.Security.Permissions;
 namespace Terra.Sdk.Lcd.Models
 {
     [Serializable]
-    public readonly struct Coin: ISerializable
+    public readonly struct Coin : ISerializable
     {
         public string Denom { get; }
         public decimal Amount { get; }
