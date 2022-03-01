@@ -35,37 +35,37 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public async Task<Result<long>> EstimateGas(Tx tx, decimal? gasAdjustment = null, IEnumerable<SignerData> signers = null)
+        public async Task<Result<long>> EstimateGas(Models.Entities.Tx tx, decimal? gasAdjustment = null, IEnumerable<SignerData> signers = null)
         {
             throw new NotImplementedException();
         }
 
-        public string Encode(Tx tx)
+        public string Encode(Models.Entities.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Tx Decode(string encodedTx)
+        public Models.Entities.Tx Decode(string encodedTx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> Hash(Tx tx)
+        public Task<string> Hash(Models.Entities.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<BlockTxBroadcastResult>> Broadcast(Tx tx)
+        public Task<Result<BlockTxBroadcastResult>> Broadcast(Models.Entities.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<SyncTxBroadcastResult>> BroadcastSync(Tx tx)
+        public Task<Result<SyncTxBroadcastResult>> BroadcastSync(Models.Entities.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<AsyncTxBroadcastResult>> BroadcastAsync(Tx tx)
+        public Task<Result<AsyncTxBroadcastResult>> BroadcastAsync(Models.Entities.Tx tx)
         {
             throw new NotImplementedException();
         }
