@@ -7,7 +7,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
     public class TxBody
     {
         [JsonProperty("messages")]
-        public List<BaseMsg> Messages { get; set; }
+        public List<Msg.Msg> Messages { get; set; }
 
         [JsonProperty("memo")]
         public string Memo { get; set; }
