@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
