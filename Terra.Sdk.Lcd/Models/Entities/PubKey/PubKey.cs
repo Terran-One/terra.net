@@ -1,6 +1,5 @@
 using JsonSubTypes;
 using Newtonsoft.Json;
-using Terra.Sdk.Lcd.Models.Entities.Account;
 
 namespace Terra.Sdk.Lcd.Models.Entities.PubKey
 {

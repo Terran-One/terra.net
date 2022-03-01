@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Models;
-using Terra.Sdk.Lcd.Models.Entities;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
 
 namespace Terra.Sdk.Lcd.Api

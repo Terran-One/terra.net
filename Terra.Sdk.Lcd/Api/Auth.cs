@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Models;
-using Terra.Sdk.Lcd.Models.Entities;
 using Terra.Sdk.Lcd.Models.Entities.Account;
 
 namespace Terra.Sdk.Lcd.Api
