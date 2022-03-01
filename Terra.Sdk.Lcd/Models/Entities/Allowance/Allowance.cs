@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JsonSubTypes;
 using Newtonsoft.Json;
 
-namespace Terra.Sdk.Lcd.Models.Entities
+namespace Terra.Sdk.Lcd.Models.Entities.Allowance
 {
     [JsonConverter(typeof(JsonSubtypes), "@type")]
     [JsonSubtypes.KnownSubType(typeof(BasicAllowance), "/cosmos.feegrant.v1beta1.BasicAllowance")]
@@ -86,41 +85,5 @@ namespace Terra.Sdk.Lcd.Models.Entities
             Grantee = grantee;
             return this;
         }
-    }
-
-    public class BasicAllowance : Allowance
-    {
-        [JsonProperty("spend_limit")]
-        public List<Coin> SpendLimit { get; set; }
-
-        [JsonProperty("expiration")]
-        public string Expiration { get; set; }
-    }
-
-    public class PeriodicAllowance : Allowance
-    {
-        [JsonProperty("basic")]
-        public BasicAllowance Basic { get; set; }
-
-        [JsonProperty("period")]
-        public string Period { get; set; }
-
-        [JsonProperty("period_spend_limit")]
-        public List<Coin> PeriodSpendLimit { get; set; }
-
-        [JsonProperty("period_can_spend")]
-        public List<Coin> PeriodCanSpend { get; set; }
-
-        [JsonProperty("period_reset")]
-        public string PeriodReset { get; set; }
-    }
-
-    public class AllowedMsgAllowance : Allowance
-    {
-        [JsonProperty("allowance")]
-        public Allowance Allowance { get; set; }
-
-        [JsonProperty("allowed_messages")]
-        public List<string> AllowedMessages { get; set; }
     }
 }

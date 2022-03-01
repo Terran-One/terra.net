@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities;
+using Terra.Sdk.Lcd.Models.Entities.Tx;
 
 namespace Terra.Sdk.Lcd.Api
 {
@@ -20,7 +21,7 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Models.Entities.Tx>> Create(SignerOptions signerOptions, CreateTxOptions createTxOptions)
+        public async Task<Result<Models.Entities.Tx.Tx>> Create(SignerOptions signerOptions, CreateTxOptions createTxOptions)
         {
             throw new NotImplementedException();
         }
@@ -35,37 +36,37 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public async Task<Result<long>> EstimateGas(Models.Entities.Tx tx, decimal? gasAdjustment = null, IEnumerable<SignerData> signers = null)
+        public async Task<Result<long>> EstimateGas(Models.Entities.Tx.Tx tx, decimal? gasAdjustment = null, IEnumerable<SignerData> signers = null)
         {
             throw new NotImplementedException();
         }
 
-        public string Encode(Models.Entities.Tx tx)
+        public string Encode(Models.Entities.Tx.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Models.Entities.Tx Decode(string encodedTx)
+        public Models.Entities.Tx.Tx Decode(string encodedTx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> Hash(Models.Entities.Tx tx)
+        public Task<string> Hash(Models.Entities.Tx.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<BlockTxBroadcastResult>> Broadcast(Models.Entities.Tx tx)
+        public Task<Result<BlockTxBroadcastResult>> Broadcast(Models.Entities.Tx.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<SyncTxBroadcastResult>> BroadcastSync(Models.Entities.Tx tx)
+        public Task<Result<SyncTxBroadcastResult>> BroadcastSync(Models.Entities.Tx.Tx tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<AsyncTxBroadcastResult>> BroadcastAsync(Models.Entities.Tx tx)
+        public Task<Result<AsyncTxBroadcastResult>> BroadcastAsync(Models.Entities.Tx.Tx tx)
         {
             throw new NotImplementedException();
         }

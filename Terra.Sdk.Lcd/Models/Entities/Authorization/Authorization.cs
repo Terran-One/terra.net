@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using JsonSubTypes;
 using Newtonsoft.Json;
 
-namespace Terra.Sdk.Lcd.Models.Entities
+namespace Terra.Sdk.Lcd.Models.Entities.Authorization
 {
     [JsonConverter(typeof(JsonSubtypes), "@type")]
     [JsonSubtypes.KnownSubType(typeof(SendAuthorization), "/cosmos.bank.v1beta1.SendAuthorization")]
@@ -28,20 +28,5 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             throw new NotImplementedException();
         }
-    }
-
-    public class SendAuthorization : Authorization
-    {
-        
-    }
-
-    public class GenericAuthorization : Authorization
-    {
-        
-    }
-
-    public class StakeAuthorization : Authorization
-    {
-        
     }
 }

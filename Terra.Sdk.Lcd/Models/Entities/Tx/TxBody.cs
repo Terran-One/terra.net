@@ -1,0 +1,18 @@
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
+
+namespace Terra.Sdk.Lcd.Models.Entities.Tx
+{
+    public class TxBody
+    {
+        [JsonProperty("messages")]
+        public List<BaseMsg> Messages { get; set; }
+
+        [JsonProperty("memo")]
+        public string Memo { get; set; }
+
+        [JsonProperty("timeout_height")]
+        public long TimeoutHeight { get; set; }
+    }
+}
