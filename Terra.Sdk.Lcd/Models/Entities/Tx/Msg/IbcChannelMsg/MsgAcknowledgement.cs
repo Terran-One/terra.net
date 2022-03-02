@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg

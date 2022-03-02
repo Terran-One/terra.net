@@ -208,18 +208,57 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             return txBytes.GetSha256Hash();
         }
 
-        public Task<BlockTxBroadcastResult> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
-        public Task<BlockTxBroadcastResult> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
+        public Task<Result<BlockTxBroadcastResult>> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
+        public Task<Result<BlockTxBroadcastResult>> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
+        public Task<Result<BlockTxBroadcastResult>> BroadcastAsync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Async);
 
-        private async Task<T> Broadcast<T>(BroadcastMode mode) where T : class
+        public async Task<PaginatedGroupedResult<TxSearchResult>> Search(TxSearchOptions options, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        {
+            var queryString = string.Join("&", options.GetQueryString(), _client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending));
+            if (!string.IsNullOrWhiteSpace(queryString))
+                queryString = $"?{queryString}";
+
+            var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs{queryString}");
+            if (!response.IsSuccessStatusCode)
+                return new PaginatedGroupedResult<TxSearchResult> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
+
+            var value = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new
+                {
+                    Txs = new List<Tx>(),
+                    TxResponses = new List<TxInfo>(),
+                    Pagination = new
+                    {
+                        NextKey = "",
+                        Total = (int?)null
+                    }
+
+                },
+                _client.JsonSerializerSettings);
+
+            return new PaginatedGroupedResult<TxSearchResult>
+            {
+                Value = new TxSearchResult
+                {
+                    Txs = value.Txs,
+                    TxResponses = value.TxResponses,
+                },
+                TotalCount = value.Pagination.Total,
+                NextPageKey = value.Pagination.NextKey
+            };
+        }
+
+        private async Task<Result<T>> Broadcast<T>(BroadcastMode mode) where T : class
         {
             var response = await _client.HttpClient.PostAsync(
                 "/cosmos/tx/v1beta1/txs",
                 new StringContent(JsonConvert.SerializeObject(new { TyBytes = Encode(), Mode = mode })));
             if (!response.IsSuccessStatusCode)
-                return null;
+                return new Result<T> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
 
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
+            var value = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
+            return new Result<T> { Value = value };
         }
     }
 }

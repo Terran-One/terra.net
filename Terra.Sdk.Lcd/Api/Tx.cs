@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
@@ -25,26 +26,10 @@ namespace Terra.Sdk.Lcd.Api
         public string Encode(Models.Entities.Tx.Tx tx) => tx.Encode();
         public Models.Entities.Tx.Tx Decode(string encodedTx) => new Models.Entities.Tx.Tx(_client).Decode(encodedTx);
         public string GetHash(Models.Entities.Tx.Tx tx) => tx.Encode();
-
-        public Task<Result<BlockTxBroadcastResult>> Broadcast(Models.Entities.Tx.Tx tx)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<BlockTxBroadcastResult>> BroadcastSync(Models.Entities.Tx.Tx tx)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<AsyncTxBroadcastResult>> BroadcastAsync(Models.Entities.Tx.Tx tx)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<TxSearchResult>> Search(TxSearchOptions options)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<BlockTxBroadcastResult>> Broadcast(Models.Entities.Tx.Tx tx) => tx.Broadcast();
+        public Task<Result<BlockTxBroadcastResult>> BroadcastSync(Models.Entities.Tx.Tx tx) => tx.BroadcastSync();
+        public Task<Result<BlockTxBroadcastResult>> BroadcastAsync(Models.Entities.Tx.Tx tx) => tx.BroadcastAsync();
+        public Task<Result<TxSearchResult>> Search(TxSearchOptions options) => new Tx(_client).Search(options);
     }
 
     public class SignerOptions
@@ -74,6 +59,18 @@ namespace Terra.Sdk.Lcd.Api
 
     public class TxSearchOptions
     {
-        public IEnumerable<TxEvent> Events { get; set; }
+        public IEnumerable<TxEvent.TxAttribute> Events { get; set; }
+
+        internal string GetQueryString()
+        {
+            if (Events == null)
+                return null;
+
+            var strb = new StringBuilder();
+            foreach (var txEvent in Events)
+                strb.Append($"&event={HttpUtility.UrlEncode($"{txEvent.Key}={txEvent.Value}")}");
+
+            return strb.ToString().TrimStart('&');
+        }
     }
 }
