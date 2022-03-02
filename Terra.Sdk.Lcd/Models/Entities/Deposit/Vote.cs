@@ -31,7 +31,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         public string Voter { get; set; }
         public List<WeightedVoteOption> Options { get; set; }
 
-        public async Task<PaginatedResult<Vote>> ForProposal(long proposalId,
+        public async Task<PaginatedResult<Vote>> GetByProposal(long proposalId,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);

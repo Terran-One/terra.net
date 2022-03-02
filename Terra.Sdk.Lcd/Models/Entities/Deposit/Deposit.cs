@@ -30,7 +30,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         public string Depositor { get; set; }
         public List<Coin> Amount { get; set; }
 
-        public async Task<PaginatedResult<Deposit>> ForProposal(long proposalId,
+        public async Task<PaginatedResult<Deposit>> GetByProposal(long proposalId,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);

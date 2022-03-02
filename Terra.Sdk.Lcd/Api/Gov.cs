@@ -49,36 +49,16 @@ namespace Terra.Sdk.Lcd.Api
         }
 
         public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
-            new Deposit(_client).ForProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
+            new Deposit(_client).GetByProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId) => new Models.Entities.Tx.Tx(_client).ForProposal(proposalId);
+        public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId) => new Models.Entities.Tx.Tx(_client).GetByProposal(proposalId);
 
         public Task<PaginatedResult<Vote>> GetVotes(long proposalId, string paginationKey = null,
-            int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) => new Vote(_client).ForProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
+            int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) => new Vote(_client).GetByProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<Result<Tally>> GetTally(long proposalId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<DepositParams>> GetDepositParameters()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<VotingParams>> GetVotingParameters()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<TallyParams>> GetTallyParameters()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<GovParams>> GetGovParameters()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<Tally>> GetTally(long proposalId) => Tally.GetByProposal(_client, proposalId);
+        public Task<Result<DepositParams>> GetDepositParameters() => new DepositParams(_client).Get();
+        public Task<Result<VotingParams>> GetVotingParameters() => new VotingParams(_client).Get();
+        public Task<Result<TallyParams>> GetTallyParameters() => new TallyParams(_client).Get();
     }
 }

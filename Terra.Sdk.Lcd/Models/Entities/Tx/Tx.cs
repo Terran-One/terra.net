@@ -33,7 +33,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         public AuthInfo AuthInfo { get; set; }
         public List<string> Signatures { get; set; }
 
-        public async Task<Result<Tx>> Create(IEnumerable<SignerOptions> signers, CreateTxOptions options)
+        internal async Task<Result<Tx>> Create(IEnumerable<SignerOptions> signers, CreateTxOptions options)
         {
             var fee = options.Fee;
 
@@ -95,7 +95,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             };
         }
 
-        public async Task<Result<long>> EstimateGas(IReadOnlyCollection<SignerData> signers = null, decimal? gasAdjustment = null)
+        internal async Task<Result<long>> EstimateGas(IReadOnlyCollection<SignerData> signers = null, decimal? gasAdjustment = null)
         {
             gasAdjustment = gasAdjustment ?? _client.Config.GasAdjustment;
 
@@ -134,7 +134,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             return new Result<long> { Value = (long)(gasAdjustment.Value * simulateRes.GasInfo.GasUsed) };
         }
 
-        public void AppendEmptySignatures(IEnumerable<SignerData> signers)
+        internal void AppendEmptySignatures(IEnumerable<SignerData> signers)
         {
             foreach (var signer in signers)
             {
@@ -191,30 +191,30 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             }
         }
 
-        public string Encode()
+        internal string Encode()
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, _client.JsonSerializerSettings));
             return System.Convert.ToBase64String(plainTextBytes);
         }
 
-        public Tx Decode(string encodedTx)
+        internal Tx Decode(string encodedTx)
         {
             var base64EncodedBytes = System.Convert.FromBase64String(encodedTx);
             var json = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
             return JsonConvert.DeserializeObject<Tx>(json, _client.JsonSerializerSettings);
         }
 
-        public string GetHash()
+        internal string GetHash()
         {
             var txBytes = Encode();
             return txBytes.GetSha256Hash();
         }
 
-        public Task<Result<BlockTxBroadcastResult>> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
-        public Task<Result<BlockTxBroadcastResult>> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
-        public Task<Result<BlockTxBroadcastResult>> BroadcastAsync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Async);
+        internal Task<Result<BlockTxBroadcastResult>> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
+        internal Task<Result<BlockTxBroadcastResult>> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
+        internal Task<Result<BlockTxBroadcastResult>> BroadcastAsync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Async);
 
-        public async Task<PaginatedGroupedResult<TxSearchResult>> Search(TxSearchOptions options, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        internal async Task<PaginatedGroupedResult<TxSearchResult>> Search(TxSearchOptions options, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var queryString = string.Join("&", options.GetQueryString(), _client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)).TrimEnd('&');
             if (!string.IsNullOrWhiteSpace(queryString))
@@ -251,7 +251,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             };
         }
 
-        public async Task<Result<Tx>> ForProposal(long proposalId)
+        internal async Task<Result<Tx>> GetByProposal(long proposalId)
         {
             var @params = new StringBuilder();
             @params.Append($"events={HttpUtility.UrlEncode("message.action='/cosmos.gov.v1beta1.MsgSubmitProposal'")}");

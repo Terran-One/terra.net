@@ -24,7 +24,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         public long Id { get; set; }
         public Content Content { get; set; }
         public ProposalStatus Status { get; set; }
-        public FinalTallyResult FinalTallyResult { get; set; }
+        public Tally FinalTallyResult { get; set; }
         public DateTime SubmitTime { get; set; }
         public DateTime DepositEndTime { get; set; }
         public List<Coin> TotalDeposit { get; set; }
@@ -44,16 +44,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
                 paginationKey, pageNumber, getTotalCount, isDescending);
         }
 
-        public Task<Result<Proposal>> Get(long proposalId)
+        internal Task<Result<Proposal>> Get(long proposalId)
         {
             return _client.GetResult(
                 $"/cosmos/gov/v1beta1/proposals/{proposalId}",
                 new { Proposal = new Proposal() },
                 data => new Result<Proposal> { Value = data.Proposal });
         }
-    }
-
-    public class Content
-    {
     }
 }
