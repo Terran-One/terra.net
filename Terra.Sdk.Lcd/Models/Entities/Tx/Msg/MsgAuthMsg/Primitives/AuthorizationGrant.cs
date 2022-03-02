@@ -43,7 +43,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
                     { "granter", granter },
                     { "grantee", grantee },
                     { "msg_type_url", msgTypeUrl}
-                });
+                }.ToQueryString());
         }
     }
 }

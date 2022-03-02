@@ -214,7 +214,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
         public async Task<PaginatedGroupedResult<TxSearchResult>> Search(TxSearchOptions options, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            var queryString = string.Join("&", options.GetQueryString(), _client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending));
+            var queryString = string.Join("&", options.GetQueryString(), _client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)).TrimEnd('&');
             if (!string.IsNullOrWhiteSpace(queryString))
                 queryString = $"?{queryString}";
 

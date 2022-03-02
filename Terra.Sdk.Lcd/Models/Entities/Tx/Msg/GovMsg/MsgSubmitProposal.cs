@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Terra.Sdk.Lcd.Models.Entities.Deposit;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
 {

@@ -1,13 +1,11 @@
-using System.Collections.Generic;
-
 namespace Terra.Sdk.Lcd.Models
 {
-    public class PaginatedResult<TEntity>
+    public class PaginatedGroupedResult<TEntity>
     {
         /// <summary>
-        /// Returned entities.
+        /// Returned entity.
         /// </summary>
-        public List<TEntity> Value { get; set; }
+        public TEntity Value { get; set; }
 
         /// <summary>
         /// Total record count, if returned.
