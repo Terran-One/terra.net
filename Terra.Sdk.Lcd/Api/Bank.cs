@@ -7,16 +7,16 @@ namespace Terra.Sdk.Lcd.Api
 {
     public class Bank
     {
-        private readonly LcdClient _lcdClient;
+        private readonly LcdClient _client;
 
         internal Bank(LcdClient lcdClient)
         {
-            _lcdClient = lcdClient;
+            _client = lcdClient;
         }
 
         public Task<PaginatedResult<Coin>> GetBalance(string address, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            return _lcdClient.GetPaginatedResult(
+            return _client.GetPaginatedResult(
                 $"/cosmos/bank/v1beta1/balances/{address}",
                 new
                 {
@@ -35,7 +35,7 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<PaginatedResult<Coin>> GetSupply(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            return _lcdClient.GetPaginatedResult(
+            return _client.GetPaginatedResult(
                 "/cosmos/bank/v1beta1/supply",
                 new
                 {

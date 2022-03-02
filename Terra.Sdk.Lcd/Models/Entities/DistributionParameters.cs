@@ -1,11 +1,18 @@
-using System;
 using System.Threading.Tasks;
+using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities
 {
     public class DistributionParameters
     {
         private readonly LcdClient _client;
+
+        /// <remarks>
+        /// For serialization.
+        /// </remarks>
+        public DistributionParameters()
+        {
+        }
 
         internal DistributionParameters(LcdClient client)
         {
@@ -19,7 +26,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
 
         internal Task<Result<DistributionParameters>> Get()
         {
-            throw new NotImplementedException();
+            return _client.GetResult<DistributionParameters>("/cosmos/distribution/v1beta1/params");
         }
     }
 }

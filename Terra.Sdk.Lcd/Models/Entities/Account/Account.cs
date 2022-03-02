@@ -10,7 +10,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
     [JsonSubtypes.KnownSubType(typeof(LazyGradedVestingAccount), "/terra.vesting.v1beta1.LazyGradedVestingAccount")]
     public class Account
     {
-        private readonly LcdClient _lcdClient;
+        private readonly LcdClient _client;
 
         [JsonProperty("@type")]
         public string Type { get; set; }
@@ -25,12 +25,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
 
         internal Account(LcdClient lcdClient)
         {
-            _lcdClient = lcdClient;
+            _client = lcdClient;
         }
 
         internal Task<Result<Account>> Get(string address)
         {
-            return _lcdClient.GetResult(
+            return _client.GetResult(
                 $"/cosmos/auth/v1beta1/accounts/{address}",
                 new { Account = new Account() },
                 data => new Result<Account> { Value = data.Account });

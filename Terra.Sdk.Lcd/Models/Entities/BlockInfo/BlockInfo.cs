@@ -5,7 +5,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
 {
     public class BlockInfo
     {
-        private readonly LcdClient _lcdClient;
+        private readonly LcdClient _client;
 
         /// <remarks>
         /// For serialization.
@@ -16,7 +16,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
 
         internal BlockInfo(LcdClient lcdClient)
         {
-            _lcdClient = lcdClient;
+            _client = lcdClient;
         }
 
         public BlockId BlockId { get; set; }
@@ -24,11 +24,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
 
         public async Task<Result<BlockInfo>> Get(long? height = null)
         {
-            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/base/tendermint/v1beta1/blocks/{(height.HasValue ? height.ToString() : "latest")}");
+            var response = await _client.HttpClient.GetAsync($"/cosmos/base/tendermint/v1beta1/blocks/{(height.HasValue ? height.ToString() : "latest")}");
             if (!response.IsSuccessStatusCode)
                 return new Result<BlockInfo> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
-            var blockInfo = JsonConvert.DeserializeObject<BlockInfo>(await response.Content.ReadAsStringAsync(), _lcdClient.JsonSerializerSettings);
+            var blockInfo = JsonConvert.DeserializeObject<BlockInfo>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
             return new Result<BlockInfo> { Value = blockInfo };
         }
     }

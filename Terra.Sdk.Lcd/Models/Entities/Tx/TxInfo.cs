@@ -9,7 +9,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
     public class TxInfo
     {
-        private readonly LcdClient _lcdClient;
+        private readonly LcdClient _client;
 
         /// <remarks>
         /// For serialization.
@@ -20,7 +20,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
         internal TxInfo(LcdClient lcdClient)
         {
-            _lcdClient = lcdClient;
+            _client = lcdClient;
         }
 
         public string Height { get; set; }
@@ -40,20 +40,20 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
         public async Task<Result<TxInfo>> Get(string txHash)
         {
-            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs/{txHash}");
+            var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs/{txHash}");
             if (!response.IsSuccessStatusCode)
                 return new Result<TxInfo> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
 
             var json = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
                 new { TxResponse = new TxInfo() },
-                _lcdClient.JsonSerializerSettings);
+                _client.JsonSerializerSettings);
             return new Result<TxInfo> { Value = json.TxResponse };
         }
 
         public async Task<Result<List<TxInfo>>> GetByHeight(long height)
         {
-            var blockInfo = await new BlockInfo.BlockInfo(_lcdClient).Get(height);
+            var blockInfo = await new BlockInfo.BlockInfo(_client).Get(height);
             if (blockInfo.Error != null)
                 return new Result<List<TxInfo>> { Error = blockInfo.Error };
 

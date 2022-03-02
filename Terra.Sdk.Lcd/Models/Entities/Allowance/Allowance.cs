@@ -12,7 +12,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
     [JsonSubtypes.KnownSubType(typeof(AllowedMsgAllowance), "/cosmos.feegrant.v1beta1.AllowedMsgAllowance")]
     public class Allowance
     {
-        private readonly LcdClient _lcdClient;
+        private readonly LcdClient _client;
 
         [JsonProperty("@type")]
         public string Type { get; set; }
@@ -29,12 +29,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
 
         internal Allowance(LcdClient lcdClient)
         {
-            _lcdClient = lcdClient;
+            _client = lcdClient;
         }
 
         internal Task<Result<Allowance>> Get(string granter, string grantee)
         {
-            return _lcdClient.GetResult(
+            return _client.GetResult(
                 $"/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}",
                 new
                 {
@@ -53,7 +53,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
 
         internal Task<PaginatedResult<Allowance>> GetAll(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            return _lcdClient.GetPaginatedResult(
+            return _client.GetPaginatedResult(
                 $"/cosmos/feegrant/v1beta1/allowances/{grantee}",
                 new
                 {

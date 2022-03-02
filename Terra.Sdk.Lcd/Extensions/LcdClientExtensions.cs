@@ -10,6 +10,19 @@ namespace Terra.Sdk.Lcd.Extensions
 {
     public static class HttpClientExtensions
     {
+        internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient lcdClient, string url)
+            where TEntity : new()
+        {
+            var response = await lcdClient.HttpClient.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+                return new Result<TEntity> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+
+            var data = JsonConvert.DeserializeObject<TEntity>(
+                await response.Content.ReadAsStringAsync(),
+                lcdClient.JsonSerializerSettings);
+            return new Result<TEntity> { Value = data };
+        }
+
         internal static async Task<Result<TEntity>> GetResult<TEntity, TAnonymousType>(this LcdClient lcdClient,
             string url, TAnonymousType anonymousTypeDefinition, Func<TAnonymousType, Result<TEntity>> resultBuilder)
         {

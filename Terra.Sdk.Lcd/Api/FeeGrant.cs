@@ -13,8 +13,7 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public Task<Result<Allowance>> GetAllowance(string granter, string grantee) =>
-            new Allowance(_client).Get(granter, grantee);
+        public Task<Result<Allowance>> GetAllowance(string granter, string grantee) => new Allowance(_client).Get(granter, grantee);
 
         public Task<PaginatedResult<Allowance>> GetAllowances(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Allowance(_client).GetAll(grantee, paginationKey, pageNumber, getTotalCount, isDescending);
