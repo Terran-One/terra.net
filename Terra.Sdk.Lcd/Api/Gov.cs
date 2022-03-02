@@ -1,16 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using Newtonsoft.Json;
-using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models;
-using Terra.Sdk.Lcd.Models.Entities;
 using Terra.Sdk.Lcd.Models.Entities.Deposit;
-using Terra.Sdk.Lcd.Models.Entities.Tx;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg;
 
 namespace Terra.Sdk.Lcd.Api
@@ -24,27 +17,10 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public Task<PaginatedResult<Proposal>> GetProposals(
-            string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
-        {
-            return _client.GetPaginatedResult(
-                "/cosmos/gov/v1beta1/proposals",
-                new
-                {
-                    Proposals = new List<Proposal>(),
-                    Pagination = new Pagination()
-                },
-                data => data.Pagination.BuildResult(data.Proposals, pageNumber),
-                paginationKey, pageNumber, getTotalCount, isDescending);
-        }
+        public Task<PaginatedResult<Proposal>> GetProposals(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+            new Proposal(_client).GetAll(paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<Result<Proposal>> GetProposal(long proposalId)
-        {
-            return _client.GetResult(
-                $"/cosmos/gov/v1beta1/proposals/{proposalId}",
-                new { Proposal = new Proposal() },
-                data => new Result<Proposal> { Value = data.Proposal });
-        }
+        public Task<Result<Proposal>> GetProposal(long proposalId) => new Proposal(_client).Get(proposalId);
 
         public async Task<Result<string>> GetProposer(long proposalId)
         {
@@ -72,73 +48,10 @@ namespace Terra.Sdk.Lcd.Api
             return new Result<List<Coin>> { Value = msg.InitialDeposit };
         }
 
-        public async Task<PaginatedResult<Deposit>> GetDeposits(long proposalId,
-            string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
-        {
-            var proposalResult = await GetProposal(proposalId);
-            if (!string.IsNullOrWhiteSpace(proposalResult.Error))
-                return new PaginatedResult<Deposit> { Error = proposalResult.Error };
+        public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+            new Deposit(_client).ForProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
 
-            var proposal = proposalResult.Value;
-            if (proposal.Status == ProposalStatus.DepositPeriod || proposal.Status == ProposalStatus.VotingPeriod)
-            {
-                return await _client.GetPaginatedResult(
-                    $"/cosmos/gov/v1beta1/proposals/{proposalId}/deposits",
-                    new
-                    {
-                        Deposits = new List<Deposit>(),
-                        Pagination = new Pagination()
-                    },
-                    data => data.Pagination.BuildResult(data.Deposits, pageNumber),
-                    paginationKey, pageNumber, getTotalCount, isDescending);
-            }
-
-            // build search params
-            var @params = new StringBuilder();
-            @params.Append($"events={HttpUtility.UrlEncode("message.action='/cosmos.gov.v1beta1.MsgDeposit'")}");
-            @params.Append($"&events={HttpUtility.UrlEncode($"proposal_deposit.proposal_id={proposalId}")}");
-
-            var queryString = string.Join("&", @params, _client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)).TrimEnd('&');
-            if (!string.IsNullOrWhiteSpace(queryString))
-                queryString = $"?{queryString}";
-
-            var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs{queryString}");
-            if (!response.IsSuccessStatusCode)
-                return new PaginatedResult<Deposit> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
-
-            var value = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
-                new
-                {
-                    Txs = new List<Models.Entities.Tx.Tx>(),
-                    TxResponses = new List<TxInfo>(),
-                    Pagination = new Pagination()
-
-                },
-                _client.JsonSerializerSettings);
-
-            var deposits = new List<Deposit>();
-            var messages = value.Txs.SelectMany(tx => tx.Body.Messages);
-            foreach (var msg in messages)
-            {
-                if (msg is MsgDeposit msgDeposit && int.Parse(msgDeposit.ProposalId) == proposalId)
-                {
-                    deposits.Add(new Deposit
-                    {
-                        ProposalId = proposalId.ToString(),
-                        Depositor = msgDeposit.Depositor,
-                        Amount = msgDeposit.Amount
-                    });
-                }
-            }
-
-            return value.Pagination.BuildResult(deposits, pageNumber);
-        }
-
-        public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId) => new Models.Entities.Tx.Tx(_client).ForProposal(proposalId);
 
         public Task<PaginatedResult<Vote>> GetVotes(
             long proposalId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)

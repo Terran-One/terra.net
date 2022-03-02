@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Api;
 using Terra.Sdk.Lcd.Extensions;
@@ -247,6 +249,37 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 TotalCount = value.Pagination.Total,
                 NextPageKey = value.Pagination.NextKey
             };
+        }
+
+        public async Task<Result<Tx>> ForProposal(long proposalId)
+        {
+            var @params = new StringBuilder();
+            @params.Append($"events={HttpUtility.UrlEncode("message.action='/cosmos.gov.v1beta1.MsgSubmitProposal'")}");
+            @params.Append($"&events={HttpUtility.UrlEncode($"submit_proposal.proposal_id={proposalId}")}");
+
+            var queryString = string.Join("&", @params, _client.GetPaginationQueryString()).TrimEnd('&');
+            if (!string.IsNullOrWhiteSpace(queryString))
+                queryString = $"?{queryString}";
+
+            var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs{queryString}");
+            if (!response.IsSuccessStatusCode)
+                return new Result<Tx> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
+
+            var value = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new
+                {
+                    Txs = new List<Tx>(),
+                    TxResponses = new List<TxInfo>(),
+                    Pagination = new Pagination()
+
+                },
+                _client.JsonSerializerSettings);
+
+            if (!value.TxResponses.Any())
+                return new Result<Tx> { Error = "Failed to fetch submit_proposer tx" };
+
+            return new Result<Tx> { Value = value.Txs.Single() };
         }
 
         private async Task<Result<T>> Broadcast<T>(BroadcastMode mode) where T : class
