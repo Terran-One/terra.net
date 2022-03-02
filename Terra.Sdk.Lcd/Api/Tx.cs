@@ -15,20 +15,14 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<TxInfo>> GetTxInfo(string txHash)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<TxInfo>> GetTxInfo(string txHash) => new TxInfo(_client).Get(txHash);
 
         public async Task<Result<Models.Entities.Tx.Tx>> Create(SignerOptions signerOptions, CreateTxOptions createTxOptions)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<TxInfo>>> GetTxInfoByHeight(long height)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<List<TxInfo>>> GetTxInfoByHeight(long height) => new TxInfo(_client).GetByHeight(height);
 
         public async Task<Result<Fee>> EstimateFee(IEnumerable<SignerData> signerData, SignerOptions options)
         {
