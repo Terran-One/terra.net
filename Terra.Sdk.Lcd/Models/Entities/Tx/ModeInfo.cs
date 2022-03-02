@@ -10,7 +10,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
         public class SingleMode
         {
-            public ModeInfo Mode { get; set; }
+            public SignMode Mode { get; set; }
         }
 
         public class MultiMode

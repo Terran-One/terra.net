@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Terra.Sdk.Lcd.Models;
+
 namespace Terra.Sdk.Lcd
 {
     public class LcdClientConfig
@@ -15,7 +18,7 @@ namespace Terra.Sdk.Lcd
         /// <summary>
         /// Coins representing the default gas prices to use for fee estimation.
         /// </summary>
-        public object GasPrices { get; set; } // Coins.Input
+        public List<Coin> GasPrices { get; set; }
 
         /// <summary>
         /// Number representing the default gas adjustment value to use for fee estimation.

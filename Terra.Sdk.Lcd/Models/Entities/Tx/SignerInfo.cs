@@ -1,10 +1,10 @@
-using Newtonsoft.Json.Linq;
+using Terra.Sdk.Lcd.Models.Entities.PubKey;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
     public class SignerInfo
     {
-        public JObject PublicKey { get; set; }
+        public PublicKey PublicKey { get; set; }
         public long Sequence { get; set; }
         public ModeInfo ModeInfo { get; set; }
     }

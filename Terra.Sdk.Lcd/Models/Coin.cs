@@ -34,5 +34,8 @@ namespace Terra.Sdk.Lcd.Models
             info.AddValue("denom", Denom);
             info.AddValue("amount", Amount);
         }
+
+        public Coin Multiply(decimal other) => new Coin(Denom, Amount * other);
+        public Coin ToIntCeilCoin() => new Coin(Denom, Math.Ceiling(Amount));
     }
 }
