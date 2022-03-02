@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models;
+using Terra.Sdk.Lcd.Models.Entities;
 
 namespace Terra.Sdk.Lcd.Api
 {
@@ -21,15 +22,9 @@ namespace Terra.Sdk.Lcd.Api
                 new
                 {
                     Data = new List<Coin>(),
-                    Pagination = new { NextKey = "", Total = 0 }
+                    Pagination = new Pagination()
                 },
-                data => new PaginatedResult<Coin>
-                {
-                    Value = data.Data,
-                    TotalCount = data.Pagination?.Total,
-                    NextPageKey = data.Pagination?.NextKey,
-                    NextPageNumber = pageNumber + 1
-                },
+                data => data.Pagination.BuildResult(data.Data, pageNumber),
                 paginationKey, pageNumber, getTotalCount, isDescending);
         }
 
@@ -40,15 +35,9 @@ namespace Terra.Sdk.Lcd.Api
                 new
                 {
                     Supply = new List<Coin>(),
-                    Pagination = new { NextKey = "", Total = 0 }
+                    Pagination = new Pagination()
                 },
-                data => new PaginatedResult<Coin>
-                {
-                    Value = data.Supply,
-                    TotalCount = data.Pagination?.Total,
-                    NextPageKey = data.Pagination?.NextKey,
-                    NextPageNumber = pageNumber + 1
-                },
+                data => data.Pagination.BuildResult(data.Supply, pageNumber),
                 paginationKey, pageNumber, getTotalCount, isDescending);
         }
     }

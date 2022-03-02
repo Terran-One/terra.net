@@ -66,15 +66,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
                             allowance = new Allowance()
                         }
                     },
-                    Pagination = new { NextKey = "", Total = 0 }
+                    Pagination = new Pagination()
                 },
-                data => new PaginatedResult<Allowance>
-                {
-                    Value = data.Allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(),
-                    TotalCount = data.Pagination?.Total,
-                    NextPageKey = data.Pagination?.NextKey,
-                    NextPageNumber = pageNumber + 1
-                },
+                data => data.Pagination.BuildResult(data.Allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(), pageNumber),
                 paginationKey, pageNumber, getTotalCount, isDescending);
         }
 

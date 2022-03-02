@@ -34,9 +34,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
                 new
                 {
                     Grants = new List<AuthorizationGrant>(),
-                    Pagination = new { NextKey = "", Total = 0 }
+                    Pagination = new Pagination()
                 },
-                data => new PaginatedResult<AuthorizationGrant> { Value = data.Grants },
+                data => data.Pagination.BuildResult(data.Grants, pageNumber),
                 paginationKey, pageNumber, getTotalCount, isDescending,
                 new NameValueCollection
                 {
