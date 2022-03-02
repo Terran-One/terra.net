@@ -22,7 +22,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         }
 
         public long Id { get; set; }
-        public Content Content { get; set; }
+        public Content.Content Content { get; set; }
         public ProposalStatus Status { get; set; }
         public Tally FinalTallyResult { get; set; }
         public DateTime SubmitTime { get; set; }

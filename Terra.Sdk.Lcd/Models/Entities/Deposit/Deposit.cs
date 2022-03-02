@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Extensions;
-using Terra.Sdk.Lcd.Models.Entities.Tx;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Deposit
