@@ -9,7 +9,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public IbcTransfer(LcdClient client)
+        internal IbcTransfer(LcdClient client)
         {
             _client = client;
         }

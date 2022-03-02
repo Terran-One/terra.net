@@ -14,7 +14,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
         {
         }
 
-        public BlockInfo(LcdClient lcdClient)
+        internal BlockInfo(LcdClient lcdClient)
         {
             _lcdClient = lcdClient;
         }

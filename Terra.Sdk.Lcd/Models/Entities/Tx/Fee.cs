@@ -16,7 +16,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         {
         }
 
-        public Fee(LcdClient client)
+        internal Fee(LcdClient client)
         {
             _client = client;
         }

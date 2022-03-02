@@ -9,7 +9,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public Market(LcdClient client)
+        internal Market(LcdClient client)
         {
             _client = client;
         }

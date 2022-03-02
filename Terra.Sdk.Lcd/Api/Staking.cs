@@ -9,7 +9,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public Staking(LcdClient client)
+        internal Staking(LcdClient client)
         {
             _client = client;
         }

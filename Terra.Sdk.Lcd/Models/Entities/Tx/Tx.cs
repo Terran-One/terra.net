@@ -22,7 +22,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         {
         }
 
-        public Tx(LcdClient client)
+        internal Tx(LcdClient client)
         {
             _client = client;
         }

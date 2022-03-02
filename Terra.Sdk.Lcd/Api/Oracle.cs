@@ -10,7 +10,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public Oracle(LcdClient client)
+        internal Oracle(LcdClient client)
         {
             _client = client;
         }

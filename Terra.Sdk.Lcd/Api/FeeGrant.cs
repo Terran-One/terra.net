@@ -8,7 +8,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public FeeGrant(LcdClient client)
+        internal FeeGrant(LcdClient client)
         {
             _client = client;
         }

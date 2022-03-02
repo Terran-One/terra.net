@@ -18,7 +18,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         {
         }
 
-        public TxInfo(LcdClient lcdClient)
+        internal TxInfo(LcdClient lcdClient)
         {
             _lcdClient = lcdClient;
         }

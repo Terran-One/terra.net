@@ -10,7 +10,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public Tendermint(LcdClient client)
+        internal Tendermint(LcdClient client)
         {
             _client = client;
         }

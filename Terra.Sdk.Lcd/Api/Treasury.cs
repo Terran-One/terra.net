@@ -10,7 +10,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public Treasury(LcdClient client)
+        internal Treasury(LcdClient client)
         {
             _client = client;
         }

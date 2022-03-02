@@ -8,7 +8,7 @@ namespace Terra.Sdk.Lcd.Api
     {
         private readonly LcdClient _client;
 
-        public AuthZ(LcdClient client)
+        internal AuthZ(LcdClient client)
         {
             _client = client;
         }
