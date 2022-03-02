@@ -207,5 +207,19 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             var txBytes = Encode();
             return txBytes.GetSha256Hash();
         }
+
+        public Task<BlockTxBroadcastResult> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
+        public Task<BlockTxBroadcastResult> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
+
+        private async Task<T> Broadcast<T>(BroadcastMode mode) where T : class
+        {
+            var response = await _client.HttpClient.PostAsync(
+                "/cosmos/tx/v1beta1/txs",
+                new StringContent(JsonConvert.SerializeObject(new { TyBytes = Encode(), Mode = mode })));
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
+        }
     }
 }
