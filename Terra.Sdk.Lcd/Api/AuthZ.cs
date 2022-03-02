@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Models;
-using Terra.Sdk.Lcd.Models.Entities.Authorization;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives;
 
 namespace Terra.Sdk.Lcd.Api
 {
@@ -13,11 +13,11 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public Task<PaginatedResult<Authorization>> GetGrants(
+        public Task<PaginatedResult<AuthorizationGrant>> GetGrants(
             string granter, string grantee, string msgTypeUrl = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            return new Authorization(_client).Get(
+            return new AuthorizationGrant(_client).Get(
                 granter, grantee, msgTypeUrl,
                 paginationKey, pageNumber, getTotalCount, isDescending);
         }

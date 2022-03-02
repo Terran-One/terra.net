@@ -13,6 +13,6 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public Task<Result<Account>> GetAccount(string address) => new Account(_client).Get(address);
+        public Task<Result<Account>> GetAccountInfo(string address) => new Account(_client).Get(address);
     }
 }

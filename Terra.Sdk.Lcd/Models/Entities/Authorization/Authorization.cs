@@ -25,7 +25,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Authorization
             _client = client;
         }
 
-        internal async Task<PaginatedResult<Authorization>> Get(
+        internal Task<PaginatedResult<Authorization>> Get(
             string granter, string grantee, string msgTypeUrl = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {

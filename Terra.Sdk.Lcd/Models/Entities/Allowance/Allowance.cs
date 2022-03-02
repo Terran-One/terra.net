@@ -57,7 +57,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
                 $"/cosmos/feegrant/v1beta1/allowances/{grantee}",
                 new
                 {
-                    allowances = new[]
+                    Allowances = new[]
                     {
                         new
                         {
@@ -66,13 +66,13 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
                             allowance = new Allowance()
                         }
                     },
-                    pagination = new {next_key = "", total = 0}
+                    Pagination = new { NextKey = "", Total = 0 }
                 },
                 data => new PaginatedResult<Allowance>
                 {
-                    Value = data.allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(),
-                    TotalCount = data.pagination?.total,
-                    NextPageKey = data.pagination?.next_key,
+                    Value = data.Allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(),
+                    TotalCount = data.Pagination?.Total,
+                    NextPageKey = data.Pagination?.NextKey,
                     NextPageNumber = pageNumber + 1
                 },
                 paginationKey, pageNumber, getTotalCount, isDescending);

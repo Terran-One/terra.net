@@ -20,14 +20,14 @@ namespace Terra.Sdk.Lcd.Api
                 $"/cosmos/bank/v1beta1/balances/{address}",
                 new
                 {
-                    data = new List<Coin>(),
-                    pagination = new { next_key = "", total = 0 }
+                    Data = new List<Coin>(),
+                    Pagination = new { NextKey = "", Total = 0 }
                 },
                 data => new PaginatedResult<Coin>
                 {
-                    Value = data.data,
-                    TotalCount = data.pagination?.total,
-                    NextPageKey = data.pagination?.next_key,
+                    Value = data.Data,
+                    TotalCount = data.Pagination?.Total,
+                    NextPageKey = data.Pagination?.NextKey,
                     NextPageNumber = pageNumber + 1
                 },
                 paginationKey, pageNumber, getTotalCount, isDescending);
@@ -39,14 +39,14 @@ namespace Terra.Sdk.Lcd.Api
                 "/cosmos/bank/v1beta1/supply",
                 new
                 {
-                    supply = new List<Coin>(),
-                    pagination = new { next_key = "", total = 0 }
+                    Supply = new List<Coin>(),
+                    Pagination = new { NextKey = "", Total = 0 }
                 },
                 data => new PaginatedResult<Coin>
                 {
-                    Value = data.supply,
-                    TotalCount = data.pagination?.total,
-                    NextPageKey = data.pagination?.next_key,
+                    Value = data.Supply,
+                    TotalCount = data.Pagination?.Total,
+                    NextPageKey = data.Pagination?.NextKey,
                     NextPageNumber = pageNumber + 1
                 },
                 paginationKey, pageNumber, getTotalCount, isDescending);
