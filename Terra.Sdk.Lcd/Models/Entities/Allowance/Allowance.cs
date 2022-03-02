@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JsonSubTypes;
 using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Allowance
 {
@@ -31,14 +32,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
             _lcdClient = lcdClient;
         }
 
-        internal async Task<Result<Allowance>> Get(string granter, string grantee)
+        internal Task<Result<Allowance>> Get(string granter, string grantee)
         {
-            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}");
-            if (!response.IsSuccessStatusCode)
-                return new Result<Allowance> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
-
-            var json = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
+            return _lcdClient.GetResult(
+                $"/cosmos/feegrant/v1beta1/allowance/{granter}/{grantee}",
                 new
                 {
                     allowance = new
@@ -48,22 +45,16 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
                         allowance = new Allowance()
                     }
                 },
-                _lcdClient.JsonSerializerSettings);
-
-            return new Result<Allowance>
-            {
-                Value = json.allowance.allowance.WithGrantInfo(json.allowance.granter, json.allowance.grantee)
-            };
+                data => new Result<Allowance>
+                {
+                    Value = data.allowance.allowance.WithGrantInfo(data.allowance.granter, data.allowance.grantee)
+                });
         }
 
-        internal async Task<PaginatedResult<Allowance>> GetAll(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
+        internal Task<PaginatedResult<Allowance>> GetAll(string grantee, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/feegrant/v1beta1/allowances/{grantee}{_lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)}");
-            if (!response.IsSuccessStatusCode)
-                return new PaginatedResult<Allowance> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
-
-            var json = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
+            return _lcdClient.GetPaginatedResult(
+                $"/cosmos/feegrant/v1beta1/allowances/{grantee}",
                 new
                 {
                     allowances = new[]
@@ -75,17 +66,16 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
                             allowance = new Allowance()
                         }
                     },
-                    pagination = new { next_key = "", total = 0 }
+                    pagination = new {next_key = "", total = 0}
                 },
-                _lcdClient.JsonSerializerSettings);
-
-            return new PaginatedResult<Allowance>
-            {
-                Value = json.allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(),
-                TotalCount = json.pagination?.total,
-                NextPageKey = json.pagination?.next_key,
-                NextPageNumber = pageNumber + 1
-            };
+                data => new PaginatedResult<Allowance>
+                {
+                    Value = data.allowances.Select(a => a.allowance.WithGrantInfo(a.granter, a.grantee)).ToList(),
+                    TotalCount = data.pagination?.total,
+                    NextPageKey = data.pagination?.next_key,
+                    NextPageNumber = pageNumber + 1
+                },
+                paginationKey, pageNumber, getTotalCount, isDescending);
         }
 
         private Allowance WithGrantInfo(string granter, string grantee)

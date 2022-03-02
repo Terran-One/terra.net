@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using JsonSubTypes;
 using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Account
 {
@@ -27,17 +28,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
             _lcdClient = lcdClient;
         }
 
-        internal async Task<Result<Account>> Get(string address)
+        internal Task<Result<Account>> Get(string address)
         {
-            var response = await _lcdClient.HttpClient.GetAsync($"/cosmos/auth/v1beta1/accounts/{address}");
-            if (!response.IsSuccessStatusCode)
-                return new Result<Account> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
-
-            var json = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
+            return _lcdClient.GetResult(
+                $"/cosmos/auth/v1beta1/accounts/{address}",
                 new { Account = new Account() },
-                _lcdClient.JsonSerializerSettings);
-            return new Result<Account> { Value = json.Account };
+                data => new Result<Account> { Value = data.Account });
         }
     }
 }
