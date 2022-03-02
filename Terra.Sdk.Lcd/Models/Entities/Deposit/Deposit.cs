@@ -69,9 +69,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
                 new
                 {
                     Txs = new List<Models.Entities.Tx.Tx>(),
-                    TxResponses = new List<TxInfo>(),
                     Pagination = new Pagination()
-
                 },
                 _client.JsonSerializerSettings);
 

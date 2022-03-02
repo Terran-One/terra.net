@@ -53,11 +53,8 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId) => new Models.Entities.Tx.Tx(_client).ForProposal(proposalId);
 
-        public Task<PaginatedResult<Vote>> GetVotes(
-            long proposalId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<PaginatedResult<Vote>> GetVotes(long proposalId, string paginationKey = null,
+            int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) => new Vote(_client).ForProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
 
         public Task<Result<Tally>> GetTally(long proposalId)
         {
