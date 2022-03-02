@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Specialized;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Models;
 
@@ -24,20 +26,12 @@ namespace Terra.Sdk.Lcd.Extensions
 
         internal static async Task<PaginatedResult<TEntity>> GetPaginatedResult<TEntity, TAnonymousType>(this LcdClient lcdClient,
             string url, TAnonymousType anonymousTypeDefinition, Func<TAnonymousType, PaginatedResult<TEntity>> resultBuilder,
-            string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending, string additionalQueryParams = null)
+            string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending,
+            NameValueCollection additionalQueryParams = null)
         {
-            var queryString = new StringBuilder();
             var paginationParams = lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending);
-            if (!string.IsNullOrWhiteSpace(additionalQueryParams))
-            {
-                queryString.Append($"?{additionalQueryParams}");
-                if (!string.IsNullOrWhiteSpace(paginationParams))
-                    queryString.Append(paginationParams.TrimStart('?'));
-            }
-            else
-            {
-                queryString.Append(paginationParams);
-            }
+            var additionalParams = additionalQueryParams?.ToQueryString();
+            var queryString = CombineQueryStrings(paginationParams, additionalParams);
 
             var response = await lcdClient.HttpClient.GetAsync($"{url}{queryString}");
             if (!response.IsSuccessStatusCode)
@@ -48,6 +42,40 @@ namespace Terra.Sdk.Lcd.Extensions
                 anonymousTypeDefinition,
                 lcdClient.JsonSerializerSettings);
             return resultBuilder(data);
+        }
+
+        private static string ToQueryString(this NameValueCollection source)
+        {
+            if (source == null)
+                return null;
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            foreach (var key in source.AllKeys)
+            {
+                if (!string.IsNullOrWhiteSpace(source[key]))
+                {
+                    query[key] = source[key];
+                }
+            }
+
+            return query.ToString();
+        }
+
+        private static string CombineQueryStrings(string a, string b)
+        {
+            var queryString = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(b))
+            {
+                queryString.Append($"?{b}");
+                if (!string.IsNullOrWhiteSpace(a))
+                    queryString.Append(a.TrimStart('?'));
+            }
+            else
+            {
+                queryString.Append(a);
+            }
+
+            return queryString.ToString();
         }
     }
 }

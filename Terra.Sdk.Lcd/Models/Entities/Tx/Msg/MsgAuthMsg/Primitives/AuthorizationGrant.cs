@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web;
 using Terra.Sdk.Lcd.Extensions;
@@ -29,12 +30,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
             string granter, string grantee, string msgTypeUrl = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            var query = HttpUtility.ParseQueryString(string.Empty);
-            query["granter"] = granter;
-            query["grantee"] = grantee;
-            if (!string.IsNullOrWhiteSpace(msgTypeUrl))
-                query["msg_type_url"] = msgTypeUrl;
-
             return _client.GetPaginatedResult(
                 "/cosmos/authz/v1beta1/grants",
                 new
@@ -44,7 +39,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
                 },
                 data => new PaginatedResult<AuthorizationGrant> { Value = data.Grants },
                 paginationKey, pageNumber, getTotalCount, isDescending,
-                query.ToString());
+                new NameValueCollection
+                {
+                    { "granter", granter },
+                    { "grantee", grantee },
+                    { "msg_type_url", msgTypeUrl}
+                });
         }
     }
 }
