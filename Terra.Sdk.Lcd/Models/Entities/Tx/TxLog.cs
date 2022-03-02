@@ -7,17 +7,5 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         public long MsgIndex { get; set; }
         public string Log { get; set; }
         public List<TxEvent> Events { get; set; }
-
-        public class TxEvent
-        {
-            public string Type { get; set; }
-            public List<TxAttribute> Attributes { get; set; }
-
-            public class TxAttribute
-            {
-                public string Key { get; set; }
-                public string Value { get; set; }
-            }
-        }
     }
 }
