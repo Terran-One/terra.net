@@ -14,28 +14,28 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<IbcClientParams>> GetParameters()
+        public Task<Result<IbcClientParams>> GetParameters()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<IdentifiedClientState>> GetClientStates(
+        public Task<PaginatedResult<IdentifiedClientState>> GetClientStates(
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<IdentifiedClientState>> GetClientState(string clientId)
+        public Task<Result<IdentifiedClientState>> GetClientState(string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<string>> GetClientStatus(string clientId)
+        public Task<Result<string>> GetClientStatus(string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<ClientConsensusStates>> GetConsensusStates(string clientId,
+        public Task<PaginatedResult<ClientConsensusStates>> GetConsensusStates(string clientId,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();

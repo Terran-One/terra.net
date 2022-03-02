@@ -16,7 +16,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         public IDictionary<string, List<Coin>> ValidatorRewards { get; set; }
         public List<Coin> Total { get; set; }
 
-        internal async Task<Result<Rewards>> Get(string delegator)
+        internal Task<Result<Rewards>> Get(string delegator)
         {
             throw new NotImplementedException();
         }

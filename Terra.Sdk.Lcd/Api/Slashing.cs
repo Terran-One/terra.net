@@ -15,17 +15,17 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<SigningInfo>> GetSigningInfo(string valConsAddress)
+        public Task<Result<SigningInfo>> GetSigningInfo(string valConsAddress)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<SigningInfo>>> GetSigningInfos()
+        public Task<Result<List<SigningInfo>>> GetSigningInfos()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<SlashingParams>> GetParameters()
+        public Task<Result<SlashingParams>> GetParameters()
         {
             throw new NotImplementedException();
         }

@@ -15,37 +15,37 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<List<Coin>>> GetTaxCaps()
+        public Task<Result<List<Coin>>> GetTaxCaps()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Coin>> GetTaxCap(string denom)
+        public Task<Result<Coin>> GetTaxCap(string denom)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<decimal>> GetTaxRate(long? height = null)
+        public Task<Result<decimal>> GetTaxRate(long? height = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<decimal>> GetRewardHeight()
+        public Task<Result<decimal>> GetRewardHeight()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<Coin>>> GetTaxProceeds()
+        public Task<Result<List<Coin>>> GetTaxProceeds()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Coin>> GetSeigniorageProceeds()
+        public Task<Result<Coin>> GetSeigniorageProceeds()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<TreasuryParams>> GetParameters()
+        public Task<Result<TreasuryParams>> GetParameters()
         {
             throw new NotImplementedException();
         }

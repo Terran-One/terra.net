@@ -14,22 +14,22 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<CodeInfo>> GetCodeInfo(long codeId)
+        public Task<Result<CodeInfo>> GetCodeInfo(long codeId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<ContractInfo>> GetCContractInfo(string contractAddress)
+        public Task<Result<ContractInfo>> GetCContractInfo(string contractAddress)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<T>> GetContractQuery<T>(string contractAddress, object query)
+        public Task<Result<T>> GetContractQuery<T>(string contractAddress, object query)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<WasmParams>> GetParameters()
+        public Task<Result<WasmParams>> GetParameters()
         {
             throw new NotImplementedException();
         }

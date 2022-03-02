@@ -17,7 +17,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         public string BonusProposerReward { get; set; }
         public bool WithdrawAddrEnabled { get; set; }
 
-        internal async Task<Result<DistributionParameters>> Get()
+        internal Task<Result<DistributionParameters>> Get()
         {
             throw new NotImplementedException();
         }

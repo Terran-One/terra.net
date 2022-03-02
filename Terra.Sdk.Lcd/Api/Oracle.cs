@@ -15,42 +15,42 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<List<Coin>>> GetExchangeRates()
+        public Task<Result<List<Coin>>> GetExchangeRates()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Coin>> GetExchangeRate(string denom)
+        public Task<Result<Coin>> GetExchangeRate(string denom)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<string>>> GetActiveDenoms()
+        public Task<Result<List<string>>> GetActiveDenoms()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<string>> GetFeederAddress(string validator)
+        public Task<Result<string>> GetFeederAddress(string validator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<long>> GetMisses(string validator)
+        public Task<Result<long>> GetMisses(string validator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<AggregateExchangeRatePrevote>> GetAggregatePrevote(string validator)
+        public Task<Result<AggregateExchangeRatePrevote>> GetAggregatePrevote(string validator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<AggregateExchangeRateVote>> GetAggregateVote(string validator)
+        public Task<Result<AggregateExchangeRateVote>> GetAggregateVote(string validator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<OracleParams>> GetParameters()
+        public Task<Result<OracleParams>> GetParameters()
         {
             throw new NotImplementedException();
         }

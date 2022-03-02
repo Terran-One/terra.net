@@ -14,57 +14,57 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<PaginatedResult<Delegation>> GetDelegations(string delegator = null, string validator = null,
+        public Task<PaginatedResult<Delegation>> GetDelegations(string delegator = null, string validator = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Delegation>> GetDelegation(string delegator, string validator)
+        public Task<Result<Delegation>> GetDelegation(string delegator, string validator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<UnbondingDelegation>> GetUnbondingDelegations(string delegator = null, string validator = null,
+        public Task<PaginatedResult<UnbondingDelegation>> GetUnbondingDelegations(string delegator = null, string validator = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<UnbondingDelegation>> GetUnbondingDelegation(string delegator = null, string validator = null)
+        public Task<Result<UnbondingDelegation>> GetUnbondingDelegation(string delegator = null, string validator = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<Redelegation>> GetRedelegations(string delegator = null, string validatorSrc = null, string validatorDst = null,
+        public Task<PaginatedResult<Redelegation>> GetRedelegations(string delegator = null, string validatorSrc = null, string validatorDst = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<Validator>> GetBondedValidators(string delegator = null,
+        public Task<PaginatedResult<Validator>> GetBondedValidators(string delegator = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<Validator>> GetValidators(
+        public Task<PaginatedResult<Validator>> GetValidators(
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Validator>> GetValidator(string address)
+        public Task<Result<Validator>> GetValidator(string address)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<StakingPool>> GetPool()
+        public Task<Result<StakingPool>> GetPool()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<StakingParams>> GetParameters()
+        public Task<Result<StakingParams>> GetParameters()
         {
             throw new NotImplementedException();
         }

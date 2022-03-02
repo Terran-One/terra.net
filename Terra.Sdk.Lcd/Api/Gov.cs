@@ -15,65 +15,65 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<PaginatedResult<Proposal>> GetProposals(string paginationKey = null, int? pageNumber = null,
+        public Task<PaginatedResult<Proposal>> GetProposals(string paginationKey = null, int? pageNumber = null,
             bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Proposal>> GetProposal(long proposalId)
+        public Task<Result<Proposal>> GetProposal(long proposalId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<string>> GetProposer(long proposalId)
+        public Task<Result<string>> GetProposer(long proposalId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Coin>> GetInitialDeposit(long proposalId)
+        public Task<List<Coin>> GetInitialDeposit(long proposalId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<Deposit>> GetDeposits(long proposalId,
+        public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Tx>> SearchProposalCreationTx(long proposalId)
+        public Task<Result<Tx>> SearchProposalCreationTx(long proposalId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<Vote>> GetVotes(long proposalId,
+        public Task<PaginatedResult<Vote>> GetVotes(long proposalId,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<Tally>> GetTally(long proposalId)
+        public Task<Result<Tally>> GetTally(long proposalId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<DepositParams>> GetDepositParameters()
+        public Task<Result<DepositParams>> GetDepositParameters()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<VotingParams>> GetVotingParameters()
+        public Task<Result<VotingParams>> GetVotingParameters()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<TallyParams>> GetTallyParameters()
+        public Task<Result<TallyParams>> GetTallyParameters()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<GovParams>> GetGovParameters()
+        public Task<Result<GovParams>> GetGovParameters()
         {
             throw new NotImplementedException();
         }

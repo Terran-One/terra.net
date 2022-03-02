@@ -17,17 +17,17 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<Rewards>> GetRewards(string delegator) => new Rewards(_lcdClient).Get(delegator);
 
-        public async Task<Result<List<Coin>>> GetValidatorCommission(string validator)
+        public Task<Result<List<Coin>>> GetValidatorCommission(string validator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<string>> GetWithdrawAddress(string delegator)
+        public Task<Result<string>> GetWithdrawAddress(string delegator)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<Coin>>> GetCommunityPool()
+        public Task<Result<List<Coin>>> GetCommunityPool()
         {
             throw new NotImplementedException();
         }

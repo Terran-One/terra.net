@@ -15,22 +15,22 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<object>> GetNodeInfo()
+        public Task<Result<object>> GetNodeInfo()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<bool>> GetSyncing()
+        public Task<Result<bool>> GetSyncing()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PaginatedResult<DelegateValidator>> GetValidatorSet(long? height = null)
+        public Task<PaginatedResult<DelegateValidator>> GetValidatorSet(long? height = null)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Result<BlockInfo>> GetBlockInfo(long? height = null)
+        public Task<Result<BlockInfo>> GetBlockInfo(long? height = null)
         {
             throw new NotImplementedException();
         }
