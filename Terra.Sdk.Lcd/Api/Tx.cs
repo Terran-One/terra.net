@@ -24,11 +24,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<Result<long>> EstimateGas(Models.Entities.Tx.Tx tx, decimal? gasAdjustment = null, IReadOnlyCollection<SignerData> signers = null) => tx.EstimateGas(signers, gasAdjustment);
         public string Encode(Models.Entities.Tx.Tx tx) => tx.Encode();
         public Models.Entities.Tx.Tx Decode(string encodedTx) => new Models.Entities.Tx.Tx(_client).Decode(encodedTx);
-
-        public Task<string> GetHash(Models.Entities.Tx.Tx tx)
-        {
-            throw new NotImplementedException();
-        }
+        public string GetHash(Models.Entities.Tx.Tx tx) => tx.Encode();
 
         public Task<Result<BlockTxBroadcastResult>> Broadcast(Models.Entities.Tx.Tx tx)
         {

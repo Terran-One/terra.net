@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Api;
+using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Account;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 
@@ -199,6 +200,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             var base64EncodedBytes = System.Convert.FromBase64String(encodedTx);
             var json = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
             return JsonConvert.DeserializeObject<Tx>(json, _client.JsonSerializerSettings);
+        }
+
+        public string GetHash()
+        {
+            var txBytes = Encode();
+            return txBytes.GetSha256Hash();
         }
     }
 }

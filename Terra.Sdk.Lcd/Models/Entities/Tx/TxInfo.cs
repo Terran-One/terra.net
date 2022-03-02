@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
@@ -65,7 +66,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             var txInfos = new List<TxInfo>();
             string firstError = null;
 
-            var txHashes = txs.Select(GetSha256Hash);
+            var txHashes = txs.Select(tx => tx.GetSha256Hash());
             foreach (var txHash in txHashes)
             {
                 var result = await Get(txHash);
@@ -84,22 +85,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 return new Result<List<TxInfo>> { Error = firstError };
 
             return new Result<List<TxInfo>> { Value = txInfos };
-        }
-
-        private static string GetSha256Hash(string rawData)
-        {
-            using (var sha256Hash = SHA256.Create())
-            {
-                var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string
-                var builder = new StringBuilder();
-                foreach (var b in bytes)
-                {
-                    builder.Append(b.ToString("x2"));
-                }
-                return builder.ToString().ToUpperInvariant();
-            }
         }
     }
 }
