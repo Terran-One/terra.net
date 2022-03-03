@@ -19,7 +19,7 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<CodeInfo>> GetCodeInfo(long codeId) => new CodeInfo(_client).Get(codeId);
 
-        public Task<Result<ContractInfo>> GetCContractInfo(string contractAddress) => new ContractInfo(_client).Get(contractAddress);
+        public Task<Result<ContractInfo>> GetContractInfo(string contractAddress) => new ContractInfo(_client).Get(contractAddress);
 
         public Task<Result<T>> GetContractQuery<T>(string contractAddress, object query) where T : new()
         {
