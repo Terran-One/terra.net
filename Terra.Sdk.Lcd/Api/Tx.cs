@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
+using Terra.Sdk.Lcd.Api.Parameters;
 using Terra.Sdk.Lcd.Models;
-using Terra.Sdk.Lcd.Models.Entities.PubKey;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
 namespace Terra.Sdk.Lcd.Api
 {
@@ -30,47 +27,5 @@ namespace Terra.Sdk.Lcd.Api
         public Task<Result<BlockTxBroadcastResult>> BroadcastSync(Models.Entities.Tx.Tx tx) => tx.BroadcastSync();
         public Task<Result<BlockTxBroadcastResult>> BroadcastAsync(Models.Entities.Tx.Tx tx) => tx.BroadcastAsync();
         public Task<Result<TxSearchResult>> Search(TxSearchOptions options) => new Tx(_client).Search(options);
-    }
-
-    public class SignerOptions
-    {
-        public string Address { get; set; }
-        public long? SequenceNumber { get; set; }
-        public PublicKey PublicKey { get; set; }
-    }
-
-    public class SignerData
-    {
-        public long SequenceNumber { get; set; }
-        public PublicKey PublicKey { get; set; }
-    }
-
-    public class CreateTxOptions
-    {
-        public IEnumerable<Msg> Msgs { get; set; }
-        public Fee Fee { get; set; }
-        public string Memo { get; set; }
-        public string Gas { get; set; }
-        public List<Coin> GasPrices { get; set; }
-        public decimal? GasAdjustment { get; set; }
-        public IEnumerable<string> FeeDenoms { get; set; }
-        public long? TimeoutHeight { get; set; }
-    }
-
-    public class TxSearchOptions
-    {
-        public IEnumerable<TxEvent.TxAttribute> Events { get; set; }
-
-        internal string GetQueryString()
-        {
-            if (Events == null)
-                return null;
-
-            var strb = new StringBuilder();
-            foreach (var txEvent in Events)
-                strb.Append($"&event={HttpUtility.UrlEncode($"{txEvent.Key}={txEvent.Value}")}");
-
-            return strb.ToString().TrimStart('&');
-        }
     }
 }

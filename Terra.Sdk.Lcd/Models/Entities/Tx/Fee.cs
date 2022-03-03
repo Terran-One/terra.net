@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Api;
+using Terra.Sdk.Lcd.Api.Parameters;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {

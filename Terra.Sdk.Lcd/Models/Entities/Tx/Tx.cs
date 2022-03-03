@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Api;
+using Terra.Sdk.Lcd.Api.Parameters;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Account;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
