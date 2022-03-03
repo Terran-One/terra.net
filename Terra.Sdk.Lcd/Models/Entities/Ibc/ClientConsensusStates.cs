@@ -23,7 +23,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         public string ClientId { get; set; }
         public List<ConsensusStateWithHeight> ConsensusStates { get; set; }
 
-        public Task<PaginatedResult<ClientConsensusStates>> Get(string clientId,
+        internal Task<PaginatedResult<ClientConsensusStates>> Get(string clientId,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             return _client.GetPaginatedResult(

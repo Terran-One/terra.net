@@ -21,7 +21,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
 
         public long VotingPeriod { get; set; }
 
-        public Task<Result<VotingParams>> Get()
+        internal Task<Result<VotingParams>> Get()
         {
             return _client.GetResult<VotingParams>("/cosmos/gov/v1beta1/params/voting");
         }

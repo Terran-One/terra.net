@@ -26,7 +26,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         public string GoalBonded { get; set; }
         public string BlocksPerYear { get; set; }
 
-        public Task<Result<MintingParams>> Get()
+        internal Task<Result<MintingParams>> Get()
         {
             return _client.GetResult(
                 "/cosmos/mint/v1beta1/params",

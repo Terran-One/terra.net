@@ -22,7 +22,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         public bool SendEnabled { get; set; }
         public bool ReceiveEnabled { get; set; }
 
-        public Task<Result<IbcTransferParams>> Get()
+        internal Task<Result<IbcTransferParams>> Get()
         {
             return _client.GetResult(
                 "/ibc/apps/transfer/v1/params",

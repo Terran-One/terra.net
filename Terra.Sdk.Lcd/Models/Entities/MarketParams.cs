@@ -23,7 +23,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         public string BasePool { get; set; }
         public string MinStabilitySpread { get; set; }
 
-        public Task<Result<MarketParams>> Get()
+        internal Task<Result<MarketParams>> Get()
         {
             return _client.GetResult(
                 "/terra/market/v1beta1/params",

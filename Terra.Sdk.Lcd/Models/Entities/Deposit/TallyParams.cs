@@ -34,7 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         /// </summary>
         public decimal VetoThreshold { get; set; }
 
-        public Task<Result<TallyParams>> Get()
+        internal Task<Result<TallyParams>> Get()
         {
             return _client.GetResult<TallyParams>("/cosmos/gov/v1beta1/params/tallying");
         }

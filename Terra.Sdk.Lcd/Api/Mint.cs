@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models;

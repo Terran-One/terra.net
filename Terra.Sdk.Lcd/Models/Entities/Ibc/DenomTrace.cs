@@ -23,7 +23,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         public string Path { get; set; }
         public string BaseDenom { get; set; }
 
-        public Task<Result<DenomTrace>> Get(string hash)
+        internal Task<Result<DenomTrace>> Get(string hash)
         {
             return _client.GetResult(
                 $"/ibc/apps/transfer/v1/denom_traces/{hash}",
@@ -34,7 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
                 data => new Result<DenomTrace> { Value = data.DenomTrace });
         }
 
-        public Task<PaginatedResult<DenomTrace>> GetAll(
+        internal Task<PaginatedResult<DenomTrace>> GetAll(
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             return _client.GetPaginatedResult(

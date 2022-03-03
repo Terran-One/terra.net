@@ -23,7 +23,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         public List<Coin> MinDeposit { get; set; }
         public string MaxDepositPeriod { get; set; }
 
-        public Task<Result<DepositParams>> Get()
+        internal Task<Result<DepositParams>> Get()
         {
             return _client.GetResult<DepositParams>("/cosmos/gov/v1beta1/params/deposit");
         }
