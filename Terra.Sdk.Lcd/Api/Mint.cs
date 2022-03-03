@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities;
 
@@ -16,17 +17,20 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<decimal>> GetInflation()
         {
-            throw new NotImplementedException();
+            return _client.GetResult(
+                "/cosmos/mint/v1beta1/inflation",
+                new { Inflation = 0M },
+                data => new Result<decimal> { Value = data.Inflation });
         }
 
         public Task<Result<decimal>> GetAnnualProvisions()
         {
-            throw new NotImplementedException();
+            return _client.GetResult(
+                "/cosmos/mint/v1beta1/annual_provisions",
+                new { AnnualProvisions = 0M },
+                data => new Result<decimal> { Value = data.AnnualProvisions });
         }
 
-        public Task<Result<MintingParams>> GetParameters()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<MintingParams>> GetParameters() => new MintingParams(_client).Get();
     }
 }
