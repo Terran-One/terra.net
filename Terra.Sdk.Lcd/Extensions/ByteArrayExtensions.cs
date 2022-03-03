@@ -1,16 +1,15 @@
 using System.Security.Cryptography;
 using System.Text;
-using CardanoBech32;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    public static class StringExtensions
+    public static class ByteArrayExtensions
     {
-        internal static string GetSha256Hash(this string rawData)
+        internal static string GetSha256Hash(this byte[] rawData)
         {
             using (var sha256Hash = SHA256.Create())
             {
-                var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+                var bytes = sha256Hash.ComputeHash(rawData);
 
                 // Convert byte array to a string
                 var builder = new StringBuilder();
@@ -22,14 +21,13 @@ namespace Terra.Sdk.Lcd.Extensions
             }
         }
 
-        internal static string ConvertToBech32AddressFromHex(this string inHex, string prefix)
+        internal static string ToHexString(this byte[] bytes)
         {
-            if (inHex == null)
-                return null;
+            var hex = new StringBuilder(bytes.Length * 2);
+            foreach (var b in bytes)
+                hex.AppendFormat("{0:x2}", b);
 
-            inHex = inHex.Trim();
-            var data = Helper.ConvertHexStringToByte(inHex);
-            return Bech32Engine.Encode(prefix, data);
+            return hex.ToString();
         }
     }
 }

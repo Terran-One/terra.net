@@ -142,7 +142,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 SignerInfo signerInfo;
                 if (signer.PublicKey != null)
                 {
-                    if (signer.PublicKey is LegacyPublicKey legacyPublicKey)
+                    if (signer.PublicKey is LegacyAminoMultisigPublicKey legacyPublicKey)
                     {
                         signerInfo = new SignerInfo
                         {

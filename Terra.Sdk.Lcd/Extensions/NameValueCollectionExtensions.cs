@@ -5,7 +5,7 @@ namespace Terra.Sdk.Lcd.Extensions
 {
     public static class NameValueCollectionExtensions
     {
-        public static string ToQueryString(this NameValueCollection source)
+        internal static string ToQueryString(this NameValueCollection source)
         {
             if (source == null)
                 return null;

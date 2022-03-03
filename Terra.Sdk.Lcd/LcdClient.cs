@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Web;
+using CardanoBech32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Terra.Sdk.Lcd.Api;
@@ -9,6 +10,7 @@ namespace Terra.Sdk.Lcd
 {
     public class LcdClient
     {
+        internal static readonly Lazy<CardanoBech32Wrapper> Bech32 = new Lazy<CardanoBech32Wrapper>(() => new CardanoBech32Wrapper());
         internal LcdClientConfig Config { get; }
         internal HttpClient HttpClient { get; }
         internal JsonSerializerSettings JsonSerializerSettings { get; } = new JsonSerializerSettings
