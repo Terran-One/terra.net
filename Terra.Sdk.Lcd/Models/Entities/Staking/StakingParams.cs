@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 
-namespace Terra.Sdk.Lcd.Models.Entities
+namespace Terra.Sdk.Lcd.Models.Entities.Staking
 {
     public class StakingParams
     {
@@ -43,6 +43,11 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             _client = client;
         }
+
+        internal Task<Result<StakingPool>> Get()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class Delegation
@@ -59,6 +64,16 @@ namespace Terra.Sdk.Lcd.Models.Entities
         internal Delegation(LcdClient client)
         {
             _client = client;
+        }
+
+        internal Task<PaginatedResult<Delegation>> GetAll(string delegator, string validator, string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal Task<Result<Delegation>> Get(string delegator, string validator)
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -77,6 +92,16 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             _client = client;
         }
+
+        internal Task<PaginatedResult<UnbondingDelegation>> GetAll(string delegator, string validator, string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal Task<Result<UnbondingDelegation>> Get(string delegator, string validator)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class Redelegation
@@ -94,6 +119,11 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             _client = client;
         }
+
+        internal Task<PaginatedResult<Redelegation>> GetAll(string delegator, string validatorSrc, string validatorDst, string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class Validator
@@ -110,6 +140,21 @@ namespace Terra.Sdk.Lcd.Models.Entities
         internal Validator(LcdClient client)
         {
             _client = client;
+        }
+
+        internal Task<PaginatedResult<Validator>> GetAllBonded(string delegator, string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal Task<Result<Validator>> Get(string address)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal Task<PaginatedResult<Validator>> GetAll(string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
