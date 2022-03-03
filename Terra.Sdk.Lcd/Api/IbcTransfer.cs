@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities;
+using Terra.Sdk.Lcd.Models.Entities.Ibc;
 
 namespace Terra.Sdk.Lcd.Api
 {
