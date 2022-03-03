@@ -8,37 +8,37 @@ namespace Terra.Sdk.Lcd.Extensions
 {
     public static class HttpClientExtensions
     {
-        internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient lcdClient, string url, string additionalParams = null)
+        internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient client, string url, string additionalParams = null)
             where TEntity : new()
         {
             if (additionalParams != null)
                 url = $"{url}?{additionalParams}";
 
-            var response = await lcdClient.HttpClient.GetAsync(url);
+            var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase}" };
 
             var data = JsonConvert.DeserializeObject<TEntity>(
                 await response.Content.ReadAsStringAsync(),
-                lcdClient.JsonSerializerSettings);
+                client.JsonSerializerSettings);
             return new Result<TEntity> { Value = data };
         }
 
-        internal static async Task<Result<TEntity>> GetResult<TEntity, TAnonymousType>(this LcdClient lcdClient,
+        internal static async Task<Result<TEntity>> GetResult<TEntity, TAnonymousType>(this LcdClient client,
             string url, TAnonymousType anonymousTypeDefinition, Func<TAnonymousType, Result<TEntity>> resultBuilder,
             string additionalParams = null)
         {
             if (additionalParams != null)
                 url = $"{url}?{additionalParams}";
 
-            var response = await lcdClient.HttpClient.GetAsync(url);
+            var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase}" };
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
                 anonymousTypeDefinition,
-                lcdClient.JsonSerializerSettings);
+                client.JsonSerializerSettings);
             return resultBuilder(data);
         }
 
