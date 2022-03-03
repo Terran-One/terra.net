@@ -17,7 +17,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
         {
         }
 
-        public AuthorizationGrant(LcdClient client)
+        internal AuthorizationGrant(LcdClient client)
         {
             _client = client;
         }

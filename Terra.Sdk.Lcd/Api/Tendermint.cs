@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities;
 using Terra.Sdk.Lcd.Models.Entities.BlockInfo;
@@ -15,7 +16,7 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public Task<Result<object>> GetNodeInfo()
+        public Task<Result<JObject>> GetNodeInfo()
         {
             throw new NotImplementedException();
         }
@@ -30,9 +31,6 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public Task<Result<BlockInfo>> GetBlockInfo(long? height = null)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<BlockInfo>> GetBlockInfo(long? height = null) => new BlockInfo(_client).Get(height);
     }
 }

@@ -14,7 +14,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         {
         }
 
-        public VotingParams(LcdClient client)
+        internal VotingParams(LcdClient client)
         {
             _client = client;
         }

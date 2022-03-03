@@ -15,7 +15,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         {
         }
 
-        public DepositParams(LcdClient client)
+        internal DepositParams(LcdClient client)
         {
             _client = client;
         }

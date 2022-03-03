@@ -15,7 +15,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         {
         }
 
-        public ClientConsensusStates(LcdClient client)
+        internal ClientConsensusStates(LcdClient client)
         {
             _client = client;
         }

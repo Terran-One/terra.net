@@ -15,7 +15,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         {
         }
 
-        public IbcClientParams(LcdClient client)
+        internal IbcClientParams(LcdClient client)
         {
             _client = client;
         }

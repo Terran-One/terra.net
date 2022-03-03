@@ -14,7 +14,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         {
         }
 
-        public TallyParams(LcdClient client)
+        internal TallyParams(LcdClient client)
         {
             _client = client;
         }
