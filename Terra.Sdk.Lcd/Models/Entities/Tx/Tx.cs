@@ -193,14 +193,14 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
         internal string Encode()
         {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, _client.JsonSerializerSettings));
+            var plainTextBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, _client.JsonSerializerSettings));
             return System.Convert.ToBase64String(plainTextBytes);
         }
 
         internal Tx Decode(string encodedTx)
         {
             var base64EncodedBytes = System.Convert.FromBase64String(encodedTx);
-            var json = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            var json = Encoding.UTF8.GetString(base64EncodedBytes);
             return JsonConvert.DeserializeObject<Tx>(json, _client.JsonSerializerSettings);
         }
 
