@@ -37,5 +37,11 @@ namespace Terra.Sdk.Lcd.Models
 
         public Coin Multiply(decimal other) => new Coin(Denom, Amount * other);
         public Coin ToIntCeilCoin() => new Coin(Denom, Math.Ceiling(Amount));
+
+        public override string ToString()
+        {
+            var roundedAmount = Math.Round(Amount);
+            return Amount == roundedAmount ? $"{roundedAmount}.0{Denom}" : $"{roundedAmount}${Denom}";
+        }
     }
 }

@@ -1,3 +1,6 @@
+using System.Threading.Tasks;
+using Terra.Sdk.Lcd.Extensions;
+
 namespace Terra.Sdk.Lcd.Models.Entities
 {
     public class MarketParams
@@ -15,21 +18,17 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             _client = client;
         }
-    }
-    public class MintingParams
-    {
-        private readonly LcdClient _client;
 
-        /// <remarks>
-        /// For serialization.
-        /// </remarks>
-        public MintingParams()
-        {
-        }
+        public string PoolRecoveryPeriod { get; set; }
+        public string BasePool { get; set; }
+        public string MinStabilitySpread { get; set; }
 
-        internal MintingParams(LcdClient client)
+        public Task<Result<MarketParams>> Get()
         {
-            _client = client;
+            return _client.GetResult(
+                "/terra/market/v1beta1/params",
+                new { Params = new MarketParams() },
+                data => new Result<MarketParams> { Value = data.Params });
         }
     }
 }
