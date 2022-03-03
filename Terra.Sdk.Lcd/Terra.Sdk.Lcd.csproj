@@ -8,6 +8,7 @@
       <PackageReference Include="CardanoBech32" Version="0.9.1" />
       <PackageReference Include="JsonSubTypes" Version="1.8.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="protobuf-net" Version="3.0.101" />
     </ItemGroup>
 
 </Project>
