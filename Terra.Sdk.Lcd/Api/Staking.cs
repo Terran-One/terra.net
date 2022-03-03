@@ -64,9 +64,6 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public Task<Result<StakingParams>> GetParameters()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<StakingParams>> GetParameters() => new StakingParams(_client).Get();
     }
 }

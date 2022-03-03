@@ -52,9 +52,6 @@ namespace Terra.Sdk.Lcd.Api
             throw new NotImplementedException();
         }
 
-        public Task<Result<TreasuryParams>> GetParameters()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<TreasuryParams>> GetParameters() => new TreasuryParams(_client).Get();
     }
 }
