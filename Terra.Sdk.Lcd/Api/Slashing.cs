@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities;
@@ -15,19 +13,10 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public Task<Result<SigningInfo>> GetSigningInfo(string valConsAddress)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<SigningInfo>> GetSigningInfo(string valConsAddress) => new SigningInfo(_client).Get(valConsAddress);
 
-        public Task<Result<List<SigningInfo>>> GetSigningInfos()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<PaginatedResult<SigningInfo>> GetSigningInfos() => new SigningInfo(_client).GetAll();
 
-        public Task<Result<SlashingParams>> GetParameters()
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Result<SlashingParams>> GetParameters() => new SlashingParams(_client).Get();
     }
 }
