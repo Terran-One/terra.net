@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 
@@ -14,6 +15,14 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
         }
 
+        public PolicyConstraints TaxPolicy { get; set; }
+        public PolicyConstraints RewardPolicy { get; set; }
+        public string SeigniorageBurdenTarget { get; set; }
+        public string MiningIncrement { get; set; }
+        public string WindowShort { get; set; }
+        public string WindowLong { get; set; }
+        public string WindowProbation { get; set; }
+
         internal TreasuryParams(LcdClient client)
         {
             _client = client;
@@ -25,6 +34,14 @@ namespace Terra.Sdk.Lcd.Models.Entities
                 "/terra/wasm/treasury/params",
                 new {Params = new TreasuryParams()},
                 data => new Result<TreasuryParams> {Value = data.Params});
+        }
+
+        public class PolicyConstraints
+        {
+            public string RateMin { get; set; }
+            public string RateMax { get; set; }
+            public List<Coin> Cap { get; set; }
+            public string ChangeRateMax { get; set; }
         }
     }
 }

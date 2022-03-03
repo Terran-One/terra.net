@@ -14,6 +14,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
         {
         }
 
+        public string UnbondingTime { get; set; }
+        public long MaxValidators { get; set; }
+        public long MaxEntries { get; set; }
+        public long HistoricalEntries { get; set; }
+        public string BondDenom { get; set; }
+
         internal StakingParams(LcdClient client)
         {
             _client = client;
