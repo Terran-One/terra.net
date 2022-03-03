@@ -1,5 +1,5 @@
-using System;
 using System.Threading.Tasks;
+using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Staking
 {
@@ -24,7 +24,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
 
         internal Task<Result<StakingPool>> Get()
         {
-            throw new NotImplementedException();
+            return _client.GetResult(
+                "/cosmos/staking/v1beta1/pool",
+                new {Pool = new StakingPool()},
+                data => new Result<StakingPool> {Value = data.Pool});
         }
     }
 }

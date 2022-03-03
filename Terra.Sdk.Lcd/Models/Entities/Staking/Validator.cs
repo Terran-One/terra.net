@@ -1,5 +1,6 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives;
 
@@ -33,19 +34,30 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
         public Commission Commission { get; set; }
         public string MinSelfDelegation { get; set; }
 
-        internal Task<PaginatedResult<Validator>> GetAllBonded(string delegator, string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        internal Task<PaginatedResult<Validator>> GetAllBonded(string delegator, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            throw new NotImplementedException();
+            return _client.GetPaginatedResult(
+                $"/cosmos/staking/v1beta1/delegators/{delegator}/validators",
+                new {Validators = new List<Validator>(), Pagination = new Pagination()},
+                data => data.Pagination.BuildResult(data.Validators, pageNumber),
+                paginationKey, pageNumber, getTotalCount, isDescending);
         }
 
-        internal Task<Result<Validator>> Get(string address)
+        internal Task<Result<Validator>> Get(string validator)
         {
-            throw new NotImplementedException();
+            return _client.GetResult(
+                $"/cosmos/staking/v1beta1/validators/{validator}",
+                new {Validator = new Validator()},
+                data => new Result<Validator> {Value = data.Validator});
         }
 
-        internal Task<PaginatedResult<Validator>> GetAll(string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending)
+        internal Task<PaginatedResult<Validator>> GetAll(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
-            throw new NotImplementedException();
+            return _client.GetPaginatedResult(
+                "/cosmos/staking/v1beta1/validators",
+                new {Validators = new List<Validator>(), Pagination = new Pagination()},
+                data => data.Pagination.BuildResult(data.Validators, pageNumber),
+                paginationKey, pageNumber, getTotalCount, isDescending);
         }
     }
 }
