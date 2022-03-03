@@ -1,11 +1,9 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
-using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Signing
 {
@@ -51,35 +49,6 @@ namespace Terra.Sdk.Lcd.Models.Signing
                 Data = new ModeInfo {Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct, Signature = sigBytes}},
                 Sequence = signDoc.Sequence
             };
-        }
-    }
-
-    public class SignDoc
-    {
-        public string ChainId { get; set; }
-        public string AccountNumber { get; set; }
-        public long Sequence { get; set; }
-        public AuthInfo AuthInfo { get; set; }
-        public TxBody TxBody { get; set; }
-
-        public byte[] ToBytes()
-        {
-            return ToProto(new
-            {
-                BodyBytes = TxBody,
-                AuthInfoBytes = AuthInfo,
-                ChainId,
-                AccountNumber = long.Parse(AccountNumber)
-            });
-        }
-
-        private static byte[] ToProto(object obj)
-        {
-            using (var stream = new MemoryStream())
-            {
-                Serializer.Serialize(stream, obj);
-                return stream.ToArray();
-            }
         }
     }
 
