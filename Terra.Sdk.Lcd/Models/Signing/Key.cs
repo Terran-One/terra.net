@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
@@ -50,12 +51,74 @@ namespace Terra.Sdk.Lcd.Models.Signing
                 Sequence = signDoc.Sequence
             };
         }
-    }
 
-    public class SignatureV2
-    {
-        public PublicKey PublicKey { get; set; }
-        public ModeInfo Data { get; set; }
-        public long Sequence { get; set; }
+        public SignatureV2 CreateSignatureAmino(SignDoc signDoc)
+        {
+            var sigBytes = Convert.ToBase64String(signDoc.ToAminoBytes());
+
+            return new SignatureV2
+            {
+                PublicKey = _publicKey,
+                Data = new ModeInfo
+                {
+                    Single = new ModeInfo.SingleMode
+                    {
+                        Mode = ModeInfo.SignMode.Direct,
+                        Signature = sigBytes
+
+                    }
+                },
+                Sequence = signDoc.Sequence
+            };
+        }
+
+        public async Task<Tx> SignTx(Tx tx, SignOptions options)
+        {
+            var copyTx = new Tx
+            {
+                Body = tx.Body,
+                AuthInfo = new AuthInfo
+                {
+                    SignerInfos = new List<SignerInfo>(),
+                    Fee = tx.AuthInfo.Fee
+                },
+                Signatures = new List<string>()
+            };
+
+            var signDoc = new SignDoc
+            {
+                ChainId = options.ChainId,
+                AccountNumber = options.AccountNumber.ToString(),
+                Sequence = options.Sequence,
+                AuthInfo = copyTx.AuthInfo,
+                TxBody = copyTx.Body
+            };
+
+            SignatureV2 signature;
+            if (options.SignMode == ModeInfo.SignMode.LegacyAminoJson)
+            {
+                signature = CreateSignatureAmino(signDoc);
+            }
+            else
+            {
+                signature = await CreateSignature(signDoc);
+            }
+
+            var sigData = signature.Data.Single;
+            copyTx.Signatures.AddRange(tx.Signatures);
+            copyTx.Signatures.Add(sigData.Signature);
+            copyTx.AuthInfo.SignerInfos.AddRange(tx.AuthInfo.SignerInfos);
+            copyTx.AuthInfo.SignerInfos.Add(new SignerInfo
+            {
+                PublicKey = signature.PublicKey,
+                Sequence = signature.Sequence,
+                ModeInfo = new ModeInfo
+                {
+                    Single = new ModeInfo.SingleMode { Mode = sigData.Mode }
+                }
+            });
+
+            return copyTx;
+        }
     }
 }

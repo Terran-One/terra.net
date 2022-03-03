@@ -23,6 +23,20 @@ namespace Terra.Sdk.Lcd.Models.Signing
             });
         }
 
+        internal byte[] ToAminoBytes() => ToProto(new
+        {
+            ChainId,
+            AccountNumber,
+            Sequence = Sequence.ToString(),
+            TimeoutHeight =
+                TxBody.TimeoutHeight != 0
+                    ? TxBody.TimeoutHeight.ToString()
+                    : null,
+            Fee = AuthInfo.Fee.ToAmino(),
+            Msgs = TxBody.Messages,
+            Memo = TxBody.Memo ?? "",
+        });
+
         private static byte[] ToProto(object obj)
         {
             using (var stream = new MemoryStream())

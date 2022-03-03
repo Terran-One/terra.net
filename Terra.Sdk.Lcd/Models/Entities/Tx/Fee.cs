@@ -76,5 +76,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 }
             };
         }
+
+        internal object ToAmino() => new { Gas = GasLimit.ToString(), Amount };
     }
 }
