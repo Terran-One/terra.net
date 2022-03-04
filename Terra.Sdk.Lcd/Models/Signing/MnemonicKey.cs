@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace Terra.Sdk.Lcd.Models.Signing
 {
     public class MnemonicKey : RawKey
@@ -18,11 +15,6 @@ namespace Terra.Sdk.Lcd.Models.Signing
             var hdPathLuna = $"m/44'/{options.CoinType}'/{options.Account}'/0/{options.Index}";
             var terraHd = MnemonicKeyOptions.Bip32.DerivePath(hdPathLuna, seed);
             return terraHd.Key;
-        }
-
-        public override Task<byte[]> Sign(byte[] payload)
-        {
-            throw new NotImplementedException();
         }
     }
 }
