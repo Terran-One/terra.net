@@ -9,18 +9,18 @@ namespace Terra.Sdk.Lcd.Models.Signing
     {
         private readonly byte[] _privateKey;
 
-        private RawKey(byte[] privateKey, SimplePublicKey publicKey) : base(publicKey)
+        public RawKey(byte[] privateKey) : base(CreatePublicKey(privateKey))
         {
             _privateKey = privateKey;
         }
 
-        public static RawKey Create(byte[] privateKey)
+        private static SimplePublicKey CreatePublicKey(byte[] privateKey)
         {
             var publicKey = new EthECKey(privateKey, true);
-            return new RawKey(privateKey, new SimplePublicKey
+            return new SimplePublicKey
             {
                 Key = Convert.ToBase64String(publicKey.GetPubKey())
-            });
+            };
         }
 
         public Tuple<byte[], long> EcdsaSign(byte[] payload)

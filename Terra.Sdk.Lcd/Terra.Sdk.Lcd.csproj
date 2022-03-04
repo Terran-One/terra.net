@@ -6,6 +6,8 @@
 
     <ItemGroup>
       <PackageReference Include="CardanoBech32" Version="0.9.1" />
+      <PackageReference Include="dotnetstandard-bip32" Version="1.0.0" />
+      <PackageReference Include="dotnetstandard-bip39" Version="1.0.2" />
       <PackageReference Include="JsonSubTypes" Version="1.8.0" />
       <PackageReference Include="Nethereum.Signer" Version="4.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
