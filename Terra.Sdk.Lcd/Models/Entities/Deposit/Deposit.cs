@@ -33,7 +33,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);
-            if (!string.IsNullOrWhiteSpace(proposalResult.Error))
+            if (proposalResult.Error != null)
                 return new PaginatedResult<Deposit> { Error = proposalResult.Error };
 
             var proposal = proposalResult.Value;
@@ -61,7 +61,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
 
             var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs{queryString}");
             if (!response.IsSuccessStatusCode)
-                return new PaginatedResult<Deposit> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
+                return await response.GetPaginatedErrorResult<Deposit>();
 
             var value = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),

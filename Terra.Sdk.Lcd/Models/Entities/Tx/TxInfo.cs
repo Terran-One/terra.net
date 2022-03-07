@@ -57,7 +57,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 return new Result<List<TxInfo>> { Value = new List<TxInfo>() };
 
             var txInfos = new List<TxInfo>();
-            string firstError = null;
+            Error firstError = null;
 
             var txHashes = txs.Select(tx => tx.GetSha256Hash());
             foreach (var txHash in txHashes)

@@ -222,7 +222,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
             var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs{queryString}");
             if (!response.IsSuccessStatusCode)
-                return new PaginatedGroupedResult<TxSearchResult> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
+                return await response.GetPaginatedGroupedErrorResult<TxSearchResult>();
 
             var value = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
@@ -263,7 +263,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
             var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs{queryString}");
             if (!response.IsSuccessStatusCode)
-                return new Result<Tx> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
+                return await response.GetErrorResult<Tx>();
 
             var value = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
@@ -277,7 +277,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 _client.JsonSerializerSettings);
 
             if (!value.TxResponses.Any())
-                return new Result<Tx> { Error = "Failed to fetch submit_proposer tx" };
+                return new Result<Tx> { Error = Error.From("Failed to fetch submit_proposer tx") };
 
             return new Result<Tx> { Value = value.Txs.Single() };
         }
@@ -288,7 +288,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 "/cosmos/tx/v1beta1/txs",
                 new StringContent(JsonConvert.SerializeObject(new { TyBytes = Encode(), Mode = mode })));
             if (!response.IsSuccessStatusCode)
-                return new Result<T> { Error = $"Failed to fetch: {response.ReasonPhrase}"};
+                return await response.GetErrorResult<T>();
 
             var value = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
             return new Result<T> { Value = value };

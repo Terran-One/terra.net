@@ -55,13 +55,13 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
             }
 
             return Task.FromResult(
-                new PaginatedResult<Delegation> {Error = "arguments delegator and validator cannot both be empty"});
+                new PaginatedResult<Delegation> {Error = Error.From("arguments delegator and validator cannot both be empty")});
         }
 
         internal async Task<Result<Delegation>> Get(string delegator, string validator)
         {
             var delegations = await GetAll(delegator, validator);
-            if (!string.IsNullOrWhiteSpace(delegations.Error))
+            if (delegations.Error != null)
                 return new Result<Delegation> {Error = delegations.Error};
 
             return new Result<Delegation> {Value = delegations.Value[0]};

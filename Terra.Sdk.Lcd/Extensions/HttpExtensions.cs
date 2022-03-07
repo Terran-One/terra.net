@@ -10,10 +10,13 @@ namespace Terra.Sdk.Lcd.Extensions
     internal static class HttpExtensions
     {
         internal static async Task<Result<TEntity>> GetErrorResult<TEntity>(this HttpResponseMessage response) =>
-            new Result<TEntity> { Error = await response.GetErrorString() };
+            new Result<TEntity> { Error = Error.From(await response.Content.ReadAsStringAsync()) };
 
         internal static async Task<PaginatedResult<TEntity>> GetPaginatedErrorResult<TEntity>(this HttpResponseMessage response) =>
-            new PaginatedResult<TEntity> { Error = await response.GetErrorString() };
+            new PaginatedResult<TEntity> { Error = Error.From(await response.Content.ReadAsStringAsync()) };
+
+        internal static async Task<PaginatedGroupedResult<TEntity>> GetPaginatedGroupedErrorResult<TEntity>(this HttpResponseMessage response) =>
+            new PaginatedGroupedResult<TEntity> { Error = Error.From(await response.Content.ReadAsStringAsync()) };
 
         internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient client, string url, string additionalParams = null)
             where TEntity : new()
@@ -67,9 +70,6 @@ namespace Terra.Sdk.Lcd.Extensions
                 lcdClient.JsonSerializerSettings);
             return resultBuilder(data);
         }
-
-        private static async Task<string> GetErrorString(this HttpResponseMessage response) =>
-            $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})";
 
         private static string CombineQueryStrings(string a, string b)
         {
