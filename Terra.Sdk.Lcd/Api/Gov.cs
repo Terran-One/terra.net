@@ -29,7 +29,7 @@ namespace Terra.Sdk.Lcd.Api
 
             var msg = creationTx.Value.Body.Messages.OfType<MsgSubmitProposal>().SingleOrDefault();
             if (msg == null)
-                return new Result<string> { Error = Error.From("Failed to fetch submit_proposer tx") };
+                return new Result<string> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
 
             return new Result<string> { Value = msg.Proposer };
         }
@@ -42,7 +42,7 @@ namespace Terra.Sdk.Lcd.Api
 
             var msg = creationTx.Value.Body.Messages.OfType<MsgSubmitProposal>().SingleOrDefault();
             if (msg == null)
-                return new Result<List<Coin>> { Error = Error.From("Failed to fetch submit_proposer tx") };
+                return new Result<List<Coin>> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
 
             return new Result<List<Coin>> { Value = msg.InitialDeposit };
         }

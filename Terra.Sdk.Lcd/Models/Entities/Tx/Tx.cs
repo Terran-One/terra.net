@@ -277,7 +277,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 _client.JsonSerializerSettings);
 
             if (!value.TxResponses.Any())
-                return new Result<Tx> { Error = Error.From("Failed to fetch submit_proposer tx") };
+                return new Result<Tx> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
 
             return new Result<Tx> { Value = value.Txs.Single() };
         }
