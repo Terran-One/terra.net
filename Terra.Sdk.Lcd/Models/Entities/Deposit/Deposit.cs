@@ -70,7 +70,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
                     Txs = new List<Models.Entities.Tx.Tx>(),
                     Pagination = new Pagination()
                 },
-                _client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
 
             var deposits = new List<Deposit>();
             var messages = value.Txs.SelectMany(tx => tx.Body.Messages);

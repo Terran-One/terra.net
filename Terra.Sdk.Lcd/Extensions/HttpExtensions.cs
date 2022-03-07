@@ -30,7 +30,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var data = JsonConvert.DeserializeObject<TEntity>(
                 await response.Content.ReadAsStringAsync(),
-                client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
             return new Result<TEntity> { Value = data };
         }
 
@@ -49,26 +49,26 @@ namespace Terra.Sdk.Lcd.Extensions
             var data = JsonConvert.DeserializeAnonymousType(
                 jsonStr,
                 anonymousTypeDefinition,
-                client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
             return resultBuilder(data);
         }
 
-        internal static async Task<PaginatedResult<TEntity>> GetPaginatedResult<TEntity, TAnonymousType>(this LcdClient lcdClient,
+        internal static async Task<PaginatedResult<TEntity>> GetPaginatedResult<TEntity, TAnonymousType>(this LcdClient client,
             string url, TAnonymousType anonymousTypeDefinition, Func<TAnonymousType, PaginatedResult<TEntity>> resultBuilder,
             string paginationKey, int? pageNumber, bool? getTotalCount, bool? isDescending,
             string additionalParams = null)
         {
-            var paginationParams = lcdClient.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending);
+            var paginationParams = client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending);
             var queryString = CombineQueryStrings(paginationParams, additionalParams);
 
-            var response = await lcdClient.HttpClient.GetAsync($"{url}{queryString}");
+            var response = await client.HttpClient.GetAsync($"{url}{queryString}");
             if (!response.IsSuccessStatusCode)
                 return await response.GetPaginatedErrorResult<TEntity>();
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
                 anonymousTypeDefinition,
-                lcdClient.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
             return resultBuilder(data);
         }
 

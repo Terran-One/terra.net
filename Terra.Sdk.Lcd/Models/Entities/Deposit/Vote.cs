@@ -74,7 +74,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
                     Pagination = new Pagination()
 
                 },
-                _client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
 
             var votes = new List<Vote>();
             var messages = value.Txs.SelectMany(tx => tx.Body.Messages);

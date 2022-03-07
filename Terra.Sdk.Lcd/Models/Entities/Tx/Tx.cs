@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -32,6 +33,25 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         public TxBody Body { get; set; }
         public AuthInfo AuthInfo { get; set; }
         public List<string> Signatures { get; set; }
+
+        public string Encode()
+        {
+            var plainTextBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, Global.JsonSerializerSettings));
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        public Tx Decode(string encodedTx)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(encodedTx);
+            var json = Encoding.UTF8.GetString(base64EncodedBytes);
+            return JsonConvert.DeserializeObject<Tx>(json, Global.JsonSerializerSettings);
+        }
+
+        public string GetHash()
+        {
+            var txBytes = Encode();
+            return txBytes.GetSha256Hash();
+        }
 
         internal async Task<Result<Tx>> Create(IEnumerable<SignerOptions> signers, CreateTxOptions options)
         {
@@ -129,7 +149,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             var simulateRes = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
                 new { GasInfo = new { GasUsed = 0M } },
-                _client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
 
             return new Result<long> { Value = (long)(gasAdjustment.Value * simulateRes.GasInfo.GasUsed) };
         }
@@ -191,25 +211,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             }
         }
 
-        internal string Encode()
-        {
-            var plainTextBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, _client.JsonSerializerSettings));
-            return System.Convert.ToBase64String(plainTextBytes);
-        }
-
-        internal Tx Decode(string encodedTx)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(encodedTx);
-            var json = Encoding.UTF8.GetString(base64EncodedBytes);
-            return JsonConvert.DeserializeObject<Tx>(json, _client.JsonSerializerSettings);
-        }
-
-        internal string GetHash()
-        {
-            var txBytes = Encode();
-            return txBytes.GetSha256Hash();
-        }
-
         internal Task<Result<BlockTxBroadcastResult>> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
         internal Task<Result<BlockTxBroadcastResult>> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
         internal Task<Result<BlockTxBroadcastResult>> BroadcastAsync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Async);
@@ -237,7 +238,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     }
 
                 },
-                _client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
 
             return new PaginatedGroupedResult<TxSearchResult>
             {
@@ -274,7 +275,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     Pagination = new Pagination()
 
                 },
-                _client.JsonSerializerSettings);
+                Global.JsonSerializerSettings);
 
             if (!value.TxResponses.Any())
                 return new Result<Tx> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
@@ -290,7 +291,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<T>();
 
-            var value = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
+            var value = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), Global.JsonSerializerSettings);
             return new Result<T> { Value = value };
         }
     }

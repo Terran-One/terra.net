@@ -10,16 +10,8 @@ namespace Terra.Sdk.Lcd
 {
     public class LcdClient
     {
-        internal static readonly Lazy<CardanoBech32Wrapper> Bech32 = new Lazy<CardanoBech32Wrapper>(() => new CardanoBech32Wrapper());
         internal LcdClientConfig Config { get; }
         internal HttpClient HttpClient { get; }
-        internal JsonSerializerSettings JsonSerializerSettings { get; } = new JsonSerializerSettings
-        {
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
-        };
 
         public LcdClient(LcdClientConfig config)
         {

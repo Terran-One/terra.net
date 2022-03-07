@@ -23,7 +23,7 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<T>> GetContractQuery<T>(string contractAddress, object query) where T : new()
         {
-            var queryMsg = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(query, _client.JsonSerializerSettings)));
+            var queryMsg = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(query, Global.JsonSerializerSettings)));
             return _client.GetResult(
                 $"/terra/wasm/v1beta1/contracts/{contractAddress}/store?query_msg={queryMsg}",
                 new {QueryResult = new T()},
