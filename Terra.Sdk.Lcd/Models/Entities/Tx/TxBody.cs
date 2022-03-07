@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {

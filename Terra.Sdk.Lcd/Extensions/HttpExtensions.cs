@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -6,8 +7,11 @@ using Terra.Sdk.Lcd.Models;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    public static class HttpClientExtensions
+    internal static class HttpExtensions
     {
+        internal static async Task<string> GetErrorString(this HttpResponseMessage response) =>
+            $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})";
+
         internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient client, string url, string additionalParams = null)
             where TEntity : new()
         {
@@ -16,7 +20,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
+                return new Result<TEntity> { Error = await response.GetErrorString() };
 
             var data = JsonConvert.DeserializeObject<TEntity>(
                 await response.Content.ReadAsStringAsync(),
@@ -33,7 +37,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
+                return new Result<TEntity> { Error = await response.GetErrorString()};
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
@@ -52,7 +56,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await lcdClient.HttpClient.GetAsync($"{url}{queryString}");
             if (!response.IsSuccessStatusCode)
-                return new PaginatedResult<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
+                return new PaginatedResult<TEntity> { Error = await response.GetErrorString() };
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),

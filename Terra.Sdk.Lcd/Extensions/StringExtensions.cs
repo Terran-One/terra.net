@@ -4,7 +4,7 @@ using CardanoBech32;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         internal static string GetSha256Hash(this string rawData)
         {

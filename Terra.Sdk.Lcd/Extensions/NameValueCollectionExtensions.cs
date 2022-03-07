@@ -3,7 +3,7 @@ using System.Web;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    public static class NameValueCollectionExtensions
+    internal static class NameValueCollectionExtensions
     {
         internal static string ToQueryString(this NameValueCollection source)
         {

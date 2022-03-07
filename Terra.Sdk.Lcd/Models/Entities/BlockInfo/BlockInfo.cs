@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
 {
@@ -26,7 +27,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
         {
             var response = await _client.HttpClient.GetAsync($"/cosmos/base/tendermint/v1beta1/blocks/{(height.HasValue ? height.ToString() : "latest")}");
             if (!response.IsSuccessStatusCode)
-                return new Result<BlockInfo> {  Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
+                return new Result<BlockInfo> {  Error = await response.GetErrorString() };
 
             var blockInfo = JsonConvert.DeserializeObject<BlockInfo>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
             return new Result<BlockInfo> { Value = blockInfo };

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    public static class ByteArrayExtensions
+    internal static class ByteArrayExtensions
     {
         internal static string GetSha256Hash(this byte[] rawData)
         {

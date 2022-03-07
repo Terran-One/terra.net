@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
-using Terra.Sdk.Lcd.Api;
 using Terra.Sdk.Lcd.Api.Parameters;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Account;
@@ -125,7 +124,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 "/cosmos/tx/v1beta1/simulate",
                 new StringContent(JsonConvert.SerializeObject(new { TyBytes = simTx.Encode() })));
             if (!response.IsSuccessStatusCode)
-                return new Result<long> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
+                return new Result<long> { Error = await response.GetErrorString() };
 
             var simulateRes = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
