@@ -124,7 +124,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 "/cosmos/tx/v1beta1/simulate",
                 new StringContent(JsonConvert.SerializeObject(new { TyBytes = simTx.Encode() })));
             if (!response.IsSuccessStatusCode)
-                return new Result<long> { Error = await response.GetErrorString() };
+                return await response.GetErrorResult<long>();
 
             var simulateRes = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),

@@ -23,14 +23,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
         public BlockId BlockId { get; set; }
         public Block Block { get; set; }
 
-        public async Task<Result<BlockInfo>> Get(long? height = null)
+        public Task<Result<BlockInfo>> Get(long? height = null)
         {
-            var response = await _client.HttpClient.GetAsync($"/cosmos/base/tendermint/v1beta1/blocks/{(height.HasValue ? height.ToString() : "latest")}");
-            if (!response.IsSuccessStatusCode)
-                return new Result<BlockInfo> {  Error = await response.GetErrorString() };
-
-            var blockInfo = JsonConvert.DeserializeObject<BlockInfo>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
-            return new Result<BlockInfo> { Value = blockInfo };
+            return _client.GetResult<BlockInfo>($"/cosmos/base/tendermint/v1beta1/blocks/{(height.HasValue ? height.ToString() : "latest")}");
         }
     }
 }

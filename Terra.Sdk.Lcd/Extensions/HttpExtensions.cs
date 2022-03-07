@@ -9,8 +9,11 @@ namespace Terra.Sdk.Lcd.Extensions
 {
     internal static class HttpExtensions
     {
-        internal static async Task<string> GetErrorString(this HttpResponseMessage response) =>
-            $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})";
+        internal static async Task<Result<TEntity>> GetErrorResult<TEntity>(this HttpResponseMessage response) =>
+            new Result<TEntity> { Error = await response.GetErrorString() };
+
+        internal static async Task<PaginatedResult<TEntity>> GetPaginatedErrorResult<TEntity>(this HttpResponseMessage response) =>
+            new PaginatedResult<TEntity> { Error = await response.GetErrorString() };
 
         internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient client, string url, string additionalParams = null)
             where TEntity : new()
@@ -20,7 +23,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> { Error = await response.GetErrorString() };
+                return await response.GetErrorResult<TEntity>();
 
             var data = JsonConvert.DeserializeObject<TEntity>(
                 await response.Content.ReadAsStringAsync(),
@@ -37,7 +40,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> { Error = await response.GetErrorString()};
+                return await response.GetErrorResult<TEntity>();
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
@@ -56,7 +59,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await lcdClient.HttpClient.GetAsync($"{url}{queryString}");
             if (!response.IsSuccessStatusCode)
-                return new PaginatedResult<TEntity> { Error = await response.GetErrorString() };
+                return await response.GetPaginatedErrorResult<TEntity>();
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
@@ -64,6 +67,9 @@ namespace Terra.Sdk.Lcd.Extensions
                 lcdClient.JsonSerializerSettings);
             return resultBuilder(data);
         }
+
+        private static async Task<string> GetErrorString(this HttpResponseMessage response) =>
+            $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})";
 
         private static string CombineQueryStrings(string a, string b)
         {
