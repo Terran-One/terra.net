@@ -8,8 +8,7 @@ var client = new LcdClient(new LcdClientConfig
 });
 
 var res = await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20");
-Console.WriteLine(JsonConvert.SerializeObject(res.Value, Formatting.Indented));
-Console.WriteLine(JsonConvert.SerializeObject(client.Tx.Decode(client.Tx.Encode(res.Value.Tx)), Formatting.Indented));
+Console.WriteLine(JsonConvert.SerializeObject(client.Tx.GetTxInfoByHeight(long.Parse(res.Value.Height))), Formatting.Indented);
 
 // var result1 = await lcdClient.Auth.GetAccount("terra1ll7lc3m0yt2eg0z7ntn5w9rdskxrrgd82ac75u");
 // Console.WriteLine(JsonConvert.SerializeObject(result1));
