@@ -45,8 +45,9 @@ namespace Terra.Sdk.Lcd.Extensions
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<TEntity>();
 
+            var jsonStr = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
+                jsonStr,
                 anonymousTypeDefinition,
                 client.JsonSerializerSettings);
             return resultBuilder(data);

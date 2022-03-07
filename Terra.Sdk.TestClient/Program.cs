@@ -7,8 +7,8 @@ var lcdClient = new LcdClient(new LcdClientConfig
     Url = "https://fcd.terra.dev"
 });
 
-var res = await lcdClient.Tx.GetTxInfo("69CA62F1328A3FBC810A3E370A186BC2A5FAED2739848CA3336580DD17C58F7E");
-Console.WriteLine(JsonConvert.SerializeObject(res));
+var res = await lcdClient.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20");
+Console.WriteLine(JsonConvert.SerializeObject(res, Formatting.Indented));
 
 // var result1 = await lcdClient.Auth.GetAccount("terra1ll7lc3m0yt2eg0z7ntn5w9rdskxrrgd82ac75u");
 // Console.WriteLine(JsonConvert.SerializeObject(result1));

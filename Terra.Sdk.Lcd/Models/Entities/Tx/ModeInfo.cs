@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
@@ -25,10 +26,15 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
         public enum SignMode
         {
+            [EnumMember(Value = "SIGN_MODE_UNSPECIFIED")]
             Unspecified = 0,
+            [EnumMember(Value = "SIGN_MODE_DIRECT")]
             Direct = 1,
+            [EnumMember(Value = "SIGN_MODE_TEXTUAL")]
             Textual = 2,
+            [EnumMember(Value = "SIGN_MODE_LEGACY_AMINO_JSON")]
             LegacyAminoJson = 127,
+            [EnumMember(Value = "UNRECOGNIZED")]
             Unrecognized = -1
         }
     }
