@@ -22,7 +22,7 @@ namespace Terra.Sdk.Lcd.Api
         {
             var response = await _client.HttpClient.GetAsync("/cosmos/base/tendermint/v1beta1/node_info");
             if (!response.IsSuccessStatusCode)
-                return new Result<JObject> {Error = $"Fetch failed: {response.ReasonPhrase}"};
+                return new Result<JObject> {Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})"};
 
             using (var stringReader = new StringReader(await response.Content.ReadAsStringAsync()))
             using (var jsonReader = new JsonTextReader(stringReader) {FloatParseHandling = FloatParseHandling.Decimal})

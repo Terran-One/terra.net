@@ -38,17 +38,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         public Tx Tx { get; set; }
         public DateTime Timestamp { get; set; }
 
-        public async Task<Result<TxInfo>> Get(string txHash)
+        public Task<Result<TxInfo>> Get(string txHash)
         {
-            var response = await _client.HttpClient.GetAsync($"/cosmos/tx/v1beta1/txs/{txHash}");
-            if (!response.IsSuccessStatusCode)
-                return new Result<TxInfo> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
-
-            var json = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
-                new { TxResponse = new TxInfo() },
-                _client.JsonSerializerSettings);
-            return new Result<TxInfo> { Value = json.TxResponse };
+            return _client.GetResult(
+                $"/cosmos/tx/v1beta1/txs/{txHash}",
+                new {TxResponse = new TxInfo()},
+                data => new Result<TxInfo> {Value = data.TxResponse});
         }
 
         public async Task<Result<List<TxInfo>>> GetByHeight(long height)

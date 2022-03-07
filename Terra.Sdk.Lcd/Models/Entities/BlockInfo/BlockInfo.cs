@@ -26,7 +26,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
         {
             var response = await _client.HttpClient.GetAsync($"/cosmos/base/tendermint/v1beta1/blocks/{(height.HasValue ? height.ToString() : "latest")}");
             if (!response.IsSuccessStatusCode)
-                return new Result<BlockInfo> {  Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new Result<BlockInfo> {  Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
 
             var blockInfo = JsonConvert.DeserializeObject<BlockInfo>(await response.Content.ReadAsStringAsync(), _client.JsonSerializerSettings);
             return new Result<BlockInfo> { Value = blockInfo };

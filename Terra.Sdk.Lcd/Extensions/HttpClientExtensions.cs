@@ -16,7 +16,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
 
             var data = JsonConvert.DeserializeObject<TEntity>(
                 await response.Content.ReadAsStringAsync(),
@@ -33,7 +33,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await client.HttpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
-                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new Result<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
@@ -52,7 +52,7 @@ namespace Terra.Sdk.Lcd.Extensions
 
             var response = await lcdClient.HttpClient.GetAsync($"{url}{queryString}");
             if (!response.IsSuccessStatusCode)
-                return new PaginatedResult<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase}" };
+                return new PaginatedResult<TEntity> { Error = $"Fetch failed: {response.ReasonPhrase} ({await response.Content.ReadAsStringAsync()})" };
 
             var data = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
