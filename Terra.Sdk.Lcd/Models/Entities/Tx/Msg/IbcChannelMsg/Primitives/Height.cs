@@ -1,13 +1,14 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using ProtoBuf;
 
-using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives
+namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives
 {
     [ProtoContract]
     public readonly struct Height : ISerializable
     {
-        [ProtoMember(1)]public long RevisionNumber { get; }
-        [ProtoMember(2)]public long RevisionHeight { get; }
+        [ProtoMember(1)] public long RevisionNumber { get; }
+        [ProtoMember(2)] public long RevisionHeight { get; }
 
         public Height(long revisionNumber, long revisionHeight) : this()
         {

@@ -1,7 +1,8 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using ProtoBuf;
 
-using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
+namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
 {
     public readonly struct WeightedVoteOption : ISerializable
     {
@@ -19,7 +20,7 @@ using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
         /// </remarks>
         public WeightedVoteOption(SerializationInfo info, StreamingContext text) : this()
         {
-            Option = (VoteOption)info.GetInt32("option");
+            Option = (VoteOption) info.GetInt32("option");
             Weight = info.GetDecimal("weight");
         }
 
@@ -29,7 +30,7 @@ using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("option", (int)Option);
+            info.AddValue("option", (int) Option);
             info.AddValue("weight", Weight);
         }
     }

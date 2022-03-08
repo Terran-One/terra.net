@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
+using ProtoBuf;
 
-using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
+namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
 {
     [ProtoContract]
     public class AuthorizationGrant
@@ -23,10 +24,8 @@ using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primit
             _client = client;
         }
 
-        [ProtoMember(1)]
-        public Authorization.Authorization Authorization { get; set; }
-        [ProtoMember(2)]
-        public DateTime Expiration { get; set; }
+        [ProtoMember(1)] public Authorization.Authorization Authorization { get; set; }
+        [ProtoMember(2)] public DateTime Expiration { get; set; }
 
         internal Task<PaginatedResult<AuthorizationGrant>> Get(
             string granter, string grantee, string msgTypeUrl = null,
@@ -43,9 +42,9 @@ using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primit
                 paginationKey, pageNumber, getTotalCount, isDescending,
                 new NameValueCollection
                 {
-                    { "granter", granter },
-                    { "grantee", grantee },
-                    { "msg_type_url", msgTypeUrl}
+                    {"granter", granter},
+                    {"grantee", grantee},
+                    {"msg_type_url", msgTypeUrl}
                 }.ToQueryString());
         }
     }

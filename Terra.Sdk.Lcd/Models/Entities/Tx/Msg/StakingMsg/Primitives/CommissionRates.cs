@@ -1,14 +1,15 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using ProtoBuf;
 
-using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives
+namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives
 {
     [ProtoContract]
     public readonly struct CommissionRates : ISerializable
     {
-        [ProtoMember(1)]public decimal Rate { get; }
-        [ProtoMember(2)]public decimal MaxRate { get; }
-        [ProtoMember(3)]public decimal MaxChangeRate { get; }
+        [ProtoMember(1)] public decimal Rate { get; }
+        [ProtoMember(2)] public decimal MaxRate { get; }
+        [ProtoMember(3)] public decimal MaxChangeRate { get; }
 
         public CommissionRates(decimal rate, decimal maxRate, decimal maxChangeRate) : this()
         {
@@ -22,7 +23,6 @@ using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primit
         /// </remarks>
         public CommissionRates(SerializationInfo info, StreamingContext text) : this()
         {
-
             Rate = info.GetDecimal("rate");
             MaxRate = info.GetDecimal("max_rate");
             MaxChangeRate = info.GetDecimal("max_change_rate");
