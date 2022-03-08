@@ -63,15 +63,14 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             foreach (var txHash in txHashes)
             {
                 var result = await Get(txHash);
-                if (result.Error != null)
+                if (result.Value != null)
                 {
                     txInfos.Add(result.Value);
                 }
-                else if (firstError == null)
+                else if (result.Error != null)
                 {
                     firstError = result.Error;
                 }
-
             }
 
             if (!txInfos.Any() && firstError != null)

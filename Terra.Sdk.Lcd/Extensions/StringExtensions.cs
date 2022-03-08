@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
 using CardanoBech32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -12,15 +11,8 @@ namespace Terra.Sdk.Lcd.Extensions
         {
             using (var sha256Hash = SHA256.Create())
             {
-                var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string
-                var builder = new StringBuilder();
-                foreach (var b in bytes)
-                {
-                    builder.Append(b.ToString("x2"));
-                }
-                return builder.ToString().ToUpperInvariant();
+                var wordArray = sha256Hash.ComputeHash(System.Convert.FromBase64String(rawData));
+                return Helper.ConvertByteToHexString(wordArray);
             }
         }
 

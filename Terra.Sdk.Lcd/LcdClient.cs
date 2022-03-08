@@ -1,9 +1,6 @@
 using System;
 using System.Net.Http;
 using System.Web;
-using CardanoBech32;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Terra.Sdk.Lcd.Api;
 
 namespace Terra.Sdk.Lcd

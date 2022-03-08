@@ -1,10 +1,8 @@
-using System;
-
 namespace Terra.Sdk.Lcd.Models.Entities.BlockInfo
 {
     public class Header
     {
-        public Version Version { get; set; }
+        public Tx.Msg.IbcConnectionMsg.Primitives.Version Version { get; set; }
         public string ChainId { get; set; }
         public string Height { get; set; }
         public string Time { get; set; }
