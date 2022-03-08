@@ -36,7 +36,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);
             if (proposalResult.Error != null)
-                return new PaginatedResult<Vote> { Error = proposalResult.Error };
+                return new PaginatedResult<Vote> {Error = proposalResult.Error};
 
             var proposal = proposalResult.Value;
             if (proposal.Status == ProposalStatus.DepositPeriod)
@@ -72,7 +72,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
                     Txs = new List<Tx.Tx>(),
                     TxResponses = new List<TxInfo>(),
                     Pagination = new Pagination()
-
                 },
                 Global.JsonSerializerSettings);
 
@@ -86,7 +85,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
                     {
                         ProposalId = proposalId,
                         Voter = msgVote.Voter,
-                        Options = new[] { new WeightedVoteOption(msgVote.Option, 1)}.ToList()
+                        Options = new[] {new WeightedVoteOption(msgVote.Option, 1)}.ToList()
                     });
                 }
                 else if (msg is MsgVoteWeighted msgVoteWeighted && msgVoteWeighted.ProposalId == proposalId)

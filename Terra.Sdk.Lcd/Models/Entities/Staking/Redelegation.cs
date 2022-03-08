@@ -17,8 +17,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
         {
         }
 
-        [JsonProperty("redelegation")]
-        public RedelegationDetails Details { get; set; }
+        [JsonProperty("redelegation")] public RedelegationDetails Details { get; set; }
         public List<RedelegationEntry> Entries { get; set; }
 
         internal Redelegation(LcdClient client)

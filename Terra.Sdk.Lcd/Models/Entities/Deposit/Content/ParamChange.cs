@@ -4,7 +4,8 @@ using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
 {
-    [ProtoContract]public readonly struct ParamChange : ISerializable
+    [ProtoContract]
+    public readonly struct ParamChange : ISerializable
     {
         /// <remarks>
         /// Used for serialization.
@@ -23,9 +24,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
             Value = value;
         }
 
-        [ProtoMember(1)]public string Subspace { get; }
-        [ProtoMember(2)]public string Key { get; }
-        [ProtoMember(3)]public string Value { get; }
+        [ProtoMember(1)] public string Subspace { get; }
+        [ProtoMember(2)] public string Key { get; }
+        [ProtoMember(3)] public string Value { get; }
 
         /// <remarks>
         /// Called during serialization.

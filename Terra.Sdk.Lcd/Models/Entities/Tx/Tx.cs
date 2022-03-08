@@ -32,14 +32,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             _client = client;
         }
 
-        [ProtoMember(1)]
-        public TxBody Body { get; set; }
+        [ProtoMember(1)] public TxBody Body { get; set; }
 
-        [ProtoMember(2)]
-        public AuthInfo AuthInfo { get; set; }
+        [ProtoMember(2)] public AuthInfo AuthInfo { get; set; }
 
-        [ProtoMember(3)]
-        public List<string> Signatures { get; set; }
+        [ProtoMember(3)] public List<string> Signatures { get; set; }
 
         public string Encode()
         {
@@ -74,7 +71,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     {
                         var baseAccount = account.Value is LazyGradedVestingAccount vestingAccount
                             ? vestingAccount.BaseVestingAccount
-                            : (BaseAccount)account.Value;
+                            : (BaseAccount) account.Value;
 
                         if (!sequenceNumber.HasValue)
                         {
@@ -89,7 +86,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 }
 
                 Debug.Assert(sequenceNumber != null, $"{nameof(sequenceNumber)} != null");
-                signerData.Add(new SignerData { SequenceNumber = sequenceNumber.Value, PublicKey = signer.PublicKey });
+                signerData.Add(new SignerData {SequenceNumber = sequenceNumber.Value, PublicKey = signer.PublicKey});
             }
 
             if (options.Fee == null)
@@ -142,22 +139,22 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     }
                 };
 
-                simTx = new Tx { Body = Body, AuthInfo = authInfo, Signatures = new List<string>() };
+                simTx = new Tx {Body = Body, AuthInfo = authInfo, Signatures = new List<string>()};
                 simTx.AppendEmptySignatures(signers);
             }
 
             var response = await _client.HttpClient.PostAsync(
                 "/cosmos/tx/v1beta1/simulate",
-                new StringContent(JsonConvert.SerializeObject(new { TyBytes = simTx.Encode() })));
+                new StringContent(JsonConvert.SerializeObject(new {TyBytes = simTx.Encode()})));
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<long>();
 
             var simulateRes = JsonConvert.DeserializeAnonymousType(
                 await response.Content.ReadAsStringAsync(),
-                new { GasInfo = new { GasUsed = 0M } },
+                new {GasInfo = new {GasUsed = 0M}},
                 Global.JsonSerializerSettings);
 
-            return new Result<long> { Value = (long)(gasAdjustment.Value * simulateRes.GasInfo.GasUsed) };
+            return new Result<long> {Value = (long) (gasAdjustment.Value * simulateRes.GasInfo.GasUsed)};
         }
 
         internal void AppendEmptySignatures(IEnumerable<SignerData> signers)
@@ -191,7 +188,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                             Sequence = signer.SequenceNumber,
                             ModeInfo = new ModeInfo
                             {
-                                Single = new ModeInfo.SingleMode { Mode = ModeInfo.SignMode.Direct }
+                                Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct}
                             }
                         };
                     }
@@ -200,11 +197,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 {
                     signerInfo = new SignerInfo
                     {
-                        PublicKey = new SimplePublicKey { Key = "" },
+                        PublicKey = new SimplePublicKey {Key = ""},
                         Sequence = signer.SequenceNumber,
                         ModeInfo = new ModeInfo
                         {
-                            Single = new ModeInfo.SingleMode { Mode = ModeInfo.SignMode.Direct }
+                            Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct}
                         }
                     };
                 }
@@ -240,9 +237,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     Pagination = new
                     {
                         NextKey = "",
-                        Total = (int?)null
+                        Total = (int?) null
                     }
-
                 },
                 Global.JsonSerializerSettings);
 
@@ -279,26 +275,25 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     Txs = new List<Tx>(),
                     TxResponses = new List<TxInfo>(),
                     Pagination = new Pagination()
-
                 },
                 Global.JsonSerializerSettings);
 
             if (!value.TxResponses.Any())
-                return new Result<Tx> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
+                return new Result<Tx> {Error = new Error {Message = "Failed to fetch submit_proposer tx"}};
 
-            return new Result<Tx> { Value = value.Txs.Single() };
+            return new Result<Tx> {Value = value.Txs.Single()};
         }
 
         private async Task<Result<T>> Broadcast<T>(BroadcastMode mode) where T : class
         {
             var response = await _client.HttpClient.PostAsync(
                 "/cosmos/tx/v1beta1/txs",
-                new StringContent(JsonConvert.SerializeObject(new { TyBytes = Encode(), Mode = mode })));
+                new StringContent(JsonConvert.SerializeObject(new {TyBytes = Encode(), Mode = mode})));
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<T>();
 
             var value = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), Global.JsonSerializerSettings);
-            return new Result<T> { Value = value };
+            return new Result<T> {Value = value};
         }
     }
 }

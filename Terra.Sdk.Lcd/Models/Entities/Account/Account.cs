@@ -12,8 +12,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
     {
         private readonly LcdClient _client;
 
-        [JsonProperty("@type")]
-        public string Type { get; set; }
+        [JsonProperty("@type")] public string Type { get; set; }
 
         /// <remarks>
         ///  For serialization.
@@ -32,8 +31,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
         {
             return _client.GetResult(
                 $"/cosmos/auth/v1beta1/accounts/{address}",
-                new { Account = new Account() },
-                data => new Result<Account> { Value = data.Account });
+                new {Account = new Account()},
+                data => new Result<Account> {Value = data.Account});
         }
     }
 }

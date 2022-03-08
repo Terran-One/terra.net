@@ -27,8 +27,8 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             return _client.GetResult(
                 "/terra/market/v1beta1/params",
-                new { Params = new MarketParams() },
-                data => new Result<MarketParams> { Value = data.Params });
+                new {Params = new MarketParams()},
+                data => new Result<MarketParams> {Value = data.Params});
         }
     }
 }

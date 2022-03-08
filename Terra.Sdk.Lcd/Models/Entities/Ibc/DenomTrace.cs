@@ -31,7 +31,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
                 {
                     DenomTrace = new DenomTrace()
                 },
-                data => new Result<DenomTrace> { Value = data.DenomTrace });
+                data => new Result<DenomTrace> {Value = data.DenomTrace});
         }
 
         internal Task<PaginatedResult<DenomTrace>> GetAll(

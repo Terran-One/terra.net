@@ -23,23 +23,19 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             _client = client;
         }
 
-        [ProtoMember(1)]
-        public long GasLimit { get; set; }
+        [ProtoMember(1)] public long GasLimit { get; set; }
 
-        [ProtoMember(2)]
-        public List<Coin> Amount { get; set; }
+        [ProtoMember(2)] public List<Coin> Amount { get; set; }
 
-        [ProtoMember(3)]
-        public string Payer { get; set; }
+        [ProtoMember(3)] public string Payer { get; set; }
 
-        [ProtoMember(4)]
-        public string Granter { get; set; }
+        [ProtoMember(4)] public string Granter { get; set; }
 
         public async Task<Result<Fee>> Estimate(IEnumerable<SignerData> signers, CreateTxOptions options)
         {
             var gasPrices = options.GasPrices ?? _client.Config.GasPrices;
             var gasAdjustment = options.GasAdjustment ?? _client.Config.GasAdjustment;
-            var feeDenoms = options.FeeDenoms?.ToArray() ?? new[] { "uusd" };
+            var feeDenoms = options.FeeDenoms?.ToArray() ?? new[] {"uusd"};
             var gas = options.Gas;
 
             List<Coin> gasPricesCoins = null;
@@ -57,9 +53,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 }
             }
 
-            var txBody = new TxBody { Messages = options.Msgs.ToList(), Memo = options.Memo ?? "" };
-            var authInfo = new AuthInfo { SignerInfos = new List<SignerInfo>(), Fee = new Fee { GasLimit = 0, Amount = new List<Coin>()}};
-            var tx = new Tx(_client) { Body = txBody, AuthInfo = authInfo, Signatures = new List<string>()};
+            var txBody = new TxBody {Messages = options.Msgs.ToList(), Memo = options.Memo ?? ""};
+            var authInfo = new AuthInfo {SignerInfos = new List<SignerInfo>(), Fee = new Fee {GasLimit = 0, Amount = new List<Coin>()}};
+            var tx = new Tx(_client) {Body = txBody, AuthInfo = authInfo, Signatures = new List<string>()};
 
             // fill empty signature
             tx.AppendEmptySignatures(signers);
@@ -70,7 +66,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
             var feeAmount = gasPricesCoins != null
                 ? gasPricesCoins.Select(c => c.Multiply(decimal.Parse(gas)).ToIntCeilCoin()).ToList()
-                : new List<Coin> { new Coin("uusd", 0) };
+                : new List<Coin> {new Coin("uusd", 0)};
 
             return new Result<Fee>
             {
@@ -80,11 +76,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                     Amount = feeAmount,
                     Payer = "",
                     Granter = ""
-
                 }
             };
         }
 
-        internal object ToAmino() => new { Gas = GasLimit.ToString(), Amount };
+        internal object ToAmino() => new {Gas = GasLimit.ToString(), Amount};
     }
 }

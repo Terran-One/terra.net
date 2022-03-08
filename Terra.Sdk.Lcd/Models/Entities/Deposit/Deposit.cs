@@ -34,7 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);
             if (proposalResult.Error != null)
-                return new PaginatedResult<Deposit> { Error = proposalResult.Error };
+                return new PaginatedResult<Deposit> {Error = proposalResult.Error};
 
             var proposal = proposalResult.Value;
             if (proposal.Status == ProposalStatus.DepositPeriod || proposal.Status == ProposalStatus.VotingPeriod)

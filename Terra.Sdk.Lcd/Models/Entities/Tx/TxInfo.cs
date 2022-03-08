@@ -24,10 +24,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         }
 
         public string Height { get; set; }
-        [JsonProperty("txhash")]
-        public string TxHash { get; set; }
-        [JsonProperty("codespace")]
-        public string CodeSpace { get; set; }
+        [JsonProperty("txhash")] public string TxHash { get; set; }
+        [JsonProperty("codespace")] public string CodeSpace { get; set; }
         public string Code { get; set; }
         public string Data { get; set; }
         public string RawLog { get; set; }
@@ -50,11 +48,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         {
             var blockInfo = await new BlockInfo.BlockInfo(_client).Get(height);
             if (blockInfo.Error != null)
-                return new Result<List<TxInfo>> { Error = blockInfo.Error };
+                return new Result<List<TxInfo>> {Error = blockInfo.Error};
 
             var txs = blockInfo.Value.Block?.Data?.Txs;
             if (txs == null)
-                return new Result<List<TxInfo>> { Value = new List<TxInfo>() };
+                return new Result<List<TxInfo>> {Value = new List<TxInfo>()};
 
             var txInfos = new List<TxInfo>();
             Error firstError = null;
@@ -74,9 +72,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             }
 
             if (!txInfos.Any() && firstError != null)
-                return new Result<List<TxInfo>> { Error = firstError };
+                return new Result<List<TxInfo>> {Error = firstError};
 
-            return new Result<List<TxInfo>> { Value = txInfos };
+            return new Result<List<TxInfo>> {Value = txInfos};
         }
     }
 }

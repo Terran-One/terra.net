@@ -11,8 +11,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
         [ProtoMember(1)] public string ConnectionId { get; set; }
         [ProtoMember(2)] public string CounterpartyConnectionId { get; set; }
 
-        [ProtoMember(3)]
-        public Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg.Primitives.Version Version { get; set; }
+        [ProtoMember(3)] public Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg.Primitives.Version Version { get; set; }
 
         [ProtoMember(4)] public JObject ClientState { get; set; }
         [ProtoMember(5)] public Height ProofHeight { get; set; }

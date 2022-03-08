@@ -29,8 +29,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
                 "/ibc/core/client/v1/client_states",
                 new
                 {
-                   ClientStates = new List<IdentifiedClientState>(),
-                   Pagination = new Pagination()
+                    ClientStates = new List<IdentifiedClientState>(),
+                    Pagination = new Pagination()
                 },
                 data => data.Pagination.BuildResult(data.ClientStates, pageNumber),
                 paginationKey, pageNumber, getTotalCount, isDescending);

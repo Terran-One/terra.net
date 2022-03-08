@@ -26,8 +26,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         {
             return _client.GetResult(
                 "/ibc/apps/transfer/v1/params",
-                new { Params = new IbcTransferParams() },
-                data => new Result<IbcTransferParams> { Value = data.Params });
+                new {Params = new IbcTransferParams()},
+                data => new Result<IbcTransferParams> {Value = data.Params});
         }
     }
 }

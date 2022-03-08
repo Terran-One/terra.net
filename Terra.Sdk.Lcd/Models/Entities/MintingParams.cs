@@ -30,8 +30,8 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             return _client.GetResult(
                 "/cosmos/mint/v1beta1/params",
-                new { Params = new MintingParams() },
-                data => new Result<MintingParams> { Value = data.Params });
+                new {Params = new MintingParams()},
+                data => new Result<MintingParams> {Value = data.Params});
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Authorization
     [JsonSubtypes.KnownSubType(typeof(StakeAuthorization), "/cosmos.staking.v1beta1.StakeAuthorization")]
     public class Authorization
     {
-        [JsonProperty("@type")]
-        public string Type { get; set; }
+        [JsonProperty("@type")] public string Type { get; set; }
     }
 }
