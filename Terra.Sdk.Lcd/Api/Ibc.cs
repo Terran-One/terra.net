@@ -25,8 +25,8 @@ namespace Terra.Sdk.Lcd.Api
         {
             return _client.GetResult(
                 $"/ibc/core/client/v1/client_status/{clientId}",
-                new { ClientState = new { Status = "" } },
-                data => new Result<string> { Value = data.ClientState.Status });
+                new {ClientState = new {Status = ""}},
+                data => new Result<string> {Value = data.ClientState.Status});
         }
 
         public Task<PaginatedResult<ClientConsensusStates>> GetConsensusStates(string clientId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>

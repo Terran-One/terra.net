@@ -34,7 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
                     Sequence = signDoc.Sequence,
                     ModeInfo = new ModeInfo
                     {
-                        Single = new ModeInfo.SingleMode { Mode = ModeInfo.SignMode.Direct }
+                        Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct}
                     }
                 }
             }.ToList();
@@ -65,7 +65,6 @@ namespace Terra.Sdk.Lcd.Models.Signing
                     {
                         Mode = ModeInfo.SignMode.Direct,
                         Signature = sigBytes
-
                     }
                 },
                 Sequence = signDoc.Sequence
@@ -114,7 +113,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
                 Sequence = signature.Sequence,
                 ModeInfo = new ModeInfo
                 {
-                    Single = new ModeInfo.SingleMode { Mode = sigData.Mode }
+                    Single = new ModeInfo.SingleMode {Mode = sigData.Mode}
                 }
             });
 

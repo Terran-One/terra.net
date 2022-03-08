@@ -9,11 +9,9 @@ namespace Terra.Sdk.Lcd.Models
     [Serializable]
     public readonly struct Coin : ISerializable
     {
-        [ProtoMember(1)]
-        public string Denom { get; }
+        [ProtoMember(1)] public string Denom { get; }
 
-        [ProtoMember(2)]
-        public decimal Amount { get; }
+        [ProtoMember(2)] public decimal Amount { get; }
 
         public Coin(string denom, decimal amount) : this()
         {

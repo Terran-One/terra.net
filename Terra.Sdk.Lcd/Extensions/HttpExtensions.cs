@@ -10,13 +10,13 @@ namespace Terra.Sdk.Lcd.Extensions
     internal static class HttpExtensions
     {
         internal static async Task<Result<TEntity>> GetErrorResult<TEntity>(this HttpResponseMessage response) =>
-            new Result<TEntity> { Error = Error.From(await response.Content.ReadAsStringAsync()) };
+            new Result<TEntity> {Error = Error.From(await response.Content.ReadAsStringAsync())};
 
         internal static async Task<PaginatedResult<TEntity>> GetPaginatedErrorResult<TEntity>(this HttpResponseMessage response) =>
-            new PaginatedResult<TEntity> { Error = Error.From(await response.Content.ReadAsStringAsync()) };
+            new PaginatedResult<TEntity> {Error = Error.From(await response.Content.ReadAsStringAsync())};
 
         internal static async Task<PaginatedGroupedResult<TEntity>> GetPaginatedGroupedErrorResult<TEntity>(this HttpResponseMessage response) =>
-            new PaginatedGroupedResult<TEntity> { Error = Error.From(await response.Content.ReadAsStringAsync()) };
+            new PaginatedGroupedResult<TEntity> {Error = Error.From(await response.Content.ReadAsStringAsync())};
 
         internal static async Task<Result<TEntity>> GetResult<TEntity>(this LcdClient client, string url, string additionalParams = null)
             where TEntity : new()
@@ -31,7 +31,7 @@ namespace Terra.Sdk.Lcd.Extensions
             var data = JsonConvert.DeserializeObject<TEntity>(
                 await response.Content.ReadAsStringAsync(),
                 Global.JsonSerializerSettings);
-            return new Result<TEntity> { Value = data };
+            return new Result<TEntity> {Value = data};
         }
 
         internal static async Task<Result<TEntity>> GetResult<TEntity, TAnonymousType>(this LcdClient client,

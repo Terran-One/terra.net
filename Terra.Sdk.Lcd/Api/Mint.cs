@@ -18,16 +18,16 @@ namespace Terra.Sdk.Lcd.Api
         {
             return _client.GetResult(
                 "/cosmos/mint/v1beta1/inflation",
-                new { Inflation = 0M },
-                data => new Result<decimal> { Value = data.Inflation });
+                new {Inflation = 0M},
+                data => new Result<decimal> {Value = data.Inflation});
         }
 
         public Task<Result<decimal>> GetAnnualProvisions()
         {
             return _client.GetResult(
                 "/cosmos/mint/v1beta1/annual_provisions",
-                new { AnnualProvisions = 0M },
-                data => new Result<decimal> { Value = data.AnnualProvisions });
+                new {AnnualProvisions = 0M},
+                data => new Result<decimal> {Value = data.AnnualProvisions});
         }
 
         public Task<Result<MintingParams>> GetParameters() => new MintingParams(_client).Get();

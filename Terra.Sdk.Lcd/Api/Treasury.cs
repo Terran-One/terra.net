@@ -27,7 +27,7 @@ namespace Terra.Sdk.Lcd.Api
         {
             return _client.GetResult(
                 "/terra/treasury/v1beta1/tax_caps",
-                new {TaxCaps = new[] { new { Denom = "", TaxCap = 0M }} },
+                new {TaxCaps = new[] {new {Denom = "", TaxCap = 0M}}},
                 data => new Result<List<Coin>> {Value = data.TaxCaps.Select(d => new Coin(d.Denom, d.TaxCap)).ToList()});
         }
 
@@ -60,7 +60,7 @@ namespace Terra.Sdk.Lcd.Api
         {
             return _client.GetResult(
                 "/terra/treasury/v1beta1/tax_proceeds",
-                new {TaxProceeds = new List<Coin>() },
+                new {TaxProceeds = new List<Coin>()},
                 data => new Result<List<Coin>> {Value = data.TaxProceeds});
         }
 

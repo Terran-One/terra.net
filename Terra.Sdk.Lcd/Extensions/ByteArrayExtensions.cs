@@ -17,6 +17,7 @@ namespace Terra.Sdk.Lcd.Extensions
                 {
                     builder.Append(b.ToString("x2"));
                 }
+
                 return builder.ToString().ToUpperInvariant();
             }
         }

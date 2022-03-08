@@ -34,7 +34,11 @@ namespace Terra.Sdk.Lcd.Extensions
             var success = true;
             var settings = new JsonSerializerSettings
             {
-                Error = (sender, args) => { success = false; args.ErrorContext.Handled = true; },
+                Error = (sender, args) =>
+                {
+                    success = false;
+                    args.ErrorContext.Handled = true;
+                },
                 MissingMemberHandling = MissingMemberHandling.Error,
                 ContractResolver = new DefaultContractResolver
                 {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Api.Parameters;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
-using TxEntity=Terra.Sdk.Lcd.Models.Entities.Tx.Tx;
+using TxEntity = Terra.Sdk.Lcd.Models.Entities.Tx.Tx;
 
 namespace Terra.Sdk.Lcd.Api
 {

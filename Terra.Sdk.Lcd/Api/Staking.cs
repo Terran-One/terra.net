@@ -28,7 +28,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<PaginatedResult<Redelegation>> GetRedelegations(string delegator = null, string validatorSrc = null, string validatorDst = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Redelegation(_client).GetAll(delegator, validatorSrc, validatorDst, paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<PaginatedResult<Validator>> GetBondedValidators(string delegator = null,  string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+        public Task<PaginatedResult<Validator>> GetBondedValidators(string delegator = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Validator(_client).GetAllBonded(delegator, paginationKey, pageNumber, getTotalCount, isDescending);
 
         public Task<PaginatedResult<Validator>> GetValidators(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>

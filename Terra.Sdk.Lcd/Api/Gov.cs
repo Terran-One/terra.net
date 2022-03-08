@@ -25,26 +25,26 @@ namespace Terra.Sdk.Lcd.Api
         {
             var creationTx = await SearchProposalCreationTx(proposalId);
             if (creationTx.Error != null)
-                return new Result<string> { Error = creationTx.Error };
+                return new Result<string> {Error = creationTx.Error};
 
             var msg = creationTx.Value.Body.Messages.OfType<MsgSubmitProposal>().SingleOrDefault();
             if (msg == null)
-                return new Result<string> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
+                return new Result<string> {Error = new Error {Message = "Failed to fetch submit_proposer tx"}};
 
-            return new Result<string> { Value = msg.Proposer };
+            return new Result<string> {Value = msg.Proposer};
         }
 
         public async Task<Result<List<Coin>>> GetInitialDeposit(long proposalId)
         {
             var creationTx = await SearchProposalCreationTx(proposalId);
             if (creationTx.Error != null)
-                return new Result<List<Coin>> { Error = creationTx.Error };
+                return new Result<List<Coin>> {Error = creationTx.Error};
 
             var msg = creationTx.Value.Body.Messages.OfType<MsgSubmitProposal>().SingleOrDefault();
             if (msg == null)
-                return new Result<List<Coin>> { Error = new Error { Message = "Failed to fetch submit_proposer tx" } };
+                return new Result<List<Coin>> {Error = new Error {Message = "Failed to fetch submit_proposer tx"}};
 
-            return new Result<List<Coin>> { Value = msg.InitialDeposit };
+            return new Result<List<Coin>> {Value = msg.InitialDeposit};
         }
 
         public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>

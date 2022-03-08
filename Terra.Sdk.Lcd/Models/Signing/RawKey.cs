@@ -27,7 +27,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
         {
             var key = new EthECKey(_privateKey, true);
             var sig = key.SignAndCalculateV(payload);
-            return Tuple.Create(sig.To64ByteArray(), (long)sig.V[0]);
+            return Tuple.Create(sig.To64ByteArray(), (long) sig.V[0]);
         }
 
         public override Task<byte[]> Sign(byte[] payload)
