@@ -1,7 +1,7 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.SlashingMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.SlashingMsg
 {
-    public class MsgUnjail : Msg
+    [ProtoContract]public class MsgUnjail : Msg
     {
-        public string Address { get; set; }
+        [ProtoMember(1)]public string Address { get; set; }
     }
 }

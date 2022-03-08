@@ -1,7 +1,7 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
 {
     public readonly struct WeightedVoteOption : ISerializable
     {

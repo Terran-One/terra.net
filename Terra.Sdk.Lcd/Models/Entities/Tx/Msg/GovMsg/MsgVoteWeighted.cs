@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
 {
-    public class MsgVoteWeighted : Msg
+    [ProtoContract]public class MsgVoteWeighted : Msg
     {
-        public long ProposalId { get; set; }
-        public string Voter { get; set; }
-        public List<WeightedVoteOption> Options { get; set; }
+        [ProtoMember(1)]public long ProposalId { get; set; }
+        [ProtoMember(2)]public string Voter { get; set; }
+        [ProtoMember(3)]public List<WeightedVoteOption> Options { get; set; }
     }
 }

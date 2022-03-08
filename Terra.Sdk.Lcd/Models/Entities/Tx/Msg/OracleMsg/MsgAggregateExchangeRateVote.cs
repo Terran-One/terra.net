@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg
 {
-    public class MsgAggregateExchangeRateVote : Msg
+    [ProtoContract]public class MsgAggregateExchangeRateVote : Msg
     {
-        public List<Coin> ExchangeRates { get; set; }
-        public string Salt { get; set; }
-        public string Validator { get; set; }
+        [ProtoMember(1)]public List<Coin> ExchangeRates { get; set; }
+        [ProtoMember(2)]public string Salt { get; set; }
+        [ProtoMember(3)]public string Validator { get; set; }
     }
 }

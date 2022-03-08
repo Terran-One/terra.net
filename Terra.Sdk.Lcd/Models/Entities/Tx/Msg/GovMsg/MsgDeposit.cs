@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
 {
-    public class MsgDeposit : Msg
+    [ProtoContract]public class MsgDeposit : Msg
     {
-        public string ProposalId { get; set;  }
-        public string Depositor { get; set; }
-        public List<Coin> Amount { get; set; }
+        [ProtoMember(1)]public string ProposalId { get; set;  }
+        [ProtoMember(2)]public string Depositor { get; set; }
+        [ProtoMember(3)]public List<Coin> Amount { get; set; }
     }
 }

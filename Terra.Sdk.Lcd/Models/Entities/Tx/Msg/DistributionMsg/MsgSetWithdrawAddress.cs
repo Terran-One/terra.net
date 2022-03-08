@@ -1,8 +1,8 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg
 {
-    public class MsgSetWithdrawAddress : Msg
+    [ProtoContract]public class MsgSetWithdrawAddress : Msg
     {
-        public string DelegatorAddress { get; set; }
-        public string WithdrawAddress { get; set; }
+        [ProtoMember(1)]public string DelegatorAddress { get; set; }
+        [ProtoMember(2)]public string WithdrawAddress { get; set; }
     }
 }

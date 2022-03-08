@@ -1,16 +1,16 @@
 using System;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcTransferMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcTransferMsg
 {
-    public class MsgTransfer : Msg
+    [ProtoContract]public class MsgTransfer : Msg
     {
-        public string SourcePort { get; set; }
-        public string SourceChannel { get; set; }
-        public Coin Token { get; set; }
-        public string Sender { get; set; }
-        public string Receiver { get; set; }
-        public Height TimeoutHeight { get; set; }
-        public DateTime TimeoutTimestamp { get; set; }
+        [ProtoMember(1)]public string SourcePort { get; set; }
+        [ProtoMember(2)]public string SourceChannel { get; set; }
+        [ProtoMember(3)]public Coin Token { get; set; }
+        [ProtoMember(4)]public string Sender { get; set; }
+        [ProtoMember(5)]public string Receiver { get; set; }
+        [ProtoMember(6)]public Height TimeoutHeight { get; set; }
+        [ProtoMember(7)]public DateTime TimeoutTimestamp { get; set; }
     }
 }

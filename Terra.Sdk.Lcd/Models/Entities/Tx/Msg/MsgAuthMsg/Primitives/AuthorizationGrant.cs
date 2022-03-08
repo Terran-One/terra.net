@@ -4,8 +4,9 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
 {
+    [ProtoContract]
     public class AuthorizationGrant
     {
         private readonly LcdClient _client;
@@ -22,7 +23,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
             _client = client;
         }
 
+        [ProtoMember(1)]
         public Authorization.Authorization Authorization { get; set; }
+        [ProtoMember(2)]
         public DateTime Expiration { get; set; }
 
         internal Task<PaginatedResult<AuthorizationGrant>> Get(

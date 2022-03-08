@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JsonSubTypes;
 using Newtonsoft.Json;
+using ProtoBuf;
 using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Allowance
@@ -10,15 +11,20 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
     [JsonSubtypes.KnownSubType(typeof(BasicAllowance), "/cosmos.feegrant.v1beta1.BasicAllowance")]
     [JsonSubtypes.KnownSubType(typeof(PeriodicAllowance), "/cosmos.feegrant.v1beta1.PeriodicAllowance")]
     [JsonSubtypes.KnownSubType(typeof(AllowedMsgAllowance), "/cosmos.feegrant.v1beta1.AllowedMsgAllowance")]
+
+    [ProtoContract]
+    [ProtoInclude(1, typeof(BasicAllowance))]
+    [ProtoInclude(2, typeof(PeriodicAllowance))]
+    [ProtoInclude(3, typeof(AllowedMsgAllowance))]
     public class Allowance
     {
         private readonly LcdClient _client;
 
         [JsonProperty("@type")]
-        public string Type { get; set; }
+        [ProtoMember(1)]public string Type { get; set; }
 
-        public string Granter { get; set; }
-        public string Grantee { get; set; }
+        [ProtoMember(2)]public string Granter { get; set; }
+        [ProtoMember(3)]public string Grantee { get; set; }
 
         /// <remarks>
         ///  For serialization.

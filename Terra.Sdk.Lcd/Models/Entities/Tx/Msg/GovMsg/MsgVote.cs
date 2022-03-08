@@ -1,11 +1,11 @@
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
 {
-    public class MsgVote : Msg
+    [ProtoContract]public class MsgVote : Msg
     {
-        public long ProposalId { get; set; }
-        public string Voter { get; set; }
-        public VoteOption Option { get; set; }
+        [ProtoMember(1)]public long ProposalId { get; set; }
+        [ProtoMember(2)]public string Voter { get; set; }
+        [ProtoMember(3)]public VoteOption Option { get; set; }
     }
 }

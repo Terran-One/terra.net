@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg
 {
-    public class MsgInstantiateContract : Msg
+    [ProtoContract]public class MsgInstantiateContract : Msg
     {
-        public string Sender { get; set; }
-        public string Admin { get; set; }
-        public long CodeId { get; set; }
-        public JObject InitMsg { get; set; }
-        public List<Coin> InitCoins { get; set; }
+        [ProtoMember(1)]public string Sender { get; set; }
+        [ProtoMember(2)]public string Admin { get; set; }
+        [ProtoMember(3)]public long CodeId { get; set; }
+        [ProtoMember(4)]public JObject InitMsg { get; set; }
+        [ProtoMember(5)]public List<Coin> InitCoins { get; set; }
     }
 }

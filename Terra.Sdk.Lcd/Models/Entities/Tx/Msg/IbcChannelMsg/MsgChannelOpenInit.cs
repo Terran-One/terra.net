@@ -1,9 +1,9 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg
 {
-    public class MsgChannelOpenInit : Msg
+    [ProtoContract]public class MsgChannelOpenInit : Msg
     {
-        public string PortId { get; set; }
-        public string ChannelId { get; set; }
-        public string Signer { get; set; }
+        [ProtoMember(1)]public string PortId { get; set; }
+        [ProtoMember(2)]public string ChannelId { get; set; }
+        [ProtoMember(3)]public string Signer { get; set; }
     }
 }

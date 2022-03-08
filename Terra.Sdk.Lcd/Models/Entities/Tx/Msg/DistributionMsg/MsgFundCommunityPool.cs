@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg
 {
-    public class MsgFundCommunityPool : Msg
+    [ProtoContract]public class MsgFundCommunityPool : Msg
     {
-        public string Depositor { get; set; }
-        public List<Coin> Amount { get; set; }
+        [ProtoMember(1)]public string Depositor { get; set; }
+        [ProtoMember(2)]public List<Coin> Amount { get; set; }
     }
 }

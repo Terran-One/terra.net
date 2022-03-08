@@ -1,8 +1,8 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg
 {
-    public class MsgDelegateFeedConsent : Msg
+    [ProtoContract]public class MsgDelegateFeedConsent : Msg
     {
-        public string Operator { get; set; }
-        public string Delegate { get; set; }
+        [ProtoMember(1)]public string Operator { get; set; }
+        [ProtoMember(2)]public string Delegate { get; set; }
     }
 }

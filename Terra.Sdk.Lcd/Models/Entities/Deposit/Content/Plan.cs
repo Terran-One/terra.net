@@ -1,9 +1,10 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
 {
-    public readonly struct Plan : ISerializable
+    [ProtoContract]public readonly struct Plan : ISerializable
     {
         /// <remarks>
         /// Used for serialization.
@@ -26,11 +27,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
             UpgradedClientState = upgradedClientState;
         }
 
-        public string Name { get; }
-        public string Time { get; }
-        public string Height { get; }
-        public string Info { get; }
-        public string UpgradedClientState { get; }
+        [ProtoMember(1)]public string Name { get; }
+        [ProtoMember(2)]public string Time { get; }
+        [ProtoMember(3)]public string Height { get; }
+        [ProtoMember(4)]public string Info { get; }
+        [ProtoMember(5)]public string UpgradedClientState { get; }
 
         /// <remarks>
         /// Called during serialization.

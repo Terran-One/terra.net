@@ -1,7 +1,7 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg
 {
-    public class MsgWithdrawValidatorCommission : Msg
+    [ProtoContract]public class MsgWithdrawValidatorCommission : Msg
     {
-        public string ValidatorAddress { get; set; }
+        [ProtoMember(1)]public string ValidatorAddress { get; set; }
     }
 }

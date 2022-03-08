@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg
 {
-    public class MsgExecAuthorized : Msg
+    [ProtoContract]public class MsgExecAuthorized : Msg
     {
-        public string Grantee { get; set; }
-        public List<Msg> Msgs { get; set; }
+        [ProtoMember(1)]public string Grantee { get; set; }
+        [ProtoMember(2)]public List<Msg> Msgs { get; set; }
     }
 }

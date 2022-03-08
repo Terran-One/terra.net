@@ -1,14 +1,14 @@
 using Newtonsoft.Json.Linq;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg
 {
-    public class MsgUpgradeClient : Msg
+    [ProtoContract]public class MsgUpgradeClient : Msg
     {
-        public string ClientId { get; set; }
-        public JObject ClientState { get; set; }
-        public JObject ConsensusState { get; set; }
-        public string ProofUpgradeClient { get; set; }
-        public string ProofUpgradeConsensusState { get; set; }
-        public string Signer { get; set; }
+        [ProtoMember(1)]public string ClientId { get; set; }
+        [ProtoMember(2)]public JObject ClientState { get; set; }
+        [ProtoMember(3)]public JObject ConsensusState { get; set; }
+        [ProtoMember(4)]public string ProofUpgradeClient { get; set; }
+        [ProtoMember(5)]public string ProofUpgradeConsensusState { get; set; }
+        [ProtoMember(6)]public string Signer { get; set; }
     }
 }

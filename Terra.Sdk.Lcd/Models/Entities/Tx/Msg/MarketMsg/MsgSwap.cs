@@ -1,9 +1,9 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MarketMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MarketMsg
 {
-    public class MsgSwap : Msg
+    [ProtoContract]public class MsgSwap : Msg
     {
-        public string Trader { get; set; }
-        public Coin OfferCoin { get; set; }
-        public string AskDenom { get; set; }
+        [ProtoMember(1)]public string Trader { get; set; }
+        [ProtoMember(2)]public Coin OfferCoin { get; set; }
+        [ProtoMember(3)]public string AskDenom { get; set; }
     }
 }

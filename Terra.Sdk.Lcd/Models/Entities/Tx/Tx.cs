@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using ProtoBuf;
 using Terra.Sdk.Lcd.Api.Parameters;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Account;
@@ -14,6 +15,7 @@ using Terra.Sdk.Lcd.Models.Entities.PubKey;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
+    [ProtoContract]
     public class Tx
     {
         private readonly LcdClient _client;
@@ -30,21 +32,25 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             _client = client;
         }
 
+        [ProtoMember(1)]
         public TxBody Body { get; set; }
+
+        [ProtoMember(2)]
         public AuthInfo AuthInfo { get; set; }
+
+        [ProtoMember(3)]
         public List<string> Signatures { get; set; }
 
         public string Encode()
         {
-            var plainTextBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, Global.JsonSerializerSettings));
+            var plainTextBytes = this.EncodeProto();
             return Convert.ToBase64String(plainTextBytes);
         }
 
         public Tx Decode(string encodedTx)
         {
-            var base64EncodedBytes = Convert.FromBase64String(encodedTx);
-            var json = Encoding.UTF8.GetString(base64EncodedBytes);
-            return JsonConvert.DeserializeObject<Tx>(json, Global.JsonSerializerSettings);
+            var bytes = Convert.FromBase64String(encodedTx);
+            return bytes.DecodeProto<Tx>();
         }
 
         public string GetHash()

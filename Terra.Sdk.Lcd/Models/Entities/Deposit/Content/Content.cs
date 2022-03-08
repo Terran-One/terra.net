@@ -1,5 +1,6 @@
 using JsonSubTypes;
 using Newtonsoft.Json;
+using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
 {
@@ -9,9 +10,16 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
     [JsonSubtypes.KnownSubType(typeof(ParameterChangeProposal), "/cosmos.gov.v1beta1.ParameterChangeProposal")]
     [JsonSubtypes.KnownSubType(typeof(SoftwareUpgradeProposal), "/cosmos.gov.v1beta1.SoftwareUpgradeProposal")]
     [JsonSubtypes.KnownSubType(typeof(CancelSoftwareUpgradeProposal), "/cosmos.gov.v1beta1.CancelSoftwareUpgradeProposal")]
+
+    [ProtoContract]
+    [ProtoInclude(1, typeof(TextProposal))]
+    [ProtoInclude(2, typeof(CommunityPoolSpendProposal))]
+    [ProtoInclude(3, typeof(ParameterChangeProposal))]
+    [ProtoInclude(4, typeof(SoftwareUpgradeProposal))]
+    [ProtoInclude(5, typeof(CancelSoftwareUpgradeProposal))]
     public class Content
     {
         [JsonProperty("@type")]
-        public string Type { get; set; }
+        [ProtoMember(1)]public string Type { get; set; }
     }
 }

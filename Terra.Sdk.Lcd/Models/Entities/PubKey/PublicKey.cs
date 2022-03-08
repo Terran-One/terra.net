@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using JsonSubTypes;
 using Newtonsoft.Json;
+using ProtoBuf;
 using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.PubKey
@@ -10,10 +11,15 @@ namespace Terra.Sdk.Lcd.Models.Entities.PubKey
     [JsonSubtypes.KnownSubType(typeof(SimplePublicKey), "/cosmos.crypto.secp256k1.PubKey")]
     [JsonSubtypes.KnownSubType(typeof(LegacyAminoMultisigPublicKey), "/cosmos.crypto.multisig.LegacyAminoPubKey")]
     [JsonSubtypes.KnownSubType(typeof(ValConsPublicKey), "/cosmos.crypto.ed25519.PubKey")]
+
+    [ProtoContract]
+    [ProtoInclude(1, typeof(SimplePublicKey))]
+    [ProtoInclude(2, typeof(LegacyAminoMultisigPublicKey))]
+    [ProtoInclude(3, typeof(ValConsPublicKey))]
     public abstract class PublicKey
     {
         [JsonProperty("@type")]
-        public string Type { get; set; }
+        public abstract string Type { get; set; } // for protobuf serialization, needs to be defined on subtype
 
         public abstract string Key { get; set; }
 

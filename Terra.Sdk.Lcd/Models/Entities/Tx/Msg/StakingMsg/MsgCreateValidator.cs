@@ -2,17 +2,16 @@ using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg
 {
-    public class MsgCreateValidator : Msg
+    [ProtoContract]public class MsgCreateValidator : Msg
     {
-        public Description Description { get; set; }
-        public CommissionRates Commission { get; set; }
-        public int MinSelfDelegation { get; set; }
-        public string DelegatorAddress { get; set; }
-        public string ValidatorAddress { get; set; }
-        [JsonProperty("pubkey")]
-        public ValConsPublicKey PubKey { get; set; }
-        public Coin Value { get; set; }
+        [ProtoMember(1)]public Description Description { get; set; }
+        [ProtoMember(2)]public CommissionRates Commission { get; set; }
+        [ProtoMember(3)]public int MinSelfDelegation { get; set; }
+        [ProtoMember(4)]public string DelegatorAddress { get; set; }
+        [ProtoMember(5)]public string ValidatorAddress { get; set; }
+        [JsonProperty("pubkey")][ProtoMember(6)]public ValConsPublicKey PubKey { get; set; }
+        [ProtoMember(7)]public Coin Value { get; set; }
     }
 }

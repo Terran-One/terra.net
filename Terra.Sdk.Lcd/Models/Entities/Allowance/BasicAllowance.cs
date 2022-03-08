@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Allowance
 {
-    public class BasicAllowance : Allowance
+    [ProtoContract]public class BasicAllowance : Allowance
     {
-        public List<Coin> SpendLimit { get; set; }
-        public string Expiration { get; set; }
+        [ProtoMember(4)]public List<Coin> SpendLimit { get; set; }
+        [ProtoMember(5)]public string Expiration { get; set; }
     }
 }

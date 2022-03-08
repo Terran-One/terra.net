@@ -1,9 +1,9 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.OracleMsg
 {
-    public class MsgAggregateExchangeRatePrevote : Msg
+    [ProtoContract]public class MsgAggregateExchangeRatePrevote : Msg
     {
-        public string Hash { get; set; }
-        public string Feeder { get; set; }
-        public string Validator { get; set; }
+        [ProtoMember(1)]public string Hash { get; set; }
+        [ProtoMember(2)]public string Feeder { get; set; }
+        [ProtoMember(3)]public string Validator { get; set; }
     }
 }

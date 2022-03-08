@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ProtoBuf;
 using Terra.Sdk.Lcd.Api.Parameters;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
+    [ProtoContract]
     public class Fee
     {
         private readonly LcdClient _client;
@@ -21,9 +23,16 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             _client = client;
         }
 
+        [ProtoMember(1)]
         public long GasLimit { get; set; }
+
+        [ProtoMember(2)]
         public List<Coin> Amount { get; set; }
+
+        [ProtoMember(3)]
         public string Payer { get; set; }
+
+        [ProtoMember(4)]
         public string Granter { get; set; }
 
         public async Task<Result<Fee>> Estimate(IEnumerable<SignerData> signers, CreateTxOptions options)

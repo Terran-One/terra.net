@@ -1,5 +1,4 @@
-using System.IO;
-using ProtoBuf;
+using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
 
 namespace Terra.Sdk.Lcd.Models.Signing
@@ -14,16 +13,16 @@ namespace Terra.Sdk.Lcd.Models.Signing
 
         public byte[] ToBytes()
         {
-            return ToProto(new
+            return new
             {
                 BodyBytes = TxBody,
                 AuthInfoBytes = AuthInfo,
                 ChainId,
                 AccountNumber = long.Parse(AccountNumber)
-            });
+            }.EncodeProto();
         }
 
-        internal byte[] ToAminoBytes() => ToProto(new
+        internal byte[] ToAminoBytes() => new
         {
             ChainId,
             AccountNumber,
@@ -35,15 +34,6 @@ namespace Terra.Sdk.Lcd.Models.Signing
             Fee = AuthInfo.Fee.ToAmino(),
             Msgs = TxBody.Messages,
             Memo = TxBody.Memo ?? "",
-        });
-
-        private static byte[] ToProto(object obj)
-        {
-            using (var stream = new MemoryStream())
-            {
-                Serializer.Serialize(stream, obj);
-                return stream.ToArray();
-            }
-        }
+        }.EncodeProto();
     }
 }

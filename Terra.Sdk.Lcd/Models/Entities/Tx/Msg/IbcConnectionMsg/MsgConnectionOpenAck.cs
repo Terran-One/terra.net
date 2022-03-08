@@ -2,19 +2,19 @@ using System;
 using Newtonsoft.Json.Linq;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
 {
-    public class MsgConnectionOpenAck : Msg
+    [ProtoContract]public class MsgConnectionOpenAck : Msg
     {
-        public string ConnectionId { get; set; }
-        public string CounterpartyConnectionId { get; set; }
-        public Version Version { get; set; }
-        public JObject ClientState { get; set; }
-        public Height ProofHeight { get; set; }
-        public string ProofTry { get; set; }
-        public string ProofClient { get; set; }
-        public string ProofConsensus { get; set; }
-        public Height ConsensusHeight { get; set; }
-        public string Signer { get; set; }
+        [ProtoMember(1)]public string ConnectionId { get; set; }
+        [ProtoMember(2)]public string CounterpartyConnectionId { get; set; }
+        [ProtoMember(3)]public Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg.Primitives.Version Version { get; set; }
+        [ProtoMember(4)]public JObject ClientState { get; set; }
+        [ProtoMember(5)]public Height ProofHeight { get; set; }
+        [ProtoMember(6)]public string ProofTry { get; set; }
+        [ProtoMember(7)]public string ProofClient { get; set; }
+        [ProtoMember(8)]public string ProofConsensus { get; set; }
+        [ProtoMember(9)]public Height ConsensusHeight { get; set; }
+        [ProtoMember(10)]public string Signer { get; set; }
     }
 }

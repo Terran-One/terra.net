@@ -1,12 +1,12 @@
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
 {
-    public class MsgConnectionOpenConfirm : Msg
+    [ProtoContract]public class MsgConnectionOpenConfirm : Msg
     {
-        public string ConnectionId { get; set; }
-        public string ProofAck { get; set; }
-        public Height ProofHeight { get; set; }
-        public string Signer { get; set; }
+        [ProtoMember(1)]public string ConnectionId { get; set; }
+        [ProtoMember(2)]public string ProofAck { get; set; }
+        [ProtoMember(3)]public Height ProofHeight { get; set; }
+        [ProtoMember(4)]public string Signer { get; set; }
     }
 }

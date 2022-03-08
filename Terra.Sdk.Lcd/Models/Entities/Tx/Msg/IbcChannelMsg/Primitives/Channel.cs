@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives
 {
+    [ProtoContract]
     public class Channel
     {
-        public State State { get; set; }
-        public Order Ordering { get; set; }
-        public Counterparty Counterparty { get; set; }
-        public List<string> ConnectionHops { get; set; }
-        public string Version { get; set; }
+        [ProtoMember(1)]public State State { get; set; }
+        [ProtoMember(2)]public Order Ordering { get; set; }
+        [ProtoMember(3)]public Counterparty Counterparty { get; set; }
+        [ProtoMember(4)]public List<string> ConnectionHops { get; set; }
+        [ProtoMember(5)]public string Version { get; set; }
     }
 }

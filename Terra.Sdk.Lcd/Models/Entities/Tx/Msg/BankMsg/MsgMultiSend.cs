@@ -1,22 +1,23 @@
 using System.Collections.Generic;
+using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.BankMsg
 {
-    public class MsgMultiSend : Msg
+    [ProtoContract]public class MsgMultiSend : Msg
     {
-        public List<Input> Inputs { get; set; }
-        public List<Output> Outputs { get; set; }
+        [ProtoMember(1)]public List<Input> Inputs { get; set; }
+        [ProtoMember(2)]public List<Output> Outputs { get; set; }
 
-        public class Input
+        [ProtoContract]public class Input
         {
-            public string Address { get; set; }
-            public List<Coin> Coins { get; set; }
+            [ProtoMember(1)]public string Address { get; set; }
+            [ProtoMember(2)]public List<Coin> Coins { get; set; }
         }
 
-        public class Output
+        [ProtoContract]public class Output
         {
-            public string Address { get; set; }
-            public List<Coin> Coins { get; set; }
+            [ProtoMember(1)]public string Address { get; set; }
+            [ProtoMember(2)]public List<Coin> Coins { get; set; }
         }
     }
 }

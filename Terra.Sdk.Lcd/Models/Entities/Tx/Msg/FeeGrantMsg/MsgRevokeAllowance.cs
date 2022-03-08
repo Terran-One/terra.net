@@ -1,8 +1,8 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.FeeGrantMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.FeeGrantMsg
 {
-    public class MsgRevokeAllowance : Msg
+    [ProtoContract]public class MsgRevokeAllowance : Msg
     {
-        public string Granter { get; set; }
-        public string Grantee { get; set; }
+        [ProtoMember(1)]public string Granter { get; set; }
+        [ProtoMember(2)]public string Grantee { get; set; }
     }
 }

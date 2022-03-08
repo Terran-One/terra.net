@@ -1,13 +1,14 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives
 {
+    [ProtoContract]
     public readonly struct CommissionRates : ISerializable
     {
-        public decimal Rate { get; }
-        public decimal MaxRate { get; }
-        public decimal MaxChangeRate { get; }
+        [ProtoMember(1)]public decimal Rate { get; }
+        [ProtoMember(2)]public decimal MaxRate { get; }
+        [ProtoMember(3)]public decimal MaxChangeRate { get; }
 
         public CommissionRates(decimal rate, decimal maxRate, decimal maxChangeRate) : this()
         {

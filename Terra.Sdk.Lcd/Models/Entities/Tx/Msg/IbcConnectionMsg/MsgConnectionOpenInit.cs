@@ -1,14 +1,14 @@
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
 {
-    public class MsgConnectionOpenInit : Msg
+    [ProtoContract]public class MsgConnectionOpenInit : Msg
     {
-        public string ClientId { get; set; }
-        public Counterparty Counterparty { get; set; }
-        public Version Version { get; set; }
-        public string DelayPeriod { get; set; }
-        public string Signer { get; set; }
+        [ProtoMember(1)]public string ClientId { get; set; }
+        [ProtoMember(2)]public Counterparty Counterparty { get; set; }
+        [ProtoMember(3)]public Version Version { get; set; }
+        [ProtoMember(4)]public string DelayPeriod { get; set; }
+        [ProtoMember(5)]public string Signer { get; set; }
     }
 }

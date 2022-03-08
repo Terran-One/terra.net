@@ -1,11 +1,11 @@
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives;
 
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg
 {
-    public class MsgGrantAuthorization : Msg
+    [ProtoContract]public class MsgGrantAuthorization : Msg
     {
-        public string Granter { get; set; }
-        public string Grantee { get; set; }
-        public AuthorizationGrant Grant { get; set; }
+        [ProtoMember(1)]public string Granter { get; set; }
+        [ProtoMember(2)]public string Grantee { get; set; }
+        [ProtoMember(3)]public AuthorizationGrant Grant { get; set; }
     }
 }

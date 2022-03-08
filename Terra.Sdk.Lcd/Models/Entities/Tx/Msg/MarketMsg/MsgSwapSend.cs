@@ -1,10 +1,10 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MarketMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MarketMsg
 {
-    public class MsgSwapSend : Msg
+    [ProtoContract]public class MsgSwapSend : Msg
     {
-        public string FromAddress { get; set; }
-        public string ToAddress { get; set; }
-        public Coin OfferCoin { get; set; }
-        public string AskDenom { get; set; }
+        [ProtoMember(1)]public string FromAddress { get; set; }
+        [ProtoMember(2)]public string ToAddress { get; set; }
+        [ProtoMember(3)]public Coin OfferCoin { get; set; }
+        [ProtoMember(4)]public string AskDenom { get; set; }
     }
 }

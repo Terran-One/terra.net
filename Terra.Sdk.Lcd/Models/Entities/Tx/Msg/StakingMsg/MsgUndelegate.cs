@@ -1,9 +1,9 @@
-namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg
+using ProtoBuf; namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg
 {
-    public class MsgUndelegate : Msg
+    [ProtoContract]public class MsgUndelegate : Msg
     {
-        public string DelegatorAddress { get; set; }
-        public string ValidatorAddress { get; set; }
-        public Coin Amount { get; set; }
+        [ProtoMember(1)]public string DelegatorAddress { get; set; }
+        [ProtoMember(2)]public string ValidatorAddress { get; set; }
+        [ProtoMember(3)]public Coin Amount { get; set; }
     }
 }
