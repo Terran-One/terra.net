@@ -5,9 +5,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg
     [ProtoContract]
     public class MsgBeginRedelegate : Msg
     {
-        [ProtoMember(1)] public string DelegatorAddress { get; set; }
-        [ProtoMember(2)] public string ValidatorSrcAddress { get; set; }
-        [ProtoMember(3)] public string ValidatorDstAddress { get; set; }
-        [ProtoMember(4)] public Coin Amount { get; set; }
+        [ProtoMember(1, Name = "delegator_address")] public string DelegatorAddress { get; set; }
+        [ProtoMember(2, Name = "validator_src_address")] public string ValidatorSrcAddress { get; set; }
+        [ProtoMember(3, Name = "validator_dst_address")] public string ValidatorDstAddress { get; set; }
+        [ProtoMember(4, Name = "amount")] public Coin Amount { get; set; }
     }
 }

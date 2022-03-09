@@ -6,7 +6,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
     {
         public long AccountNumber { get; set; }
         public long Sequence { get; set; }
-        public ModeInfo.SignMode SignMode { get; set; }
+        public SignMode SignMode { get; set; }
         public string ChainId { get; set; }
     }
 }

@@ -20,11 +20,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Allowance
         private readonly LcdClient _client;
 
         [JsonProperty("@type")]
-        [ProtoMember(1)]
+        [ProtoMember(1, Name = "type")]
         public string Type { get; set; }
 
-        [ProtoMember(2)] public string Granter { get; set; }
-        [ProtoMember(3)] public string Grantee { get; set; }
+        [ProtoMember(2, Name = "granter")] public string Granter { get; set; }
+        [ProtoMember(3, Name = "grantee")] public string Grantee { get; set; }
 
         /// <remarks>
         ///  For serialization.

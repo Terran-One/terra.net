@@ -34,7 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
                     Sequence = signDoc.Sequence,
                     ModeInfo = new ModeInfo
                     {
-                        Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct}
+                        Single = new Entities.Tx.Single {Mode = SignMode.Direct}
                     }
                 }
             }.ToList();
@@ -47,7 +47,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
             return new SignatureV2
             {
                 PublicKey = _publicKey,
-                Data = new ModeInfo {Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct, Signature = sigBytes}},
+                Data = new ModeInfo {Single = new Entities.Tx.Single {Mode = SignMode.Direct, Signature = sigBytes}},
                 Sequence = signDoc.Sequence
             };
         }
@@ -61,9 +61,9 @@ namespace Terra.Sdk.Lcd.Models.Signing
                 PublicKey = _publicKey,
                 Data = new ModeInfo
                 {
-                    Single = new ModeInfo.SingleMode
+                    Single = new Entities.Tx.Single
                     {
-                        Mode = ModeInfo.SignMode.Direct,
+                        Mode = SignMode.Direct,
                         Signature = sigBytes
                     }
                 },
@@ -94,7 +94,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
             };
 
             SignatureV2 signature;
-            if (options.SignMode == ModeInfo.SignMode.LegacyAminoJson)
+            if (options.SignMode == SignMode.LegacyAminoJson)
             {
                 signature = CreateSignatureAmino(signDoc);
             }
@@ -113,7 +113,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
                 Sequence = signature.Sequence,
                 ModeInfo = new ModeInfo
                 {
-                    Single = new ModeInfo.SingleMode {Mode = sigData.Mode}
+                    Single = new Entities.Tx.Single {Mode = sigData.Mode}
                 }
             });
 

@@ -1,6 +1,8 @@
 using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using Newtonsoft.Json;
 using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models
@@ -9,14 +11,23 @@ namespace Terra.Sdk.Lcd.Models
     [Serializable]
     public readonly struct Coin : ISerializable
     {
-        [ProtoMember(1)] public string Denom { get; }
+        [ProtoMember(1, Name = "denom")]
+        public string Denom { get; }
 
-        [ProtoMember(2)] public decimal Amount { get; }
+        public decimal Amount { get; }
+
+        /// <remarks>
+        /// For protobuf serialization.
+        /// </remarks>
+        [JsonIgnore]
+        [ProtoMember(2, Name = "amount")]
+        public string ProtoAmount { get; }
 
         public Coin(string denom, decimal amount) : this()
         {
             Denom = denom;
             Amount = amount;
+            ProtoAmount = amount.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <remarks>
@@ -26,6 +37,7 @@ namespace Terra.Sdk.Lcd.Models
         {
             Denom = info.GetString("denom");
             Amount = info.GetDecimal("amount");
+            ProtoAmount = info.GetString("amount");
         }
 
         /// <remarks>

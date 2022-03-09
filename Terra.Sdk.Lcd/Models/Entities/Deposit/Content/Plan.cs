@@ -28,11 +28,11 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
             UpgradedClientState = upgradedClientState;
         }
 
-        [ProtoMember(1)] public string Name { get; }
-        [ProtoMember(2)] public string Time { get; }
-        [ProtoMember(3)] public string Height { get; }
-        [ProtoMember(4)] public string Info { get; }
-        [ProtoMember(5)] public string UpgradedClientState { get; }
+        [ProtoMember(1, Name = "name")] public string Name { get; }
+        [ProtoMember(2, Name = "time")] public string Time { get; }
+        [ProtoMember(3, Name = "height")] public string Height { get; }
+        [ProtoMember(4, Name = "info")] public string Info { get; }
+        [ProtoMember(5, Name = "upgraded_client_state")] public string UpgradedClientState { get; }
 
         /// <remarks>
         /// Called during serialization.

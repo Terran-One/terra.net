@@ -28,10 +28,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
             NoWithVeto = info.GetInt32("no_with_veto");
         }
 
-        [ProtoMember(1)] public int Yes { get; }
-        [ProtoMember(2)] public int Abstain { get; }
-        [ProtoMember(3)] public int No { get; }
-        [ProtoMember(4)] public int NoWithVeto { get; }
+        [ProtoMember(1, Name = "yes")] public int Yes { get; }
+        [ProtoMember(2, Name = "abstain")] public int Abstain { get; }
+        [ProtoMember(3, Name = "no")] public int No { get; }
+        [ProtoMember(4, Name = "no_with_veto")] public int NoWithVeto { get; }
 
         /// <remarks>
         /// Called during serialization.

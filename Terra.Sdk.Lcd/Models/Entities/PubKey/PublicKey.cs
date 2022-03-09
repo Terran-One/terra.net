@@ -11,6 +11,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.PubKey
     [JsonSubtypes.KnownSubType(typeof(SimplePublicKey), "/cosmos.crypto.secp256k1.PubKey")]
     [JsonSubtypes.KnownSubType(typeof(LegacyAminoMultisigPublicKey), "/cosmos.crypto.multisig.LegacyAminoPubKey")]
     [JsonSubtypes.KnownSubType(typeof(ValConsPublicKey), "/cosmos.crypto.ed25519.PubKey")]
+
     [ProtoContract]
     [ProtoInclude(1, typeof(SimplePublicKey))]
     [ProtoInclude(2, typeof(LegacyAminoMultisigPublicKey))]

@@ -7,9 +7,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg.Primitives
     [ProtoContract]
     public readonly struct CommissionRates : ISerializable
     {
-        [ProtoMember(1)] public decimal Rate { get; }
-        [ProtoMember(2)] public decimal MaxRate { get; }
-        [ProtoMember(3)] public decimal MaxChangeRate { get; }
+        [ProtoMember(1, Name = "rate")] public decimal Rate { get; }
+        [ProtoMember(2, Name = "max_rate")] public decimal MaxRate { get; }
+        [ProtoMember(3, Name = "max_change_rate")] public decimal MaxChangeRate { get; }
 
         public CommissionRates(decimal rate, decimal maxRate, decimal maxChangeRate) : this()
         {

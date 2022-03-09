@@ -7,12 +7,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcTransferMsg
     [ProtoContract]
     public class MsgTransfer : Msg
     {
-        [ProtoMember(1)] public string SourcePort { get; set; }
-        [ProtoMember(2)] public string SourceChannel { get; set; }
-        [ProtoMember(3)] public Coin Token { get; set; }
-        [ProtoMember(4)] public string Sender { get; set; }
-        [ProtoMember(5)] public string Receiver { get; set; }
-        [ProtoMember(6)] public Height TimeoutHeight { get; set; }
-        [ProtoMember(7)] public DateTime TimeoutTimestamp { get; set; }
+        [ProtoMember(1, Name = "source_port")] public string SourcePort { get; set; }
+        [ProtoMember(2, Name = "source_channel")] public string SourceChannel { get; set; }
+        [ProtoMember(3, Name = "token")] public Coin Token { get; set; }
+        [ProtoMember(4, Name = "sender")] public string Sender { get; set; }
+        [ProtoMember(5, Name = "receiver")] public string Receiver { get; set; }
+        [ProtoMember(6, Name = "timeout_height")] public Height TimeoutHeight { get; set; }
+        [ProtoMember(7, Name = "timeout_timestamp")] public DateTime TimeoutTimestamp { get; set; }
     }
 }

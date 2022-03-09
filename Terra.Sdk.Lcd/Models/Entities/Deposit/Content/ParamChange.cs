@@ -24,9 +24,9 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
             Value = value;
         }
 
-        [ProtoMember(1)] public string Subspace { get; }
-        [ProtoMember(2)] public string Key { get; }
-        [ProtoMember(3)] public string Value { get; }
+        [ProtoMember(1, Name = "subspace")] public string Subspace { get; }
+        [ProtoMember(2, Name = "key")] public string Key { get; }
+        [ProtoMember(3, Name = "value")] public string Value { get; }
 
         /// <remarks>
         /// Called during serialization.

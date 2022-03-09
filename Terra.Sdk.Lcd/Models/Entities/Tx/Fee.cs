@@ -23,15 +23,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             _client = client;
         }
 
-        [ProtoMember(1)] public long GasLimit { get; set; }
+        [ProtoMember(1, Name = "amount")] public List<Coin> Amount { get; set; }
+        [ProtoMember(2, Name = "gas_limit")] public long GasLimit { get; set; }
+        [ProtoMember(3, Name = "payer")] public string Payer { get; set; }
+        [ProtoMember(4, Name = "granter")] public string Granter { get; set; }
 
-        [ProtoMember(2)] public List<Coin> Amount { get; set; }
-
-        [ProtoMember(3)] public string Payer { get; set; }
-
-        [ProtoMember(4)] public string Granter { get; set; }
-
-        public async Task<Result<Fee>> Estimate(IEnumerable<SignerData> signers, CreateTxOptions options)
+        internal async Task<Result<Fee>> Estimate(IEnumerable<SignerData> signers, CreateTxOptions options)
         {
             var gasPrices = options.GasPrices ?? _client.Config.GasPrices;
             var gasAdjustment = options.GasAdjustment ?? _client.Config.GasAdjustment;

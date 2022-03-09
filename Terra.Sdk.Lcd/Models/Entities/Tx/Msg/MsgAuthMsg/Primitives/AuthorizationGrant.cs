@@ -24,8 +24,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg.Primitives
             _client = client;
         }
 
-        [ProtoMember(1)] public Authorization.Authorization Authorization { get; set; }
-        [ProtoMember(2)] public DateTime Expiration { get; set; }
+        [ProtoMember(1, Name = "authorization")] public Authorization.Authorization Authorization { get; set; }
+        [ProtoMember(2, Name = "expiration")] public DateTime Expiration { get; set; }
 
         internal Task<PaginatedResult<AuthorizationGrant>> Get(
             string granter, string grantee, string msgTypeUrl = null,

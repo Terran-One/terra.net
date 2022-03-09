@@ -19,7 +19,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
     public class Content
     {
         [JsonProperty("@type")]
-        [ProtoMember(1)]
+        [ProtoMember(1, Name = "type")]
         public string Type { get; set; }
     }
 }

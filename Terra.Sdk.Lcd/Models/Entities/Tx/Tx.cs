@@ -18,7 +18,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
     [ProtoContract]
     public class Tx
     {
-        private readonly LcdClient _client;
+        private LcdClient _client;
 
         /// <remarks>
         /// For serialization.
@@ -32,11 +32,44 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             _client = client;
         }
 
-        [ProtoMember(1)] public TxBody Body { get; set; }
+        internal Tx WithClient(LcdClient client)
+        {
+            _client = client;
+            return this;
+        }
 
-        [ProtoMember(2)] public AuthInfo AuthInfo { get; set; }
+        [ProtoMember(1, Name = "body")]
+        public TxBody Body { get; set; }
 
-        [ProtoMember(3)] public List<string> Signatures { get; set; }
+        [ProtoMember(2, Name = "auth_info")]
+        public AuthInfo AuthInfo { get; set; }
+
+        public List<string> Signatures
+        {
+            get => _signatures;
+            set
+            {
+                _signatures = value;
+                _protoSignatures = value.Select(Encoding.UTF8.GetBytes).ToList();
+            }
+        }
+        private List<string> _signatures;
+
+        /// <remarks>
+        /// For protobuf serialization.
+        /// </remarks>
+        [JsonIgnore]
+        [ProtoMember(3, Name = "signatures")]
+        public List<byte[]> ProtoSignatures
+        {
+            get => _protoSignatures;
+            set
+            {
+                _protoSignatures = value;
+                _signatures = _protoSignatures.Select(Encoding.UTF8.GetString).ToList();
+            }
+        }
+        private List<byte[]> _protoSignatures;
 
         public string Encode()
         {
@@ -145,7 +178,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
 
             var response = await _client.HttpClient.PostAsync(
                 "/cosmos/tx/v1beta1/simulate",
-                new StringContent(JsonConvert.SerializeObject(new {TyBytes = simTx.Encode()})));
+                new StringContent(JsonConvert.SerializeObject(new {TxBytes = simTx.Encode()}, Global.JsonSerializerSettings)));
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<long>();
 
@@ -172,7 +205,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                             Sequence = signer.SequenceNumber,
                             ModeInfo = new ModeInfo
                             {
-                                Multi = new ModeInfo.MultiMode
+                                Multi = new Multi
                                 {
                                     BitArray = CompactBitArray.FromBits(legacyPublicKey.PublicKeys.Count),
                                     ModeInfos = new List<ModeInfo>()
@@ -188,7 +221,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                             Sequence = signer.SequenceNumber,
                             ModeInfo = new ModeInfo
                             {
-                                Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct}
+                                Single = new Single {Mode = SignMode.Direct}
                             }
                         };
                     }
@@ -201,7 +234,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                         Sequence = signer.SequenceNumber,
                         ModeInfo = new ModeInfo
                         {
-                            Single = new ModeInfo.SingleMode {Mode = ModeInfo.SignMode.Direct}
+                            Single = new Single {Mode = SignMode.Direct}
                         }
                     };
                 }

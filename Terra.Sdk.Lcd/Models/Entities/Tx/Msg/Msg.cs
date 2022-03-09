@@ -23,10 +23,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgMultiSend), "/cosmos.bank.v1beta1.MsgMultiSend")]
     [JsonSubtypes.KnownSubType(typeof(MsgFundCommunityPool), "/cosmos.distribution.v1beta1.MsgFundCommunityPool")]
     [JsonSubtypes.KnownSubType(typeof(MsgSetWithdrawAddress), "/cosmos.distribution.v1beta1.MsgSetWithdrawAddress")]
-    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawDelegatorReward),
-        "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward")]
-    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawValidatorCommission),
-        "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission")]
+    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawDelegatorReward), "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward")]
+    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawValidatorCommission), "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission")]
     [JsonSubtypes.KnownSubType(typeof(MsgGrantAllowance), "/cosmos.feegrant.v1beta1.MsgGrantAllowance")]
     [JsonSubtypes.KnownSubType(typeof(MsgRevokeAllowance), "/cosmos.feegrant.v1beta1.MsgRevokeAllowance")]
     [JsonSubtypes.KnownSubType(typeof(MsgDeposit), "/cosmos.gov.v1beta1.MsgDeposit")]
@@ -57,10 +55,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgExecAuthorized), "/cosmos.authz.v1beta1.MsgExecAuthorized")]
     [JsonSubtypes.KnownSubType(typeof(MsgGrantAuthorization), "/cosmos.authz.v1beta1.MsgGrantAuthorization")]
     [JsonSubtypes.KnownSubType(typeof(MsgRevokeAuthorization), "/cosmos.authz.v1beta1.MsgRevokeAuthorization")]
-    [JsonSubtypes.KnownSubType(typeof(MsgAggregateExchangeRatePrevote),
-        "/terra.oracle.v1beta1.MsgAggregateExchangeRatePrevote")]
-    [JsonSubtypes.KnownSubType(typeof(MsgAggregateExchangeRateVote),
-        "/terra.oracle.v1beta1.MsgAggregateExchangeRateVote")]
+    [JsonSubtypes.KnownSubType(typeof(MsgAggregateExchangeRatePrevote), "/terra.oracle.v1beta1.MsgAggregateExchangeRatePrevote")]
+    [JsonSubtypes.KnownSubType(typeof(MsgAggregateExchangeRateVote), "/terra.oracle.v1beta1.MsgAggregateExchangeRateVote")]
     [JsonSubtypes.KnownSubType(typeof(MsgDelegateFeedConsent), "/terra.oracle.v1beta1.MsgDelegateFeedConsent")]
     [JsonSubtypes.KnownSubType(typeof(MsgUnjail), "/cosmos.slashing.v1beta1.MsgUnjail")]
     [JsonSubtypes.KnownSubType(typeof(MsgBeginRedelegate), "/cosmos.staking.v1beta1.MsgBeginRedelegate")]
@@ -75,6 +71,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgMigrateContract), "/terra.wasm.v1beta1.MsgMigrateContract")]
     [JsonSubtypes.KnownSubType(typeof(MsgStoreCode), "/terra.wasm.v1beta1.MsgStoreCode")]
     [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/terra.wasm.v1beta1.MsgUpdateContractAdmin")]
+
     [ProtoContract]
     [ProtoInclude(1, typeof(MsgSend))]
     [ProtoInclude(2, typeof(MsgMultiSend))]
@@ -131,7 +128,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     public abstract class Msg
     {
         [JsonProperty("@type")]
-        [ProtoMember(1)]
         public string Type { get; set; }
     }
 }

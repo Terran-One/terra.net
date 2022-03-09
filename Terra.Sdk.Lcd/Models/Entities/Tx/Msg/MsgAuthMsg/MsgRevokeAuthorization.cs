@@ -5,8 +5,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg
     [ProtoContract]
     public class MsgRevokeAuthorization : Msg
     {
-        [ProtoMember(1)] public string Granter { get; set; }
-        [ProtoMember(2)] public string Grantee { get; set; }
-        [ProtoMember(3)] public string MsgTypeUrl { get; set; }
+        [ProtoMember(1, Name = "granter")] public string Granter { get; set; }
+        [ProtoMember(2, Name = "grantee")] public string Grantee { get; set; }
+        [ProtoMember(3, Name = "msg_type_url")] public string MsgTypeUrl { get; set; }
     }
 }

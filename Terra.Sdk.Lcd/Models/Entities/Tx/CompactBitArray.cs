@@ -1,11 +1,13 @@
 using System;
+using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
+    [ProtoContract]
     public class CompactBitArray
     {
-        public long ExtraBitsStored { get; set; }
-        public uint[] Elems { get; set; }
+        [ProtoMember(1, Name = "extra_bits_stored")] public long ExtraBitsStored { get; set; }
+        [ProtoMember(2, Name = "elems")] public byte[] Elems { get; set; }
 
         public static CompactBitArray FromBits(int bits)
         {
@@ -22,7 +24,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             return new CompactBitArray
             {
                 ExtraBitsStored = bits % 8,
-                Elems = new uint[numElems]
+                Elems = new byte[numElems]
             };
         }
     }

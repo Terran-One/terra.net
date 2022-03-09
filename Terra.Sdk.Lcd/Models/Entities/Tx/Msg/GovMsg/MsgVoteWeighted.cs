@@ -7,8 +7,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg
     [ProtoContract]
     public class MsgVoteWeighted : Msg
     {
-        [ProtoMember(1)] public long ProposalId { get; set; }
-        [ProtoMember(2)] public string Voter { get; set; }
-        [ProtoMember(3)] public List<WeightedVoteOption> Options { get; set; }
+        [ProtoMember(1, Name = "proposal_id")] public long ProposalId { get; set; }
+        [ProtoMember(2, Name = "voter")] public string Voter { get; set; }
+        [ProtoMember(3, Name = "options")] public List<WeightedVoteOption> Options { get; set; }
     }
 }
