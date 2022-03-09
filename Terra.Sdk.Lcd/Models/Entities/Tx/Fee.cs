@@ -36,7 +36,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             var gasPrices = options.GasPrices ?? _client.Config.GasPrices;
             var gasAdjustment = options.GasAdjustment ?? _client.Config.GasAdjustment;
             var feeDenoms = options.FeeDenoms?.ToArray() ?? new[] {"uusd"};
-            var gas = options.Gas;
+            var rawGasValue = options.Gas;
 
             List<Coin> gasPricesCoins = null;
             if (gasPrices?.Any() == true)
@@ -47,9 +47,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 {
                     var gasPricesCoinsFiltered = gasPricesCoins.Where(c => feeDenoms.Contains(c.Denom)).ToList();
                     if (gasPricesCoinsFiltered.Any())
-                    {
                         gasPricesCoins = gasPricesCoinsFiltered;
-                    }
                 }
             }
 
@@ -61,18 +59,29 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             tx.AppendEmptySignatures(signers);
 
             // simulate gas
-            if (gas == null || gas == "auto" || gas == "0")
-                gas = (await tx.EstimateGas(gasAdjustment: gasAdjustment)).ToString();
+            long gasLimit;
+            if (rawGasValue == null || rawGasValue == "auto" || rawGasValue == "0")
+            {
+                var gasResult = await tx.EstimateGas(gasAdjustment: gasAdjustment);
+                if (gasResult.Error != null)
+                    return new Result<Fee> {Error = gasResult.Error};
+
+                gasLimit = gasResult.Value;
+            }
+            else
+            {
+                gasLimit = long.Parse(rawGasValue);
+            }
 
             var feeAmount = gasPricesCoins != null
-                ? gasPricesCoins.Select(c => c.Multiply(decimal.Parse(gas)).ToIntCeilCoin()).ToList()
+                ? gasPricesCoins.Select(c => c.Multiply(gasLimit).ToIntCeilCoin()).ToList()
                 : new List<Coin> {new Coin("uusd", 0)};
 
             return new Result<Fee>
             {
                 Value = new Fee
                 {
-                    GasLimit = int.Parse(gas),
+                    GasLimit = gasLimit,
                     Amount = feeAmount,
                     Payer = "",
                     Granter = ""
