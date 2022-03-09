@@ -14,10 +14,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             set
             {
                 _protoPublicKey = value;
-
-                var type = PublicKey.SubtypeMap.Value[value.TypeUrl];
-                var decoded = value.Value.DecodeProto(type);
-                _publicKey = (PublicKey)decoded;
+                _publicKey = value.Decode<PublicKey>();
             }
         }
         private Any _protoPublicKey;

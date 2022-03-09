@@ -15,12 +15,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             set
             {
                 _protoMessages = value;
-                _messages = value.Select(m =>
-                {
-                    var type = Msg.Msg.SubtypeMap.Value[m.TypeUrl];
-                    var decoded = m.Value.DecodeProto(type);
-                    return (Msg.Msg)decoded;
-                }).ToList();
+                _messages = value.Select(m => m.Decode<Msg.Msg>()).ToList();
             }
         }
         private List<Any> _protoMessages;
