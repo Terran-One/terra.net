@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using JsonSubTypes;
 using Newtonsoft.Json;
@@ -18,7 +19,14 @@ namespace Terra.Sdk.Lcd.Models.Entities.PubKey
     [ProtoInclude(3, typeof(ValConsPublicKey))]
     public abstract class PublicKey
     {
-        [JsonProperty("@type")] public abstract string Type { get; set; } // for protobuf serialization, needs to be defined on subtype
+        internal static readonly Lazy<IDictionary<string, Type>> SubtypeMap = new Lazy<IDictionary<string, Type>>(() =>
+            typeof(PublicKey).GetCustomAttributes(typeof(JsonSubtypes.KnownSubTypeAttribute), false)
+                             .Cast<JsonSubtypes.KnownSubTypeAttribute>()
+                             .Select(attr => Tuple.Create(attr.AssociatedValue.ToString(), attr.SubType))
+                             .ToDictionary(t => t.Item1, t => t.Item2));
+
+        [JsonProperty("@type")]
+        public string Type { get; set; }
 
         public abstract string Key { get; set; }
 

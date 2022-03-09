@@ -6,7 +6,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
     [ProtoContract]
     public class TxBody
     {
-        [ProtoMember(1, Name = "messages")]
+        //[ProtoMember(1, Name = "messages")]
         public List<Msg.Msg> Messages { get; set; }
 
         [ProtoMember(2, Name = "memo")]
