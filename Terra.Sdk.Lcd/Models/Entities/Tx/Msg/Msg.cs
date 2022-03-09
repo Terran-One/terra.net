@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using JsonSubTypes;
 using Newtonsoft.Json;
-using ProtoBuf;
+using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.BankMsg;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.DistributionMsg;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.FeeGrantMsg;
@@ -71,62 +73,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgMigrateContract), "/terra.wasm.v1beta1.MsgMigrateContract")]
     [JsonSubtypes.KnownSubType(typeof(MsgStoreCode), "/terra.wasm.v1beta1.MsgStoreCode")]
     [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/terra.wasm.v1beta1.MsgUpdateContractAdmin")]
-
-    [ProtoContract]
-    [ProtoInclude(1, typeof(MsgSend))]
-    [ProtoInclude(2, typeof(MsgMultiSend))]
-    [ProtoInclude(3, typeof(MsgFundCommunityPool))]
-    [ProtoInclude(4, typeof(MsgSetWithdrawAddress))]
-    [ProtoInclude(5, typeof(MsgWithdrawDelegatorReward))]
-    [ProtoInclude(6, typeof(MsgWithdrawValidatorCommission))]
-    [ProtoInclude(7, typeof(MsgGrantAllowance))]
-    [ProtoInclude(8, typeof(MsgRevokeAllowance))]
-    [ProtoInclude(9, typeof(MsgDeposit))]
-    [ProtoInclude(10, typeof(MsgSubmitProposal))]
-    [ProtoInclude(11, typeof(MsgVote))]
-    [ProtoInclude(12, typeof(MsgVoteWeighted))]
-    [ProtoInclude(13, typeof(MsgAcknowledgement))]
-    [ProtoInclude(14, typeof(MsgChannelCloseConfirm))]
-    [ProtoInclude(15, typeof(MsgChannelCloseInit))]
-    [ProtoInclude(16, typeof(MsgChannelOpenAck))]
-    [ProtoInclude(17, typeof(MsgChannelOpenConfirm))]
-    [ProtoInclude(18, typeof(MsgChannelOpenInit))]
-    [ProtoInclude(19, typeof(MsgChannelOpenTry))]
-    [ProtoInclude(20, typeof(MsgRecvPacket))]
-    [ProtoInclude(21, typeof(MsgTimeout))]
-    [ProtoInclude(22, typeof(MsgTimeoutOnClose))]
-    [ProtoInclude(23, typeof(MsgCreateClient))]
-    [ProtoInclude(24, typeof(MsgSubmitMisbehaviour))]
-    [ProtoInclude(25, typeof(MsgUpdateClient))]
-    [ProtoInclude(26, typeof(MsgUpgradeClient))]
-    [ProtoInclude(27, typeof(MsgConnectionOpenAck))]
-    [ProtoInclude(28, typeof(MsgConnectionOpenConfirm))]
-    [ProtoInclude(29, typeof(MsgConnectionOpenInit))]
-    [ProtoInclude(30, typeof(MsgConnectionOpenTry))]
-    [ProtoInclude(31, typeof(MsgTransfer))]
-    [ProtoInclude(32, typeof(MsgSwap))]
-    [ProtoInclude(33, typeof(MsgSwapSend))]
-    [ProtoInclude(34, typeof(MsgExecAuthorized))]
-    [ProtoInclude(35, typeof(MsgGrantAuthorization))]
-    [ProtoInclude(36, typeof(MsgRevokeAuthorization))]
-    [ProtoInclude(37, typeof(MsgAggregateExchangeRatePrevote))]
-    [ProtoInclude(38, typeof(MsgAggregateExchangeRateVote))]
-    [ProtoInclude(39, typeof(MsgDelegateFeedConsent))]
-    [ProtoInclude(40, typeof(MsgUnjail))]
-    [ProtoInclude(41, typeof(MsgBeginRedelegate))]
-    [ProtoInclude(42, typeof(MsgCreateValidator))]
-    [ProtoInclude(43, typeof(MsgDelegate))]
-    [ProtoInclude(44, typeof(MsgEditValidator))]
-    [ProtoInclude(45, typeof(MsgUndelegate))]
-    [ProtoInclude(46, typeof(MsgClearContractAdmin))]
-    [ProtoInclude(47, typeof(MsgExecuteContract))]
-    [ProtoInclude(48, typeof(MsgInstantiateContract))]
-    [ProtoInclude(49, typeof(MsgMigrateCode))]
-    [ProtoInclude(50, typeof(MsgMigrateContract))]
-    [ProtoInclude(51, typeof(MsgStoreCode))]
-    [ProtoInclude(52, typeof(MsgUpdateContractAdmin))]
     public abstract class Msg
     {
+        internal static readonly Lazy<IDictionary<string, Type>> SubtypeMap = new Lazy<IDictionary<string, Type>>(() => typeof(Msg).GetJsonSubtypeMap());
+
         [JsonProperty("@type")]
         public string Type { get; set; }
     }

@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json.Linq;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg.Primitives;
 using ProtoBuf;

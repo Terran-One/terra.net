@@ -1,6 +1,5 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.GovMsg.Primitives
 {
