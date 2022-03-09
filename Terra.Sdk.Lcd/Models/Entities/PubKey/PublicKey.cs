@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using JsonSubTypes;
 using Newtonsoft.Json;
@@ -13,8 +12,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.PubKey
     [JsonSubtypes.KnownSubType(typeof(ValConsPublicKey), "/cosmos.crypto.ed25519.PubKey")]
     public abstract class PublicKey
     {
-        internal static readonly Lazy<IDictionary<string, Type>> SubtypeMap = new Lazy<IDictionary<string, Type>>(() => typeof(PublicKey).GetJsonSubtypeMap());
-
         [JsonProperty("@type")]
         public string Type { get; set; }
 

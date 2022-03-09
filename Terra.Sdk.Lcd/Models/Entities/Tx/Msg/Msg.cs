@@ -75,8 +75,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/terra.wasm.v1beta1.MsgUpdateContractAdmin")]
     public abstract class Msg
     {
-        internal static readonly Lazy<IDictionary<string, Type>> SubtypeMap = new Lazy<IDictionary<string, Type>>(() => typeof(Msg).GetJsonSubtypeMap());
-
         [JsonProperty("@type")]
         public string Type { get; set; }
     }
