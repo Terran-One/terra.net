@@ -21,7 +21,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Account
         {
         }
 
-
         internal Account(LcdClient lcdClient)
         {
             _client = lcdClient;

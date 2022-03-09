@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Api.Parameters;
+using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
 using TxEntity = Terra.Sdk.Lcd.Models.Entities.Tx.Tx;
@@ -23,7 +24,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<Result<long>> EstimateGas(TxEntity tx, decimal? gasAdjustment = null, IReadOnlyCollection<SignerData> signers = null) => tx.WithClient(_client).EstimateGas(signers, gasAdjustment);
         public string Encode(TxEntity tx) => tx.Encode();
         public TxEntity Decode(string encodedTx) => new TxEntity(_client).Decode(encodedTx);
-        public string GetHash(TxEntity tx) => tx.Encode();
+        public string GetHash(TxEntity tx) => tx.EncodeProto().ToHexString();
         public Task<Result<BlockTxBroadcastResult>> Broadcast(TxEntity tx) => tx.Broadcast();
         public Task<Result<BlockTxBroadcastResult>> BroadcastSync(TxEntity tx) => tx.BroadcastSync();
         public Task<Result<BlockTxBroadcastResult>> BroadcastAsync(TxEntity tx) => tx.BroadcastAsync();

@@ -23,8 +23,8 @@ var tx = (await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6
 Dump(tx);
 
 Console.WriteLine("\n***Response***");
-var res = await client.Tx.EstimateFee(
-    tx.AuthInfo.SignerInfos.Select(si => new SignerData {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
+var res = await client.Tx.Create(
+    tx.AuthInfo.SignerInfos.Select(si => new SignerOptions {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
     new CreateTxOptions
     {
         Fee = tx.AuthInfo.Fee,
@@ -32,6 +32,19 @@ var res = await client.Tx.EstimateFee(
         Msgs = tx.Body.Messages
     });
 Dump(res);
+
+Console.WriteLine("***Hash***");
+Dump(client.Tx.GetHash(res.Value));
+
+// var res = await client.Tx.EstimateFee(
+//     tx.AuthInfo.SignerInfos.Select(si => new SignerData {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
+//     new CreateTxOptions
+//     {
+//         Fee = tx.AuthInfo.Fee,
+//         Memo = tx.Body.Memo,
+//         Msgs = tx.Body.Messages
+//     });
+// Dump(res);
 
 // var result1 = await lcdClient.Auth.GetAccount("terra1ll7lc3m0yt2eg0z7ntn5w9rdskxrrgd82ac75u");
 // Console.WriteLine(JsonConvert.SerializeObject(result1));
