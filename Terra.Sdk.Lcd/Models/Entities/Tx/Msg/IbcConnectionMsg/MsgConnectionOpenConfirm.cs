@@ -6,6 +6,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
     [ProtoContract]
     public class MsgConnectionOpenConfirm : Msg
     {
+        protected override System.Type Type => typeof(MsgConnectionOpenConfirm);
+
         [ProtoMember(1, Name = "connection_id")] public string ConnectionId { get; set; }
         [ProtoMember(2, Name = "proof_ack")] public string ProofAck { get; set; }
         [ProtoMember(3, Name = "proof_height")] public Height ProofHeight { get; set; }

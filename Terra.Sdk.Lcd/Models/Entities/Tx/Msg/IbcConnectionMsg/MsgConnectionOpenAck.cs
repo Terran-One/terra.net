@@ -7,6 +7,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
     [ProtoContract]
     public class MsgConnectionOpenAck : Msg
     {
+        protected override System.Type Type => typeof(MsgConnectionOpenAck);
+
         [ProtoMember(1, Name = "connection_id")] public string ConnectionId { get; set; }
         [ProtoMember(2, Name = "counterparty_connection_id")] public string CounterpartyConnectionId { get; set; }
         [ProtoMember(3, Name = "version")] public Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg.Primitives.Version Version { get; set; }

@@ -7,6 +7,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcTransferMsg
     [ProtoContract]
     public class MsgTransfer : Msg
     {
+        protected override Type Type => typeof(MsgTransfer);
+
         [ProtoMember(1, Name = "source_port")] public string SourcePort { get; set; }
         [ProtoMember(2, Name = "source_channel")] public string SourceChannel { get; set; }
         [ProtoMember(3, Name = "token")] public Coin Token { get; set; }

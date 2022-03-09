@@ -7,6 +7,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg
     [ProtoContract]
     public class MsgInstantiateContract : Msg
     {
+        protected override System.Type Type => typeof(MsgInstantiateContract);
+
         [ProtoMember(1, Name = "sender")] public string Sender { get; set; }
         [ProtoMember(2, Name = "admin")] public string Admin { get; set; }
         [ProtoMember(3, Name = "code_id")] public long CodeId { get; set; }

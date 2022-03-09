@@ -50,7 +50,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             set
             {
                 _signatures = value;
-                _protoSignatures = value.Select(Encoding.UTF8.GetBytes).ToList();
+                _protoSignatures = _signatures?.Select(Encoding.UTF8.GetBytes).ToList();
             }
         }
         private List<string> _signatures;
@@ -66,10 +66,22 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             set
             {
                 _protoSignatures = value;
-                _signatures = _protoSignatures.Select(Encoding.UTF8.GetString).ToList();
+                _signatures = _protoSignatures?.Select(Encoding.UTF8.GetString).ToList();
             }
         }
         private List<byte[]> _protoSignatures;
+
+        internal void AddSignature(string signature)
+        {
+            Signatures.Add(signature);
+            ProtoSignatures.Add(Encoding.UTF8.GetBytes(signature));
+        }
+
+        internal void AddSignatures(IReadOnlyCollection<string> signatures)
+        {
+            Signatures.AddRange(signatures);
+            ProtoSignatures.AddRange(signatures.Select(Encoding.UTF8.GetBytes));
+        }
 
         public string Encode()
         {
@@ -159,8 +171,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             var simTx = this;
             if (!Signatures.Any())
             {
-                if (signers?.Any() == false)
-                    return null;
+                if (signers?.Any() != true)
+                    return new Result<long> {Error = new Error {Message = "Cannot append signature"}};
 
                 var authInfo = new AuthInfo
                 {
@@ -243,7 +255,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 if (Signatures == null) Signatures = new List<string>();
 
                 AuthInfo.SignerInfos.Add(signerInfo);
-                Signatures.Add("");
+                AddSignature("");
             }
         }
 

@@ -6,6 +6,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg
     [ProtoContract]
     public class MsgAcknowledgement : Msg
     {
+        protected override System.Type Type => typeof(MsgAcknowledgement);
+
         [ProtoMember(1, Name = "packet")] public Packet Packet { get; set; }
         [ProtoMember(2, Name = "acknowledgement")] public string Acknowledgement { get; set; }
         [ProtoMember(3, Name = "proof_acked")] public string ProofAcked { get; set; }

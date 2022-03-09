@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
@@ -104,8 +105,8 @@ namespace Terra.Sdk.Lcd.Models.Signing
             }
 
             var sigData = signature.Data.Single;
-            copyTx.Signatures.AddRange(tx.Signatures);
-            copyTx.Signatures.Add(sigData.Signature);
+            copyTx.AddSignatures(tx.Signatures);
+            copyTx.AddSignature(sigData.Signature);
             copyTx.AuthInfo.SignerInfos.AddRange(tx.AuthInfo.SignerInfos);
             copyTx.AuthInfo.SignerInfos.Add(new SignerInfo
             {

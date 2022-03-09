@@ -19,7 +19,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<Result<TxInfo>> GetTxInfo(string txHash) => new TxInfo(_client).Get(txHash);
         public Task<Result<TxEntity>> Create(IEnumerable<SignerOptions> signers, CreateTxOptions options) => new TxEntity(_client).Create(signers, options);
         public Task<Result<List<TxInfo>>> GetTxInfosByHeight(long height) => new TxInfo(_client).GetByHeight(height);
-        public Task<Result<Fee>> EstimateFee(IEnumerable<SignerData> signers, CreateTxOptions options) => new Fee(_client).Estimate(signers, options);
+        public Task<Result<Fee>> EstimateFee(IReadOnlyCollection<SignerData> signers, CreateTxOptions options) => new Fee(_client).Estimate(signers, options);
         public Task<Result<long>> EstimateGas(TxEntity tx, decimal? gasAdjustment = null, IReadOnlyCollection<SignerData> signers = null) => tx.WithClient(_client).EstimateGas(signers, gasAdjustment);
         public string Encode(TxEntity tx) => tx.Encode();
         public TxEntity Decode(string encodedTx) => new TxEntity(_client).Decode(encodedTx);

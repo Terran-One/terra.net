@@ -12,8 +12,14 @@ namespace Terra.Sdk.Lcd.Models.Entities.PubKey
     [JsonSubtypes.KnownSubType(typeof(ValConsPublicKey), "/cosmos.crypto.ed25519.PubKey")]
     public abstract class PublicKey
     {
+        protected PublicKey()
+        {
+            TypeUrl = typeof(PublicKey).GetTypeToUrlMap()[Type.Name];
+        }
+
         [JsonProperty("@type")]
-        public string Type { get; set; }
+        public string TypeUrl { get; set; }
+        protected abstract Type Type { get; }
 
         public abstract string Key { get; set; }
 

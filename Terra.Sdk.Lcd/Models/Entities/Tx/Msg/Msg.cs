@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using JsonSubTypes;
 using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Extensions;
@@ -75,7 +74,13 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/terra.wasm.v1beta1.MsgUpdateContractAdmin")]
     public abstract class Msg
     {
+        protected Msg()
+        {
+            TypeUrl = typeof(Msg).GetTypeToUrlMap()[Type.Name];
+        }
+
         [JsonProperty("@type")]
-        public string Type { get; set; }
+        public string TypeUrl { get; set; }
+        protected abstract Type Type { get; }
     }
 }

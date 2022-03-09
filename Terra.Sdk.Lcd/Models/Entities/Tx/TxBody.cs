@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using ProtoBuf;
 using Terra.Sdk.Lcd.Extensions;
 
@@ -8,6 +9,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
     [ProtoContract]
     public class TxBody
     {
+        [JsonIgnore]
         [ProtoMember(1, Name = "messages")]
         public List<Any> ProtoMessages
         {
@@ -28,12 +30,22 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 _messages = value;
                 _protoMessages = value?.Select(v => new Any
                 {
-                    TypeUrl = v.Type,
+                    TypeUrl = v.TypeUrl,
                     Value = v.EncodeProto()
                 }).ToList();
             }
         }
         private List<Msg.Msg> _messages;
+
+        internal void AddMessage(Msg.Msg message)
+        {
+            Messages.Add(message);
+            ProtoMessages.Add(new Any
+            {
+                TypeUrl = message.TypeUrl,
+                Value = message.EncodeProto()
+            });
+        }
 
         [ProtoMember(2, Name = "memo")]
         public string Memo { get; set; }

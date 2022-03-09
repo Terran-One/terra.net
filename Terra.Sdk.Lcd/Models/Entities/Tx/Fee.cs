@@ -28,7 +28,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         [ProtoMember(3, Name = "payer")] public string Payer { get; set; }
         [ProtoMember(4, Name = "granter")] public string Granter { get; set; }
 
-        internal async Task<Result<Fee>> Estimate(IEnumerable<SignerData> signers, CreateTxOptions options)
+        internal async Task<Result<Fee>> Estimate(IReadOnlyCollection<SignerData> signers, CreateTxOptions options)
         {
             var gasPrices = options.GasPrices ?? _client.Config.GasPrices;
             var gasAdjustment = options.GasAdjustment ?? _client.Config.GasAdjustment;
@@ -48,7 +48,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 }
             }
 
-            var txBody = new TxBody {Messages = options.Msgs.ToList(), Memo = options.Memo ?? ""};
+            var txBody = new TxBody {Messages = options.Msgs?.ToList(), Memo = options.Memo ?? ""};
             var authInfo = new AuthInfo {SignerInfos = new List<SignerInfo>(), Fee = new Fee {GasLimit = 0, Amount = new List<Coin>()}};
             var tx = new Tx(_client) {Body = txBody, AuthInfo = authInfo, Signatures = new List<string>()};
 

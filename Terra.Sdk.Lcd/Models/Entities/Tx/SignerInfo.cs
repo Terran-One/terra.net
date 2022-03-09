@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using ProtoBuf;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
@@ -7,6 +8,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
     [ProtoContract]
     public class SignerInfo
     {
+        [JsonIgnore]
         [ProtoMember(1, Name = "public_key")]
         public Any ProtoPublicKey
         {
@@ -27,7 +29,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 _publicKey = value;
                 ProtoPublicKey = new Any
                 {
-                    TypeUrl = value.Type,
+                    TypeUrl = value.TypeUrl,
                     Value = value.EncodeProto()
                 };
             }

@@ -6,7 +6,7 @@ using ProtoBuf.Meta;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    internal static class ObjectExtensions
+    internal static class ProtoExtensions
     {
         internal static byte[] EncodeProto<T>(this T entity)
         {

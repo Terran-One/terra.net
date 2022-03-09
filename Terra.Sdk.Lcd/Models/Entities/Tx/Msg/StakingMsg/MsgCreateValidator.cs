@@ -8,6 +8,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.StakingMsg
     [ProtoContract]
     public class MsgCreateValidator : Msg
     {
+        protected override System.Type Type => typeof(MsgCreateValidator);
+
         [ProtoMember(1, Name = "description")] public Description Description { get; set; }
         [ProtoMember(2, Name = "commission")] public CommissionRates Commission { get; set; }
         [ProtoMember(3, Name = "min_self_delegation")] public int MinSelfDelegation { get; set; }

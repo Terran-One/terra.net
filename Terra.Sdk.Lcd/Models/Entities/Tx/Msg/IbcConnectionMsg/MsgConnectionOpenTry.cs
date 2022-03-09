@@ -9,6 +9,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
     [ProtoContract]
     public class MsgConnectionOpenTry : Msg
     {
+        protected override System.Type Type => typeof(MsgConnectionOpenTry);
+
         [ProtoMember(1, Name = "client_id")] public string ClientId { get; set; }
         [ProtoMember(2, Name = "previous_connection_id")] public string PreviousConnectionId { get; set; }
         [ProtoMember(3, Name = "client_state")] public JObject ClientState { get; set; }

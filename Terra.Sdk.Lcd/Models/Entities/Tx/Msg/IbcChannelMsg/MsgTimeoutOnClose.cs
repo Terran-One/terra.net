@@ -6,6 +6,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcChannelMsg
     [ProtoContract]
     public class MsgTimeoutOnClose : Msg
     {
+        protected override System.Type Type => typeof(MsgTimeoutOnClose);
+
         [ProtoMember(1, Name = "packet")] public Packet Packet { get; set; }
         [ProtoMember(2, Name = "proof_unreceived")] public string ProofUnreceived { get; set; }
         [ProtoMember(3, Name = "proof_close")] public string ProofClose { get; set; }

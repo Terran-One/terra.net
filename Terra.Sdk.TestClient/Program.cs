@@ -1,7 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Terra.Sdk.Lcd;
+using Terra.Sdk.Lcd.Api.Parameters;
 
-var dump = (object value) => Console.WriteLine(JsonConvert.SerializeObject(value, Formatting.Indented, new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
+void Dump(object value)
+{
+    var jsonSerializerSettings = new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
+    var json = JsonConvert.SerializeObject(value, Formatting.Indented, jsonSerializerSettings);
+    Console.WriteLine(json);
+}
 
 var client = new LcdClient(new LcdClientConfig
 {
@@ -14,11 +20,18 @@ var client = new LcdClient(new LcdClientConfig
 
 Console.WriteLine("\n***Request***");
 var tx = (await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20")).Value.Tx;
-dump(tx);
+Dump(tx);
 
 Console.WriteLine("\n***Response***");
-var res = await client.Tx.EstimateGas(tx, .06M);
-dump(res);
+var res = await client.Tx.EstimateFee(
+    tx.AuthInfo.SignerInfos.Select(si => new SignerData {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
+    new CreateTxOptions
+    {
+        Fee = tx.AuthInfo.Fee,
+        Memo = tx.Body.Memo,
+        Msgs = tx.Body.Messages
+    });
+Dump(res);
 
 // var result1 = await lcdClient.Auth.GetAccount("terra1ll7lc3m0yt2eg0z7ntn5w9rdskxrrgd82ac75u");
 // Console.WriteLine(JsonConvert.SerializeObject(result1));
