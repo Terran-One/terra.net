@@ -25,9 +25,9 @@ namespace Terra.Sdk.Lcd.Api
         public string Encode(TxEntity tx) => tx.Encode();
         public TxEntity Decode(string encodedTx) => new TxEntity(_client).Decode(encodedTx);
         public string GetHash(TxEntity tx) => tx.EncodeProto().ToHexString();
-        public Task<Result<BlockTxBroadcastResult>> Broadcast(TxEntity tx) => tx.Broadcast();
-        public Task<Result<BlockTxBroadcastResult>> BroadcastSync(TxEntity tx) => tx.BroadcastSync();
-        public Task<Result<BlockTxBroadcastResult>> BroadcastAsync(TxEntity tx) => tx.BroadcastAsync();
+        public Task<Result<BlockTxBroadcastResult>> Broadcast(TxEntity tx) => tx.WithClient(_client).Broadcast();
+        public Task<Result<SyncTxBroadcastResult>> BroadcastSync(TxEntity tx) => tx.WithClient(_client).BroadcastSync();
+        public Task<Result<AsyncTxBroadcastResult>> BroadcastAsync(TxEntity tx) => tx.WithClient(_client).BroadcastAsync();
         public Task<Result<TxSearchResult>> Search(TxSearchOptions options) => new Tx(_client).Search(options);
     }
 }

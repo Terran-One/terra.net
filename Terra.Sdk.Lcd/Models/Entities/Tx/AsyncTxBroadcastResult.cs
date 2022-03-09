@@ -1,6 +1,10 @@
 namespace Terra.Sdk.Lcd.Models.Entities.Tx
 {
-    public class AsyncTxBroadcastResult
+    public class SyncTxBroadcastResult : BlockTxBroadcastResult
+    {
+    }
+
+    public class AsyncTxBroadcastResult : BlockTxBroadcastResult
     {
     }
 }

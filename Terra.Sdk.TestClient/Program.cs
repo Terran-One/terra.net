@@ -33,8 +33,10 @@ var res = await client.Tx.Create(
     });
 Dump(res);
 
-Console.WriteLine("***Hash***");
-Dump(client.Tx.GetHash(res.Value));
+Console.WriteLine("\n***Broadcast***");
+res.Value.Signatures = tx.Signatures;
+var broadcast = await client.Tx.BroadcastSync(res.Value);
+Dump(broadcast);
 
 // var res = await client.Tx.EstimateFee(
 //     tx.AuthInfo.SignerInfos.Select(si => new SignerData {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),

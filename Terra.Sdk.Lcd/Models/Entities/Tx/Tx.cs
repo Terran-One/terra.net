@@ -260,8 +260,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         }
 
         internal Task<Result<BlockTxBroadcastResult>> Broadcast() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Block);
-        internal Task<Result<BlockTxBroadcastResult>> BroadcastSync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Sync);
-        internal Task<Result<BlockTxBroadcastResult>> BroadcastAsync() => Broadcast<BlockTxBroadcastResult>(BroadcastMode.Async);
+        internal Task<Result<SyncTxBroadcastResult>> BroadcastSync() => Broadcast<SyncTxBroadcastResult>(BroadcastMode.Sync);
+        internal Task<Result<AsyncTxBroadcastResult>> BroadcastAsync() => Broadcast<AsyncTxBroadcastResult>(BroadcastMode.Async);
 
         internal async Task<PaginatedGroupedResult<TxSearchResult>> Search(TxSearchOptions options, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
@@ -329,16 +329,19 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             return new Result<Tx> {Value = value.Txs.Single()};
         }
 
-        private async Task<Result<T>> Broadcast<T>(BroadcastMode mode) where T : class
+        private async Task<Result<T>> Broadcast<T>(BroadcastMode mode) where T : BlockTxBroadcastResult, new()
         {
             var response = await _client.HttpClient.PostAsync(
                 "/cosmos/tx/v1beta1/txs",
-                new StringContent(JsonConvert.SerializeObject(new {TyBytes = Encode(), Mode = mode})));
+                new StringContent(JsonConvert.SerializeObject(new {TxBytes = Encode(), Mode = mode}, Global.JsonSerializerSettings)));
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<T>();
 
-            var value = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(), Global.JsonSerializerSettings);
-            return new Result<T> {Value = value};
+            var value = JsonConvert.DeserializeAnonymousType(
+                await response.Content.ReadAsStringAsync(),
+                new { TxResponse = new T() },
+                Global.JsonSerializerSettings);
+            return new Result<T> {Value = value.TxResponse};
         }
     }
 }

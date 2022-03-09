@@ -15,6 +15,6 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
         public string Codespace { get; set; }
         public string Info { get; set; }
         public string Data { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
     }
 }
