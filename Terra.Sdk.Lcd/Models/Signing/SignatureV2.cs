@@ -6,7 +6,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
     public class SignatureV2
     {
         public PublicKey PublicKey { get; set; }
-        public ModeInfo Data { get; set; }
+        public Descriptor Data { get; set; }
         public long Sequence { get; set; }
     }
 }

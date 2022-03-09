@@ -47,7 +47,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
             return new SignatureV2
             {
                 PublicKey = _publicKey,
-                Data = new ModeInfo {Single = new Entities.Tx.Single {Mode = SignMode.Direct, Signature = sigBytes}},
+                Data = new Descriptor {Single = new Single {Mode = SignMode.Direct, Signature = sigBytes}},
                 Sequence = signDoc.Sequence
             };
         }
@@ -59,9 +59,9 @@ namespace Terra.Sdk.Lcd.Models.Signing
             return new SignatureV2
             {
                 PublicKey = _publicKey,
-                Data = new ModeInfo
+                Data = new Descriptor
                 {
-                    Single = new Entities.Tx.Single
+                    Single = new Single
                     {
                         Mode = SignMode.Direct,
                         Signature = sigBytes
