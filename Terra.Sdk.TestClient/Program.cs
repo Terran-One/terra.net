@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Terra.Sdk.Lcd;
-using Terra.Sdk.Lcd.Api.Parameters;
 
 void Dump(object value)
 {
@@ -18,11 +17,9 @@ var client = new LcdClient(new LcdClientConfig
 // var txInfos = await client.Tx.GetTxInfosByHeight(long.Parse(txInfo.Value.Height));
 // Console.WriteLine(JsonConvert.SerializeObject(txInfos, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
 
-Dump(await client.Wasm.GetContractInfo("terra18vd8fpwxzck93qlwghaj6arh4p7c5n896xzem5"));
-
 // Console.WriteLine("\n***Request***");
-// var tx = (await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20")).Value.Tx;
-// Dump(tx);
+var tx = (await client.Tx.GetTxInfo("254AAD0DABFD6E86D82491CBC2796B3F52BCF9B2E036198787DDFBB6639CC966")).Value.Tx;
+Dump(tx);
 //
 // Console.WriteLine("\n***Response***");
 // var res = await client.Tx.Create(

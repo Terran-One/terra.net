@@ -1,3 +1,5 @@
+using System.Text;
+using Newtonsoft.Json;
 using ProtoBuf;
 using Terra.Sdk.Lcd.Extensions;
 
@@ -37,6 +39,19 @@ namespace Terra.Sdk.Lcd.Models
             var subtypeMap = typeof(T).GetUrlToTypeMap();
             var decoded = Value.DecodeProto(subtypeMap[TypeUrl]);
             return (T)decoded;
+        }
+
+        /// <summary>
+        /// Decodes the instance into a subtype of the type dynamic.
+        /// </summary>
+        internal dynamic DecodeDynamic()
+        {
+            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(Value), Global.JsonSerializerSettings);
+        }
+
+        internal static byte[] EncodeDynamic(dynamic entity)
+        {
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(entity, Global.JsonSerializerSettings));
         }
     }
 }

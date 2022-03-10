@@ -2,7 +2,6 @@ using System;
 using System.Buffers;
 using System.IO;
 using ProtoBuf;
-using ProtoBuf.Meta;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
@@ -10,7 +9,6 @@ namespace Terra.Sdk.Lcd.Extensions
     {
         internal static byte[] EncodeProto<T>(this T entity)
         {
-            RuntimeTypeModel.Default.InferTagFromNameDefault = true;
             using (var stream = new MemoryStream())
             {
                 Serializer.Serialize(stream, entity);

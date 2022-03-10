@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Wasm
