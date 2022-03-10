@@ -13,6 +13,6 @@ var client = new LcdClient(new LcdClientConfig
     Url = "https://bombay-lcd.terra.dev"
 });
 
-var res = await client.Gov.GetTally(5333);
+var res = await client.Gov.GetVotes(5333);
 Console.WriteLine("***Result***");
 Dump(res);
