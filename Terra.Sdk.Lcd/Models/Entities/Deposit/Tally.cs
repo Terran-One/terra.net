@@ -49,7 +49,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
 
         internal static Task<Result<Tally>> GetByProposal(LcdClient client, long proposalId)
         {
-            return client.GetResult<Tally>($"/cosmos/gov/v1beta1/proposals/{proposalId}/tally");
+            return client.GetResult(
+                $"/cosmos/gov/v1beta1/proposals/{proposalId}/tally",
+                new {Tally = default(Tally)},
+                data => new Result<Tally> {Value = data.Tally});
         }
     }
 }

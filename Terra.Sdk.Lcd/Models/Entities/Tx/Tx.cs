@@ -299,11 +299,12 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             };
         }
 
-        internal async Task<Result<Tx>> GetByProposal(long proposalId)
+        internal async Task<Result<Tx>> GetByProposal(long proposalId, long txHeight)
         {
             var @params = new StringBuilder();
             @params.Append($"events={HttpUtility.UrlEncode("message.action='/cosmos.gov.v1beta1.MsgSubmitProposal'")}");
             @params.Append($"&events={HttpUtility.UrlEncode($"submit_proposal.proposal_id={proposalId}")}");
+            @params.Append($"&events={HttpUtility.UrlEncode($"tx.height={txHeight}")}");
 
             var queryString = string.Join("&", @params, _client.GetPaginationQueryString()).TrimEnd('&');
             if (!string.IsNullOrWhiteSpace(queryString))

@@ -21,9 +21,9 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<Proposal>> GetProposal(long proposalId) => new Proposal(_client).Get(proposalId);
 
-        public async Task<Result<string>> GetProposer(long proposalId)
+        public async Task<Result<string>> GetProposer(long proposalId, long txHeight)
         {
-            var creationTx = await SearchProposalCreationTx(proposalId);
+            var creationTx = await SearchProposalCreationTx(proposalId, txHeight);
             if (creationTx.Error != null)
                 return new Result<string> {Error = creationTx.Error};
 
@@ -34,9 +34,9 @@ namespace Terra.Sdk.Lcd.Api
             return new Result<string> {Value = msg.Proposer};
         }
 
-        public async Task<Result<List<Coin>>> GetInitialDeposit(long proposalId)
+        public async Task<Result<List<Coin>>> GetInitialDeposit(long proposalId, long txHeight)
         {
-            var creationTx = await SearchProposalCreationTx(proposalId);
+            var creationTx = await SearchProposalCreationTx(proposalId, txHeight);
             if (creationTx.Error != null)
                 return new Result<List<Coin>> {Error = creationTx.Error};
 
@@ -50,7 +50,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId, long? txHeight = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Deposit(_client).GetByProposal(proposalId, txHeight, paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId) => new Models.Entities.Tx.Tx(_client).GetByProposal(proposalId);
+        public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId, long txHeight) => new Models.Entities.Tx.Tx(_client).GetByProposal(proposalId, txHeight);
 
         public Task<PaginatedResult<Vote>> GetVotes(long proposalId, string paginationKey = null,
             int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) => new Vote(_client).GetByProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
