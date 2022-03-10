@@ -18,15 +18,14 @@ namespace Terra.Sdk.Lcd.Api
             _client = client;
         }
 
-        public async Task<Result<JObject>> GetNodeInfo()
+        public async Task<Result<dynamic>> GetNodeInfo()
         {
             var response = await _client.HttpClient.GetAsync("/cosmos/base/tendermint/v1beta1/node_info");
             if (!response.IsSuccessStatusCode)
-                return await response.GetErrorResult<JObject>();
+                return await response.GetErrorResult<dynamic>();
 
-            using (var stringReader = new StringReader(await response.Content.ReadAsStringAsync()))
-            using (var jsonReader = new JsonTextReader(stringReader) {FloatParseHandling = FloatParseHandling.Decimal})
-                return new Result<JObject> {Value = await JObject.LoadAsync(jsonReader, null)};
+            dynamic dynamicObject = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+            return new Result<dynamic> {Value = dynamicObject};
         }
 
         public Task<Result<bool>> GetSyncing()

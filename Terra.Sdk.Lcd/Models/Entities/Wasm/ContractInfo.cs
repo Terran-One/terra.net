@@ -24,7 +24,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Wasm
         public string Address { get; set; }
         public string Creator { get; set; }
         public string Admin { get; set; }
-        public JObject InitMsg { get; set; }
+        public dynamic InitMsg { get; set; }
 
         internal Task<Result<ContractInfo>> Get(string contractAddress)
         {

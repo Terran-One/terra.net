@@ -18,25 +18,27 @@ var client = new LcdClient(new LcdClientConfig
 // var txInfos = await client.Tx.GetTxInfosByHeight(long.Parse(txInfo.Value.Height));
 // Console.WriteLine(JsonConvert.SerializeObject(txInfos, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
 
-Console.WriteLine("\n***Request***");
-var tx = (await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20")).Value.Tx;
-Dump(tx);
+Dump(await client.Wasm.GetContractInfo("terra18vd8fpwxzck93qlwghaj6arh4p7c5n896xzem5"));
 
-Console.WriteLine("\n***Response***");
-var res = await client.Tx.Create(
-    tx.AuthInfo.SignerInfos.Select(si => new SignerOptions {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
-    new CreateTxOptions
-    {
-        Fee = tx.AuthInfo.Fee,
-        Memo = tx.Body.Memo,
-        Msgs = tx.Body.Messages
-    });
-Dump(res);
-
-Console.WriteLine("\n***Broadcast***");
-res.Value.Signatures = tx.Signatures;
-var broadcast = await client.Tx.BroadcastSync(res.Value);
-Dump(broadcast);
+// Console.WriteLine("\n***Request***");
+// var tx = (await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20")).Value.Tx;
+// Dump(tx);
+//
+// Console.WriteLine("\n***Response***");
+// var res = await client.Tx.Create(
+//     tx.AuthInfo.SignerInfos.Select(si => new SignerOptions {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
+//     new CreateTxOptions
+//     {
+//         Fee = tx.AuthInfo.Fee,
+//         Memo = tx.Body.Memo,
+//         Msgs = tx.Body.Messages
+//     });
+// Dump(res);
+//
+// Console.WriteLine("\n***Broadcast***");
+// res.Value.Signatures = tx.Signatures;
+// var broadcast = await client.Tx.BroadcastSync(res.Value);
+// Dump(broadcast);
 
 // var res = await client.Tx.EstimateFee(
 //     tx.AuthInfo.SignerInfos.Select(si => new SignerData {PublicKey = si.PublicKey, SequenceNumber = si.Sequence}).ToList(),
