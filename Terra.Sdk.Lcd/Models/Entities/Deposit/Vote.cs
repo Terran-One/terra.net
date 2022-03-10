@@ -31,7 +31,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         public string Voter { get; set; }
         public List<WeightedVoteOption> Options { get; set; }
 
-        public async Task<PaginatedResult<Vote>> GetByProposal(long proposalId,
+        public async Task<PaginatedResult<Vote>> GetByProposal(long proposalId, long? txHeight = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);
@@ -53,9 +53,13 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
             }
 
             // build search params
+            if (!txHeight.HasValue)
+                return new PaginatedResult<Vote> {Error = new Error {Message = "Must provide tx.height events for public node"}};
+
             var @params = new StringBuilder();
             @params.Append($"events={HttpUtility.UrlEncode("message.action='/cosmos.gov.v1beta1.MsgVote'")}");
             @params.Append($"&events={HttpUtility.UrlEncode($"proposal_vote.proposal_id={proposalId}")}");
+            @params.Append($"&events={HttpUtility.UrlEncode($"tx.height={txHeight.Value}")}");
 
             var queryString = string.Join("&", @params, _client.GetPaginationQueryString()).TrimEnd('&');
             if (!string.IsNullOrWhiteSpace(queryString))

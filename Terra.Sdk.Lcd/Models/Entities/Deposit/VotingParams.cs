@@ -19,11 +19,14 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
             _client = client;
         }
 
-        public long VotingPeriod { get; set; }
+        public string VotingPeriod { get; set; }
 
         internal Task<Result<VotingParams>> Get()
         {
-            return _client.GetResult<VotingParams>("/cosmos/gov/v1beta1/params/voting");
+            return _client.GetResult(
+                "/cosmos/gov/v1beta1/params/voting",
+                new {VotingParams = new VotingParams()},
+                data => new Result<VotingParams> {Value = data.VotingParams});
         }
     }
 }

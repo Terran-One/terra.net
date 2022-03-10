@@ -25,7 +25,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
 
         internal Task<Result<DepositParams>> Get()
         {
-            return _client.GetResult<DepositParams>("/cosmos/gov/v1beta1/params/deposit");
+            return _client.GetResult(
+                "/cosmos/gov/v1beta1/params/deposit",
+                new {DepositParams = new DepositParams()},
+                data => new Result<DepositParams> {Value = data.DepositParams});
         }
     }
 }

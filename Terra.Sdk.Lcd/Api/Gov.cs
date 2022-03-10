@@ -52,8 +52,8 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId, long txHeight) => new Models.Entities.Tx.Tx(_client).GetByProposal(proposalId, txHeight);
 
-        public Task<PaginatedResult<Vote>> GetVotes(long proposalId, string paginationKey = null,
-            int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) => new Vote(_client).GetByProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
+        public Task<PaginatedResult<Vote>> GetVotes(long proposalId, long? txHeight = null, string paginationKey = null,
+            int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) => new Vote(_client).GetByProposal(proposalId, txHeight, paginationKey, pageNumber, getTotalCount, isDescending);
 
         public Task<Result<Tally>> GetTally(long proposalId) => Tally.GetByProposal(_client, proposalId);
         public Task<Result<DepositParams>> GetDepositParameters() => new DepositParams(_client).Get();

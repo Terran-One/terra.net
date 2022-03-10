@@ -36,7 +36,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
 
         internal Task<Result<TallyParams>> Get()
         {
-            return _client.GetResult<TallyParams>("/cosmos/gov/v1beta1/params/tallying");
+            return _client.GetResult(
+                "/cosmos/gov/v1beta1/params/tallying",
+                new {TallyParams = new TallyParams()},
+                data => new Result<TallyParams> {Value = data.TallyParams});
         }
     }
 }
