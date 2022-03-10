@@ -1,9 +1,11 @@
+using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Deposit.Content
 {
+    [Serializable]
     [ProtoContract]
     public readonly struct ParamChange : ISerializable
     {

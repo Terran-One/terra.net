@@ -10,9 +10,9 @@ void Dump(object value)
 
 var client = new LcdClient(new LcdClientConfig
 {
-    Url = "https://fcd.terra.dev"
+    Url = "https://bombay-lcd.terra.dev"
 });
 
-var res = await client.Distribution.GetParameters();
+var res = await client.Gov.GetProposal(5333);
 Console.WriteLine("***Result***");
 Dump(res);

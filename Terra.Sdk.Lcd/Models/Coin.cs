@@ -7,8 +7,8 @@ using ProtoBuf;
 
 namespace Terra.Sdk.Lcd.Models
 {
-    [ProtoContract]
     [Serializable]
+    [ProtoContract]
     public readonly struct Coin : ISerializable
     {
         [ProtoMember(1, Name = "denom")]

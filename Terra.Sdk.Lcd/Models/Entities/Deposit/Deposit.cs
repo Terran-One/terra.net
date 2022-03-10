@@ -29,7 +29,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         public string Depositor { get; set; }
         public List<Coin> Amount { get; set; }
 
-        public async Task<PaginatedResult<Deposit>> GetByProposal(long proposalId,
+        public async Task<PaginatedResult<Deposit>> GetByProposal(long proposalId, long? txHeight = null,
             string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
             var proposalResult = await new Proposal(_client).Get(proposalId);
@@ -51,9 +51,13 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
             }
 
             // build search params
+            if (!txHeight.HasValue)
+                return new PaginatedResult<Deposit> {Error = new Error {Message = "Must provide tx.height events for public node"}};
+
             var @params = new StringBuilder();
             @params.Append($"events={HttpUtility.UrlEncode("message.action='/cosmos.gov.v1beta1.MsgDeposit'")}");
             @params.Append($"&events={HttpUtility.UrlEncode($"proposal_deposit.proposal_id={proposalId}")}");
+            @params.Append($"&events={HttpUtility.UrlEncode($"tx.height={txHeight.Value}")}");
 
             var queryString = string.Join("&", @params, _client.GetPaginationQueryString(paginationKey, pageNumber, getTotalCount, isDescending)).TrimEnd('&');
             if (!string.IsNullOrWhiteSpace(queryString))

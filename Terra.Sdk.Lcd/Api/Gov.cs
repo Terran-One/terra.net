@@ -47,8 +47,8 @@ namespace Terra.Sdk.Lcd.Api
             return new Result<List<Coin>> {Value = msg.InitialDeposit};
         }
 
-        public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
-            new Deposit(_client).GetByProposal(proposalId, paginationKey, pageNumber, getTotalCount, isDescending);
+        public Task<PaginatedResult<Deposit>> GetDeposits(long proposalId, long? txHeight = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+            new Deposit(_client).GetByProposal(proposalId, txHeight, paginationKey, pageNumber, getTotalCount, isDescending);
 
         public Task<Result<Models.Entities.Tx.Tx>> SearchProposalCreationTx(long proposalId) => new Models.Entities.Tx.Tx(_client).GetByProposal(proposalId);
 

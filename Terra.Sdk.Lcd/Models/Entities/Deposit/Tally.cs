@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Terra.Sdk.Lcd.Extensions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Deposit
 {
+    [Serializable]
     [ProtoContract]
     public readonly struct Tally : ISerializable
     {
@@ -22,16 +24,16 @@ namespace Terra.Sdk.Lcd.Models.Entities.Deposit
         /// </remarks>
         public Tally(SerializationInfo info, StreamingContext text) : this()
         {
-            Yes = info.GetInt32("yes");
-            Abstain = info.GetInt32("abstain");
-            No = info.GetInt32("no");
-            NoWithVeto = info.GetInt32("no_with_veto");
+            Yes = info.GetInt64("yes");
+            Abstain = info.GetInt64("abstain");
+            No = info.GetInt64("no");
+            NoWithVeto = info.GetInt64("no_with_veto");
         }
 
-        [ProtoMember(1, Name = "yes")] public int Yes { get; }
-        [ProtoMember(2, Name = "abstain")] public int Abstain { get; }
-        [ProtoMember(3, Name = "no")] public int No { get; }
-        [ProtoMember(4, Name = "no_with_veto")] public int NoWithVeto { get; }
+        [ProtoMember(1, Name = "yes")] public long Yes { get; }
+        [ProtoMember(2, Name = "abstain")] public long Abstain { get; }
+        [ProtoMember(3, Name = "no")] public long No { get; }
+        [ProtoMember(4, Name = "no_with_veto")] public long NoWithVeto { get; }
 
         /// <remarks>
         /// Called during serialization.
