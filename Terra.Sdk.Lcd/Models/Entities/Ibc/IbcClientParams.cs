@@ -24,7 +24,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
 
         internal Task<Result<IbcClientParams>> Get()
         {
-            return _client.GetResult<IbcClientParams>("/ibc/client/v1/params");
+            return _client.GetResult(
+                "/ibc/client/v1/params",
+                new {Params = new IbcClientParams()},
+                data => new Result<IbcClientParams> {Value = data.Params});
         }
     }
 }
