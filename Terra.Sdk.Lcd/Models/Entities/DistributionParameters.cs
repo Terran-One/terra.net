@@ -26,7 +26,10 @@ namespace Terra.Sdk.Lcd.Models.Entities
 
         internal Task<Result<DistributionParameters>> Get()
         {
-            return _client.GetResult<DistributionParameters>("/cosmos/distribution/v1beta1/params");
+            return _client.GetResult(
+                "/cosmos/distribution/v1beta1/params",
+                new { Params = new DistributionParameters() },
+                data => new Result<DistributionParameters> { Value = data.Params });
         }
     }
 }

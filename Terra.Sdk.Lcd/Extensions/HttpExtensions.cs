@@ -28,8 +28,11 @@ namespace Terra.Sdk.Lcd.Extensions
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<TEntity>();
 
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("***Raw***");
+            Console.WriteLine(json);
             var data = JsonConvert.DeserializeObject<TEntity>(
-                await response.Content.ReadAsStringAsync(),
+                json,
                 Global.JsonSerializerSettings);
             return new Result<TEntity> {Value = data};
         }
@@ -45,8 +48,11 @@ namespace Terra.Sdk.Lcd.Extensions
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<TEntity>();
 
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("***Raw***");
+            Console.WriteLine(json);
             var data = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
+                json,
                 anonymousTypeDefinition,
                 Global.JsonSerializerSettings);
             return resultBuilder(data);
@@ -64,8 +70,11 @@ namespace Terra.Sdk.Lcd.Extensions
             if (!response.IsSuccessStatusCode)
                 return await response.GetPaginatedErrorResult<TEntity>();
 
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("***Raw***");
+            Console.WriteLine(json);
             var data = JsonConvert.DeserializeAnonymousType(
-                await response.Content.ReadAsStringAsync(),
+                json,
                 anonymousTypeDefinition,
                 Global.JsonSerializerSettings);
             return resultBuilder(data);
