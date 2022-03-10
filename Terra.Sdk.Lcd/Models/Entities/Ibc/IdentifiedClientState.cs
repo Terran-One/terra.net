@@ -21,7 +21,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
         }
 
         public string ClientId { get; set; }
-        public string ClientState { get; set; }
+        public dynamic ClientState { get; set; }
 
         internal Task<PaginatedResult<IdentifiedClientState>> GetAll(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)
         {
@@ -38,7 +38,10 @@ namespace Terra.Sdk.Lcd.Models.Entities.Ibc
 
         internal Task<Result<IdentifiedClientState>> Get(string clientId)
         {
-            return _client.GetResult<IdentifiedClientState>($"/ibc/core/client/v1/client_states/{clientId}");
+            return _client.GetResult(
+                $"/ibc/core/client/v1/client_states/{clientId}",
+                new {ClientState = (dynamic)null},
+                data => new Result<IdentifiedClientState> {Value = new IdentifiedClientState {ClientId = clientId, ClientState = data.ClientState}});
         }
     }
 }

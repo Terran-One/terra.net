@@ -13,6 +13,6 @@ var client = new LcdClient(new LcdClientConfig
     Url = "https://bombay-lcd.terra.dev"
 });
 
-var res = await client.Ibc.GetParameters();
+var res = await client.Ibc.GetConsensusStates("07-tendermint-0");
 Console.WriteLine("***Result***");
 Dump(res);

@@ -25,11 +25,11 @@ namespace Terra.Sdk.Lcd.Api
         {
             return _client.GetResult(
                 $"/ibc/core/client/v1/client_status/{clientId}",
-                new {ClientState = new {Status = ""}},
-                data => new Result<string> {Value = data.ClientState.Status});
+                new {Status = ""},
+                data => new Result<string> {Value = data.Status});
         }
 
-        public Task<PaginatedResult<ClientConsensusStates>> GetConsensusStates(string clientId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
-            new ClientConsensusStates(_client).Get(clientId, paginationKey, pageNumber, getTotalCount, isDescending);
+        public Task<PaginatedResult<ConsensusStateWithHeight>> GetConsensusStates(string clientId, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+            new ConsensusStateWithHeight(_client).Get(clientId, paginationKey, pageNumber, getTotalCount, isDescending);
     }
 }
