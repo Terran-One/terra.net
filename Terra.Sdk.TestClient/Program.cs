@@ -14,6 +14,6 @@ var client = new LcdClient(new LcdClientConfig
     Url = "https://fcd.terra.dev"
 });
 
-var res = await client.Treasury.GetParameters();
+var res = await client.Treasury.GetRewardWeight();
 Console.WriteLine("***Result***");
 Dump(res);
