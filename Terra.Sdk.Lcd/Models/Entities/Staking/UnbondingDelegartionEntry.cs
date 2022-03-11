@@ -4,7 +4,8 @@ using System.Security.Permissions;
 
 namespace Terra.Sdk.Lcd.Models.Entities.Staking
 {
-    public class UnbondingDelegartionEntry : ISerializable
+    [Serializable]
+    public readonly struct UnbondingDelegartionEntry : ISerializable
     {
         public int InitialBalance { get; }
         public int Balance { get; }

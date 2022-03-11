@@ -21,10 +21,10 @@ namespace Terra.Sdk.Lcd.Api
                 $"/cosmos/bank/v1beta1/balances/{address}",
                 new
                 {
-                    Data = new List<Coin>(),
+                    Balances = new List<Coin>(),
                     Pagination = new Pagination()
                 },
-                data => data.Pagination.BuildResult(data.Data, pageNumber),
+                data => data.Pagination.BuildResult(data.Balances, pageNumber),
                 paginationKey, pageNumber, getTotalCount, isDescending);
         }
 

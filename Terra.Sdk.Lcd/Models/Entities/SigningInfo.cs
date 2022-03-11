@@ -31,8 +31,8 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             return _client.GetResult(
                 $"/cosmos/slashing/v1beta1/signing_infos/{valConsAddress}",
-                new {Info = new SigningInfo()},
-                data => new Result<SigningInfo> {Value = data.Info});
+                new {ValSigningInfo = new SigningInfo()},
+                data => new Result<SigningInfo> {Value = data.ValSigningInfo});
         }
 
         internal Task<PaginatedResult<SigningInfo>> GetAll(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null)

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Terra.Sdk.Lcd;
-using Terra.Sdk.Lcd.Models;
 
 void Dump(object value)
 {
@@ -11,9 +10,10 @@ void Dump(object value)
 
 var client = new LcdClient(new LcdClientConfig
 {
-    Url = "https://bombay-lcd.terra.dev"
+    //Url = "https://bombay-lcd.terra.dev"
+    Url = "https://fcd.terra.dev"
 });
 
-var res = await client.Market.GetSwapRate(new Coin("umnt", 61153995M), "umyr");
+var res = await client.Treasury.GetParameters();
 Console.WriteLine("***Result***");
 Dump(res);

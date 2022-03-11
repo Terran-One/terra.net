@@ -12,9 +12,9 @@ namespace Terra.Sdk.Lcd.Models.Entities
             return new PaginatedResult<T>
             {
                 Value = value,
-                TotalCount = Total,
+                TotalCount = Total == 0 ? (int?)null : Total,
                 NextPageKey = NextKey,
-                NextPageNumber = pageNumber + 1
+                NextPageNumber = string.IsNullOrWhiteSpace(NextKey) && Total > 0 ? (pageNumber ?? 1) + 1 : (int?)null
             };
         }
     }

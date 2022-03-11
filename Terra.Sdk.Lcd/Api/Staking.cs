@@ -16,8 +16,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<PaginatedResult<Delegation>> GetDelegations(string delegator = null, string validator = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Delegation(_client).GetAll(delegator, validator, paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<Result<Delegation>> GetDelegation(string delegator, string validator) =>
-            new Delegation(_client).Get(delegator, validator);
+        public Task<Result<Delegation>> GetDelegation(string delegator, string validator) => new Delegation(_client).Get(delegator, validator);
 
         public Task<PaginatedResult<UnbondingDelegation>> GetUnbondingDelegations(string delegator = null, string validator = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new UnbondingDelegation(_client).GetAll(delegator, validator, paginationKey, pageNumber, getTotalCount, isDescending);
@@ -25,10 +24,10 @@ namespace Terra.Sdk.Lcd.Api
         public Task<Result<UnbondingDelegation>> GetUnbondingDelegation(string delegator = null, string validator = null) =>
             new UnbondingDelegation(_client).Get(delegator, validator);
 
-        public Task<PaginatedResult<Redelegation>> GetRedelegations(string delegator = null, string validatorSrc = null, string validatorDst = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+        public Task<PaginatedResult<Redelegation>> GetRedelegations(string delegator, string validatorSrc = null, string validatorDst = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Redelegation(_client).GetAll(delegator, validatorSrc, validatorDst, paginationKey, pageNumber, getTotalCount, isDescending);
 
-        public Task<PaginatedResult<Validator>> GetBondedValidators(string delegator = null, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
+        public Task<PaginatedResult<Validator>> GetBondedValidators(string delegator, string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>
             new Validator(_client).GetAllBonded(delegator, paginationKey, pageNumber, getTotalCount, isDescending);
 
         public Task<PaginatedResult<Validator>> GetValidators(string paginationKey = null, int? pageNumber = null, bool? getTotalCount = null, bool? isDescending = null) =>

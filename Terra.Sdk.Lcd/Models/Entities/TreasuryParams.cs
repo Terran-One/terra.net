@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Terra.Sdk.Lcd.Extensions;
 
@@ -31,7 +30,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         internal Task<Result<TreasuryParams>> Get()
         {
             return _client.GetResult(
-                "/terra/wasm/treasury/params",
+                "/terra/treasury/v1beta1/params",
                 new {Params = new TreasuryParams()},
                 data => new Result<TreasuryParams> {Value = data.Params});
         }
@@ -40,7 +39,7 @@ namespace Terra.Sdk.Lcd.Models.Entities
         {
             public string RateMin { get; set; }
             public string RateMax { get; set; }
-            public List<Coin> Cap { get; set; }
+            public Coin Cap { get; set; }
             public string ChangeRateMax { get; set; }
         }
     }

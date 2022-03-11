@@ -34,7 +34,7 @@ namespace Terra.Sdk.Lcd.Api
         public Task<Result<List<string>>> GetActiveDenoms()
         {
             return _client.GetResult(
-                "/terra/oracle/v1beta1/denoms/active",
+                "/terra/oracle/v1beta1/denoms/actives",
                 new {Actives = new List<string>()},
                 data => new Result<List<string>> {Value = data.Actives});
         }

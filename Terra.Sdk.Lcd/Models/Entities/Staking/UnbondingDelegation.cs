@@ -65,7 +65,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
             if (delegations.Error != null)
                 return new Result<UnbondingDelegation> {Error = delegations.Error};
 
-            return new Result<UnbondingDelegation> {Value = delegations.Value[0]};
+            return new Result<UnbondingDelegation> {Value = delegations.Value.FirstOrDefault()};
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Terra.Sdk.Lcd.Extensions;
 
@@ -12,6 +13,7 @@ namespace Terra.Sdk.Lcd.Models
 
         internal static Error From(string response)
         {
+            Console.WriteLine(response);
             if (response.TryParseJson(out Error error))
                 return error;
 

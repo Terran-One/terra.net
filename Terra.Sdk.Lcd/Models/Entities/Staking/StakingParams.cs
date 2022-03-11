@@ -28,7 +28,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Staking
         internal Task<Result<StakingParams>> Get()
         {
             return _client.GetResult(
-                "/terra/wasm/staking/params",
+                "/cosmos/staking/v1beta1/params",
                 new {Params = new StakingParams()},
                 data => new Result<StakingParams> {Value = data.Params});
         }
