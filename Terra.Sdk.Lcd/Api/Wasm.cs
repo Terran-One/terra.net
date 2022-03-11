@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities.Wasm;
@@ -24,13 +23,7 @@ namespace Terra.Sdk.Lcd.Api
 
         public Task<Result<T>> GetContractQuery<T>(string contractAddress, object query) where T : new()
         {
-            var queryMsg = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(query, new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
-                }
-            })));
+            var queryMsg = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(query, Global.JsonSerializerSettings)));
             return _client.GetResult(
                 $"/terra/wasm/v1beta1/contracts/{contractAddress}/store?query_msg={queryMsg}",
                 new {QueryResult = new T()},

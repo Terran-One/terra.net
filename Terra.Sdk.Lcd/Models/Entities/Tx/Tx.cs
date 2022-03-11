@@ -188,9 +188,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
                 simTx.AppendEmptySignatures(signers);
             }
 
-            var response = await _client.HttpClient.PostAsync(
-                "/cosmos/tx/v1beta1/simulate",
-                new StringContent(JsonConvert.SerializeObject(new {TxBytes = simTx.Encode()}, Global.JsonSerializerSettings)));
+            var json = JsonConvert.SerializeObject(new {TxBytes = simTx.Encode()}, Global.JsonSerializerSettings);
+            var response = await _client.HttpClient.PostAsync("/cosmos/tx/v1beta1/simulate", new StringContent(json));
             if (!response.IsSuccessStatusCode)
                 return await response.GetErrorResult<long>();
 

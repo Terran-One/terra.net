@@ -29,7 +29,6 @@ namespace Terra.Sdk.Lcd.Extensions
                 return await response.GetErrorResult<TEntity>();
 
             var json = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"***Raw***\n{json}");
             var data = JsonConvert.DeserializeObject<TEntity>(json, Global.JsonSerializerSettings);
             return new Result<TEntity> {Value = data};
         }
@@ -46,7 +45,6 @@ namespace Terra.Sdk.Lcd.Extensions
                 return await response.GetErrorResult<TEntity>();
 
             var json = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"***Raw***\n{json}");
             var data = JsonConvert.DeserializeAnonymousType(json, anonymousTypeDefinition, Global.JsonSerializerSettings);
             return resultBuilder(data);
         }
