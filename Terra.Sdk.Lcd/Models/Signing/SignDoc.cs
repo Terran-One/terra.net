@@ -1,3 +1,4 @@
+using System.Linq;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
 
@@ -32,7 +33,11 @@ namespace Terra.Sdk.Lcd.Models.Signing
                     ? TxBody.TimeoutHeight.ToString()
                     : null,
             Fee = AuthInfo.Fee.ToAmino(),
-            Msgs = TxBody.Messages,
+            Msgs = TxBody.Messages.Select(m => new Any
+            {
+                TypeUrl = m.TypeUrl,
+                Value = m.EncodeProto()
+            }).ToList(),
             Memo = TxBody.Memo ?? "",
         }.EncodeProto();
     }

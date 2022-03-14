@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 using Terra.Sdk.Lcd.Models.Entities.Tx;
@@ -10,17 +11,18 @@ namespace Terra.Sdk.Lcd.Models.Signing
 {
     public abstract class Key
     {
-        private readonly PublicKey _publicKey;
+        [JsonIgnore]
+        public PublicKey PublicKey { get; }
 
         protected Key(PublicKey publicKey)
         {
-            _publicKey = publicKey;
+            PublicKey = publicKey;
         }
 
         public abstract Task<byte[]> Sign(byte[] payload);
 
-        public string AccAddress => _publicKey.Address;
-        public string ValAddress => _publicKey.RawAddress.ToHexString().ConvertToBech32AddressFromHex("terravaloper");
+        public string AccAddress => PublicKey.Address;
+        public string ValAddress => PublicKey.RawAddress.ToHexString().ConvertToBech32AddressFromHex("terravaloper");
 
         public async Task<SignatureV2> CreateSignature(SignDoc signDoc)
         {
@@ -30,7 +32,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
             {
                 new SignerInfo
                 {
-                    PublicKey = _publicKey,
+                    PublicKey = PublicKey,
                     Sequence = signDoc.Sequence,
                     ModeInfo = new ModeInfo
                     {
@@ -46,7 +48,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
 
             return new SignatureV2
             {
-                PublicKey = _publicKey,
+                PublicKey = PublicKey,
                 Data = new Descriptor {Single = new Single {Mode = SignMode.Direct, Signature = sigBytes}},
                 Sequence = signDoc.Sequence
             };
@@ -58,7 +60,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
 
             return new SignatureV2
             {
-                PublicKey = _publicKey,
+                PublicKey = PublicKey,
                 Data = new Descriptor
                 {
                     Single = new Single

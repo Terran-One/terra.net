@@ -7,11 +7,11 @@ namespace Terra.Sdk.Lcd.Models.Signing
 {
     public class RawKey : Key
     {
-        private readonly byte[] _privateKey;
+        public byte[] PrivateKey { get; set; }
 
         public RawKey(byte[] privateKey) : base(CreatePublicKey(privateKey))
         {
-            _privateKey = privateKey;
+            PrivateKey = privateKey;
         }
 
         private static SimplePublicKey CreatePublicKey(byte[] privateKey)
@@ -25,7 +25,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
 
         public Tuple<byte[], long> EcdsaSign(byte[] payload)
         {
-            var key = new EthECKey(_privateKey, true);
+            var key = new EthECKey(PrivateKey, true);
             var sig = key.SignAndCalculateV(payload);
             return Tuple.Create(sig.To64ByteArray(), (long) sig.V[0]);
         }

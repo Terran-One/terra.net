@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ProtoBuf;
@@ -86,6 +87,28 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx
             };
         }
 
-        internal object ToAmino() => new {Gas = GasLimit.ToString(), Amount};
+        internal FeeAmino ToAmino() => new FeeAmino {Gas = GasLimit.ToString(), Amount = Amount.Select(CoinAmino.FromCoin).ToList()};
+
+        [ProtoContract(Name = "Fee")]
+        internal class FeeAmino
+        {
+            [ProtoMember(1, Name = "gas")]
+            public string Gas { get; set; }
+
+            [ProtoMember(2, Name = "amount")]
+            public List<CoinAmino> Amount { get; set; }
+        }
+
+        [ProtoContract(Name = "Coin")]
+        internal class CoinAmino
+        {
+            public static CoinAmino FromCoin(Coin coin) => new CoinAmino {Denom = coin.Denom, Amount = coin.Amount.ToString(CultureInfo.InvariantCulture)};
+
+            [ProtoMember(1, Name = "denom")]
+            public string Denom { get; set; }
+
+            [ProtoMember(2, Name = "amount")]
+            public string Amount { get; set; }
+        }
     }
 }
