@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terra.Sdk.TestClient", "Ter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terra.Sdk.Lcd", "Terra.Sdk.Lcd\Terra.Sdk.Lcd.csproj", "{A0C7FB8E-0CC1-4F8F-B269-7A7FAB9D9B4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terra.BigQuery.Etl", "Terra.BigQuery.Etl\Terra.BigQuery.Etl.csproj", "{FA4C88BD-5E60-4275-81E0-24255E702E74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{A0C7FB8E-0CC1-4F8F-B269-7A7FAB9D9B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0C7FB8E-0CC1-4F8F-B269-7A7FAB9D9B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0C7FB8E-0CC1-4F8F-B269-7A7FAB9D9B4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA4C88BD-5E60-4275-81E0-24255E702E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA4C88BD-5E60-4275-81E0-24255E702E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA4C88BD-5E60-4275-81E0-24255E702E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA4C88BD-5E60-4275-81E0-24255E702E74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
