@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Google.Apis.Bigquery.v2.Data;
+using Newtonsoft.Json;
 using Terra.BigQuery.Etl;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.BankMsg;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
 void Dump(object value)
 {
@@ -9,8 +10,29 @@ void Dump(object value)
     Console.WriteLine(json);
 }
 
-var schema = Schema.Create<MsgMultiSend>();
+IEnumerable<Type> FindSubClassesOf<TBaseType>()
+{
+    var baseType = typeof(TBaseType);
+    var assembly = baseType.Assembly;
+
+    return assembly.GetTypes().Where(t => t.IsSubclassOf(baseType));
+}
+
+var types = FindSubClassesOf<Msg>();
+var schema = new TableSchema
+{
+    Fields = types.Select(t => new TableFieldSchema
+    {
+        Name = t.Name,
+        Type = "RECORD",
+        Mode = "NULLABLE",
+        Fields = Schema.Create(t).Fields
+    }).ToList()
+};
 Dump(schema);
+
+// var schema = Schema.Create<MsgMultiSend>();
+// Dump(schema);
 
 // var client = BigQueryClient.Create(projectId);
 // var schemaOLD = new TableSchemaBuilder

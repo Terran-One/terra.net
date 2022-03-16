@@ -5,6 +5,13 @@ namespace Terra.BigQuery.Etl;
 
 public static class Schema
 {
+    public static TableSchema Create(Type type)
+    {
+        var schema = new TableSchema {Fields = new List<TableFieldSchema>()};
+        schema.Populate(type);
+        return schema;
+    }
+
     public static TableSchema Create<T>()
     {
         var schema = new TableSchema {Fields = new List<TableFieldSchema>()};
