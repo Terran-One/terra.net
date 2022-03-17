@@ -25,7 +25,7 @@ public class NestedField
         cSharpCode.AppendLine("using System.Linq;");
         cSharpCode.AppendLine("using Google.Cloud.BigQuery.V2;");
         cSharpCode.AppendLine("using Terra.BigQuery.Roslyn;");
-        cSharpCode.AppendLine(GetRowGeneratorCSharpCode(type));
+        cSharpCode.AppendLine(BuildRowGeneratorCSharpCode(type));
 
         foreach (var rowGenerator in (IDictionary<string, string>) rowGenerators)
             cSharpCode.AppendLine(rowGenerator.Value);
@@ -81,7 +81,7 @@ public class NestedField
         var nestedSchema = new TableSchema {Fields = new List<TableFieldSchema>()};
 
         if (!rowGenerators.ContainsKey(type.Name))
-            rowGenerators.Add(type.Name, GetRowGeneratorCSharpCode(type));
+            rowGenerators.Add(type.Name, BuildRowGeneratorCSharpCode(type));
 
         schema.Fields.Add(new TableFieldSchema
         {
@@ -94,7 +94,7 @@ public class NestedField
         Populate(nestedSchema, type, rowGenerators);
     }
 
-    private static string GetRowGeneratorCSharpCode(Type type)
+    private static string BuildRowGeneratorCSharpCode(Type type)
     {
         return $@"
 public class {type.Name}RowGenerator : IRowGenerator
