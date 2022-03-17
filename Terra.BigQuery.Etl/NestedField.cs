@@ -107,7 +107,7 @@ public class {type.Name}RowGenerator : IRowGenerator
         var msg = ({type.FullName.Replace('+', '.')})value;
         return new BigQueryInsertRow
         {{
-            {string.Join(",\n            ", type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(prop =>
+            {string.Join(",\n            ", type.GetSerializableProperties().Select(prop =>
             {
                 if (prop.PropertyType == typeof(decimal))
                     return $"{{ \"{prop.Name}\", BigQueryNumeric.FromDecimal(msg.{prop.Name}, LossOfPrecisionHandling.Truncate) }}";
