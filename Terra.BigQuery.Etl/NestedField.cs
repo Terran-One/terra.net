@@ -39,6 +39,7 @@ public class NestedField
         }
 
         builder._rowGenerator = (IRowGenerator)Activator.CreateInstance(assembly.GetType($"{type.Name}RowGenerator"));
+
         builder.Success = true;
         return builder;
     }
