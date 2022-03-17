@@ -10,19 +10,19 @@ void Dump(object value)
     Console.WriteLine(json);
 }
 
-var row = NestedField.Create(typeof(MsgMultiSend));
+var msgField = NestedField.Create(typeof(MsgMultiSend));
 
 Console.WriteLine("*** Code ***");
-Console.WriteLine(row.GeneratedCode);
+Console.WriteLine(msgField.GeneratedCode);
 
-if (!row.Success)
+if (!msgField.Success)
     return;
 
 Console.WriteLine("*** Schema ***");
-Dump(row.Schema);
+Dump(msgField.Schema);
 
 Console.WriteLine("*** Data ***");
-Dump(row.BuildInsertRow(new MsgMultiSend
+Dump(msgField.BuildInsertRow(new MsgMultiSend
 {
     Inputs = new List<MsgMultiSend.Input>
     {
