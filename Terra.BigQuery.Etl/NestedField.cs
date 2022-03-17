@@ -16,8 +16,8 @@ public class NestedField
     {
         // Build schema
         var rowGenerators = new Dictionary<string, string>();
-        var builder = new NestedField {Schema = new TableSchema {Fields = new List<TableFieldSchema>()}};
-        Populate(builder.Schema, type, rowGenerators);
+        var nestedField = new NestedField {Schema = new TableSchema {Fields = new List<TableFieldSchema>()}};
+        Populate(nestedField.Schema, type, rowGenerators);
 
         // Build row generation code
         var cSharpCode = new StringBuilder();
@@ -30,18 +30,20 @@ public class NestedField
         foreach (var rowGenerator in (IDictionary<string, string>) rowGenerators)
             cSharpCode.AppendLine(rowGenerator.Value);
 
-        builder.GeneratedCode = cSharpCode.ToString();
-        var assembly = LoadIntoCurrentAssembly(builder.GeneratedCode);
+        nestedField.GeneratedCode = cSharpCode.ToString();
+
+        var assembly = LoadIntoCurrentAssembly(nestedField.GeneratedCode);
         if (assembly == null)
         {
-            builder.Success = false;
-            return builder;
+            nestedField.Success = false;
+            return nestedField;
         }
 
-        builder._rowGenerator = (IRowGenerator)Activator.CreateInstance(assembly.GetType($"{type.Name}RowGenerator"));
+        nestedField._rowGenerator = (IRowGenerator)Activator.CreateInstance(assembly.GetType($"{type.Name}RowGenerator"));
 
-        builder.Success = true;
-        return builder;
+        // Nested field successfully built
+        nestedField.Success = true;
+        return nestedField;
     }
 
     public bool Success { get; private set; }
