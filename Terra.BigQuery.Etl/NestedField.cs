@@ -30,8 +30,8 @@ public class NestedField
         foreach (var rowGenerator in (IDictionary<string, string>) rowGenerators)
             cSharpCode.AppendLine(rowGenerator.Value);
 
-        builder.CSharpCode = cSharpCode.ToString();
-        var assembly = LoadIntoCurrentAssembly(builder.CSharpCode);
+        builder.GeneratedCode = cSharpCode.ToString();
+        var assembly = LoadIntoCurrentAssembly(builder.GeneratedCode);
         if (assembly == null)
         {
             builder.Success = false;
@@ -45,9 +45,9 @@ public class NestedField
 
     public bool Success { get; private set; }
     public TableSchema Schema { get; private init; }
-    public string CSharpCode { get; private set; }
-    public BigQueryInsertRow GetRow(object value) => _rowGenerator.GenerateRow(value);
+    public BigQueryInsertRow BuildInsertRow(object value) => _rowGenerator.GenerateRow(value);
 
+    internal string GeneratedCode { get; private set; }
     private IRowGenerator _rowGenerator;
 
     private static void Populate(TableSchema schema, Type type, IDictionary<string, string> rowGenerators)

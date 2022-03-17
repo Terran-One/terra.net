@@ -13,7 +13,7 @@ void Dump(object value)
 var row = NestedField.Create(typeof(MsgMultiSend));
 
 Console.WriteLine("*** Code ***");
-Console.WriteLine(row.CSharpCode);
+Console.WriteLine(row.GeneratedCode);
 
 if (!row.Success)
     return;
@@ -22,7 +22,7 @@ Console.WriteLine("*** Schema ***");
 Dump(row.Schema);
 
 Console.WriteLine("*** Data ***");
-Dump(row.GetRow(new MsgMultiSend
+Dump(row.BuildInsertRow(new MsgMultiSend
 {
     Inputs = new List<MsgMultiSend.Input>
     {
