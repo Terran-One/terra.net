@@ -1,7 +1,7 @@
-﻿using Google.Apis.Bigquery.v2.Data;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Terra.BigQuery.Etl;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
+using Terra.Sdk.Lcd.Models;
+using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.BankMsg;
 
 void Dump(object value)
 {
@@ -10,84 +10,30 @@ void Dump(object value)
     Console.WriteLine(json);
 }
 
-IEnumerable<Type> FindSubClassesOf<TBaseType>()
-{
-    var baseType = typeof(TBaseType);
-    var assembly = baseType.Assembly;
+var row = NestedField.Create(typeof(MsgMultiSend));
 
-    return assembly.GetTypes().Where(t => t.IsSubclassOf(baseType));
-}
+Console.WriteLine("*** Code ***");
+Console.WriteLine(row.CSharpCode);
 
-var types = FindSubClassesOf<Msg>();
-var schema = new TableSchema
+if (!row.Success)
+    return;
+
+Console.WriteLine("*** Schema ***");
+Dump(row.Schema);
+
+Console.WriteLine("*** Data ***");
+Dump(row.GetRow(new MsgMultiSend
 {
-    Fields = types.Select(t => new TableFieldSchema
+    Inputs = new List<MsgMultiSend.Input>
     {
-        Name = t.Name,
-        Type = "RECORD",
-        Mode = "NULLABLE",
-        Fields = Schema.Create(t).Fields
-    }).ToList()
-};
-Dump(schema);
+        new() {Address = "my_address_1", Coins = new List<Coin> { new("uuid", 10M) }},
+        new() {Address = "my_address_2", Coins = new List<Coin> { new("uuid", 20M) }}
+    },
+    Outputs = new List<MsgMultiSend.Output>
+    {
+        new() {Address = "my_address_1", Coins = new List<Coin> { new("uuid", 10M) }},
+        new() {Address = "my_address_2", Coins = new List<Coin> { new("uuid", 20M) }}
+    },
+    TypeUrl = "/cosmos.bank.v1beta1.MsgMultiSend"
+}));
 
-// var schema = Schema.Create<MsgMultiSend>();
-// Dump(schema);
-
-// var client = BigQueryClient.Create(projectId);
-// var schemaOLD = new TableSchemaBuilder
-// {
-//     { "type", BigQueryDbType.String  },
-//     { "value", BigQueryDbType.Struct  }
-// }.Build();
-//
-// var schema = new TableSchema
-// {
-//     Fields = new List<TableFieldSchema>
-//     {
-//         new TableFieldSchema {Name = "Type", Type = "STRING", Mode = "REQUIRED"},
-//         new TableFieldSchema
-//         {
-//             Name = "MsgSend",
-//             Type = "RECORD",
-//             Mode = "NULLABLE",
-//             Fields = new List<TableFieldSchema>
-//             {
-//                 new TableFieldSchema {Name = "FromAddress", Type = "STRING", Mode = "REQUIRED"},
-//                 new TableFieldSchema {Name = "ToAddress", Type = "STRING", Mode = "REQUIRED"},
-//                 new TableFieldSchema
-//                 {
-//                     Name = "Coins",
-//                     Type = "RECORD",
-//                     Mode = "REPEATED",
-//                     Fields = new List<TableFieldSchema>
-//                     {
-//                         new TableFieldSchema {Name = "DENOM", Type = "NUMERIC", Mode = "REQUIRED"}
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// };
-
-// var tableToCreate = new Table
-// {
-//     TimePartitioning = TimePartition.CreateDailyPartitioning(expiration: null),
-//     Schema = schema
-// };
-// var table = client.CreateTable(datasetId, tableId, tableToCreate);
-// // Upload a single row to the table, using JSON rather than the streaming buffer, as
-// // the _PARTITIONTIME column will be null while it's being served from the streaming buffer.
-// // This code assumes the upload succeeds; normally, you should check the job results.
-// table.UploadJson(new[] { "{ \"message\": \"Sample message\" }" }).PollUntilCompleted();
-//
-// var results = client.ExecuteQuery(
-//     $"SELECT message, _PARTITIONTIME AS pt FROM {table}",
-//     parameters: null);
-// var rows = results.ToList();
-// foreach (var row in rows)
-// {
-//     var message = (string) row["message"];
-//     var partition = (DateTime) row["pt"];
-//     Console.WriteLine($"Message: {message}; partition: {partition:yyyy-MM-dd}");
-// }
