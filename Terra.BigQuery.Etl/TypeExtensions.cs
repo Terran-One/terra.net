@@ -38,10 +38,10 @@ public static class TypeExtensions
 
     public static bool IsListOfBytes(this Type type)
     {
-        return type == typeof(byte[]) || type.IsList() && type.GetGenericArguments().SingleOrDefault() == typeof(byte);
+        return type == typeof(byte[]) || type.IsCollection() && type.GetGenericArguments().SingleOrDefault() == typeof(byte);
     }
 
-    public static bool IsListOfPrimitive(this Type type)
+    public static bool IsCollectionOfPrimitive(this Type type)
     {
         if (type.IsListOfBytes()) // special case
             return false;
@@ -54,14 +54,14 @@ public static class TypeExtensions
         if (type.IsArray)
             return type.GetElementType(); // Not supporting arrays of arrays for now
 
-        if (type.IsList())
+        if (type.IsCollection())
             return type.GetGenericArguments().Single();
 
         return null;
     }
 
-    public static bool IsList(this Type type)
+    public static bool IsCollection(this Type type)
     {
-        return type.Name == "List`1";
+        return type.IsArray || type.Name == "List`1";
     }
 }

@@ -24,6 +24,7 @@ public class NestedField
         cSharpCode.AppendLine("using System.Collections.Generic;");
         cSharpCode.AppendLine("using System.Linq;");
         cSharpCode.AppendLine("using Google.Cloud.BigQuery.V2;");
+        cSharpCode.AppendLine("using Newtonsoft.Json;");
         cSharpCode.AppendLine("using Terra.BigQuery.Roslyn;");
         cSharpCode.AppendLine(BuildRowGeneratorCSharpCode(type));
 
@@ -35,6 +36,7 @@ public class NestedField
         var assembly = LoadIntoCurrentAssembly(nestedField.GeneratedCode);
         if (assembly == null)
         {
+            Console.WriteLine(nestedField.GeneratedCode);
             nestedField.Success = false;
             return nestedField;
         }
@@ -57,7 +59,11 @@ public class NestedField
     {
         foreach (var prop in type.GetSerializableProperties())
         {
-            if (prop.PropertyType.IsListOfPrimitive())
+            if (prop.PropertyType == typeof(object))
+            {
+                AddPrimitive(schema, prop.Name, typeof(string), false);
+            }
+            else if (prop.PropertyType.IsCollectionOfPrimitive())
             {
                 AddPrimitive(schema, prop.Name, prop.PropertyType, true);
             }
@@ -65,7 +71,11 @@ public class NestedField
             {
                 AddPrimitive(schema, prop.Name, prop.PropertyType, false);
             }
-            else if (prop.PropertyType.IsList())
+            else if (prop.PropertyType.IsEnum)
+            {
+                AddEnum(schema, prop.Name, prop.PropertyType);
+            }
+            else if (prop.PropertyType.IsCollection())
             {
                 AddRecord(schema, prop.Name, prop.PropertyType, true, rowGenerators);
             }
@@ -109,13 +119,22 @@ public class {type.Name}RowGenerator : IRowGenerator
         {{
             {string.Join(",\n            ", type.GetSerializableProperties().Select(prop =>
             {
+                if (prop.PropertyType == typeof(object))
+                    return $"{{ \"{prop.Name}\", JsonConvert.SerializeObject((object)msg.{prop.Name}, Formatting.Indented) }}";
+
                 if (prop.PropertyType == typeof(decimal))
                     return $"{{ \"{prop.Name}\", BigQueryNumeric.FromDecimal(msg.{prop.Name}, LossOfPrecisionHandling.Truncate) }}";
 
-                if (TypeExtensions.Primitives.ContainsKey(prop.PropertyType.Name))
+                if (prop.PropertyType.IsPrimitive() || prop.PropertyType.IsCollectionOfPrimitive())
                     return $"{{ \"{prop.Name}\", msg.{prop.Name} }}";
 
-                if (prop.PropertyType.IsArray || prop.PropertyType.IsList())
+                if (prop.PropertyType.IsEnum)
+                    return $"{{ \"{prop.Name}\", (int)msg.{prop.Name} }}";
+
+                if (prop.PropertyType.IsCollection())
+                    return $"{{ \"{prop.Name}\", msg.{prop.Name}.Select(x => new {prop.PropertyType.GetListElementType().Name}RowGenerator().GenerateRow(x)).ToList() }}";
+
+                if (prop.PropertyType.IsCollection())
                     return $"{{ \"{prop.Name}\", msg.{prop.Name}.Select(x => new {prop.PropertyType.GetListElementType().Name}RowGenerator().GenerateRow(x)).ToList() }}";
 
                 return $"{{ \"{prop.Name}\", new {prop.PropertyType.Name}RowGenerator().GenerateRow(msg) }}";
@@ -136,6 +155,16 @@ public class {type.Name}RowGenerator : IRowGenerator
             Name = name,
             Type = typeName,
             Mode = isList ? "REPEATED" : "NULLABLE"
+        });
+    }
+
+    private static void AddEnum(TableSchema schema, string name, Type type)
+    {
+        schema.Fields.Add(new TableFieldSchema
+        {
+            Name = name,
+            Type = "INTEGER",
+            Mode = "NULLABLE"
         });
     }
 
