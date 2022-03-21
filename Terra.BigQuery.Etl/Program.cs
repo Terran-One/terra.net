@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
 using Google.Cloud.BigQuery.V2;
@@ -57,42 +56,41 @@ while (reader.Read())
     if (++i % 10 == 0)
         Console.WriteLine($"{DateTime.Now}: {i} rows processed");
 
-    var dataRecord = (IDataRecord) reader;
-    var hash = (string) dataRecord[0];
-    var data = JsonConvert.DeserializeAnonymousType(
-        (string) dataRecord[1],
-        new {Tx = new {Value = new {Msg = new[] {new {Type = "", Value = new JObject()}}}}},
-        new JsonSerializerSettings
-        {
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
-        });
-
-    var messages = data.Tx.Value.Msg
-        .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
-        .Select(t =>
-        {
-            var insertRow = NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1);
-            return insertRow == null
-                ? new BigQueryInsertRow {{"Type", t.Item3}}
-                : new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
-        })
-        .ToList();
-
-    var row = new BigQueryInsertRow
-    {
-        {"TxHash", hash},
-        {"Messages", messages},
-        {"Timestamp", DateTime.Now.AsBigQueryDate()}
-    };
-
     try
     {
+        var dataRecord = (IDataRecord) reader;
+        var hash = (string) dataRecord[0];
+        var data = JsonConvert.DeserializeAnonymousType(
+            (string) dataRecord[1],
+            new {Tx = new {Value = new {Msg = new[] {new {Type = "", Value = new JObject()}}}}},
+            new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
+            });
+
+        var messages = data.Tx.Value.Msg
+            .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
+            .Select(t =>
+            {
+                var insertRow = NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1);
+                return insertRow == null
+                    ? new BigQueryInsertRow {{"Type", t.Item3}}
+                    : new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
+            })
+            .ToList();
+
+        var row = new BigQueryInsertRow
+        {
+            {"TxHash", hash},
+            {"Messages", messages},
+            {"Timestamp", DateTime.Now.AsBigQueryDate()}
+        };
         table.InsertRow(row);
     }
-    catch (GoogleApiException e)
+    catch (Exception e)
     {
         Console.WriteLine(e);
     }
