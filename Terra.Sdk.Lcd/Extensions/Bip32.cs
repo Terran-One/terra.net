@@ -1,15 +1,16 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using dotnetstandard_bip32;
 
 namespace Terra.Sdk.Lcd.Extensions
 {
-    public static class Bip32Extensions
+    public static class Bip32
     {
-        public static (byte[] Key, byte[] ChainCode) CustomDerivePath(this BIP32 bip32, string path, string seed)
+        public static (byte[] Key, byte[] ChainCode) CustomDerivePath(string path, string seed)
         {
-            (byte[], byte[]) masterKeyFromSeed = bip32.GetMasterKeyFromSeed(seed);
+            (byte[], byte[]) masterKeyFromSeed = GetMasterKeyFromSeed(seed);
             return path.Split('/').Slice(1)
                 .Select(a => (
                     Value: Convert.ToUInt32(a.Replace("'", ""), 10),
@@ -19,6 +20,16 @@ namespace Terra.Sdk.Lcd.Extensions
         }
 
         private const uint HardenedOffset = 2147483648;
+        private const string Curve = "Bitcoin seed";
+
+        private static (byte[] Key, byte[] ChainCode) GetMasterKeyFromSeed(string seed)
+        {
+            using (var hmacshA512 = new HMACSHA512(Encoding.UTF8.GetBytes(Curve)))
+            {
+                var hash = hmacshA512.ComputeHash(seed.HexToByteArray());
+                return (hash.Slice(0, 32), hash.Slice(32));
+            }
+        }
 
         private static (byte[] Key, byte[] ChainCode) GetChildKeyDerivation(byte[] key, byte[] chainCode, uint index)
         {

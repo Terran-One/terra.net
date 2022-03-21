@@ -15,7 +15,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
         {
             var seed = MnemonicKeyOptions.Bip39.MnemonicToSeedHex(options.Mnemonic, "");
             var hdPathLuna = $"m/44'/{options.CoinType}'/{options.Account}'/0/{options.Index}";
-            var terraHd = MnemonicKeyOptions.Bip32.CustomDerivePath(hdPathLuna, seed);
+            var terraHd = Bip32.CustomDerivePath(hdPathLuna, seed);
             return terraHd.Key;
         }
     }
