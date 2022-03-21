@@ -1,4 +1,5 @@
 using Terra.Sdk.Lcd.Extensions;
+using Terra.Sdk.Lcd.SigningUtils;
 
 namespace Terra.Sdk.Lcd.Models.Signing
 {

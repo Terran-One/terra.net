@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using dotnetstandard_bip32;
 
-namespace Terra.Sdk.Lcd.Extensions
+namespace Terra.Sdk.Lcd.SigningUtils
 {
     public static class Bip32
     {
