@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
 using Google.Cloud.BigQuery.V2;
@@ -71,10 +72,10 @@ while (reader.Read())
 
     var messages = data.Tx.Value.Msg
         .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
-        .Where(t => t != null).Select(t => new BigQueryInsertRow
+        .Select(t => new BigQueryInsertRow
         {
-            {"Type", t.Item2.Name},
-            {t.Item2.Name, NestedField.Create(t.Item2).BuildInsertRow(t.Item1)}
+            {"Type", t.Item3},
+            {t.Item3, NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1)}
         })
         .ToList();
 
@@ -85,7 +86,14 @@ while (reader.Read())
         {"Timestamp", DateTime.Now.AsBigQueryDate()}
     };
 
-    table.InsertRow(row);
+    try
+    {
+        table.InsertRow(row);
+    }
+    catch (GoogleApiException e)
+    {
+        Console.WriteLine(e);
+    }
 }
 
 reader.Close();

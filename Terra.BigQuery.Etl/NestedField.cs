@@ -9,6 +9,9 @@ public class NestedField
 {
     public static NestedField Create(Type type)
     {
+        if (type == null)
+            return null;
+
         // Build schema
         var rowGenerators = new Dictionary<string, string>();
         var nestedField = new NestedField {Schema = new TableSchema {Fields = new List<TableFieldSchema>()}};
@@ -45,7 +48,7 @@ public class NestedField
 
     public bool Success { get; private set; }
     public TableSchema Schema { get; private init; }
-    public BigQueryInsertRow BuildInsertRow(object value) => _rowGenerator.GenerateRow(value);
+    public BigQueryInsertRow BuildInsertRow(object value) => value == null ? null : _rowGenerator.GenerateRow(value);
 
     internal string GeneratedCode { get; private set; }
     private IRowGenerator _rowGenerator;

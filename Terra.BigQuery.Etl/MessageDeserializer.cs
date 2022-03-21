@@ -21,16 +21,16 @@ public static class MessageDeserializer
         cSharpCode.AppendLine(@"
 public class Deserializer : IMessageDeserializer
 {
-    public Tuple<Msg, Type> Deserialize(string type, JObject json)
+    public Tuple<Msg, Type, string> Deserialize(string type, JObject json)
     {
         return type switch
         {");
 
         foreach (var type in typeof(Msg).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Msg))))
-            cSharpCode.AppendLine(@$"            ""{type.Name}"" => Tuple.Create((Msg)json.ToObject<{type.FullName}>(), typeof({type.FullName})),");
+            cSharpCode.AppendLine(@$"            ""{type.Name}"" => Tuple.Create((Msg)json.ToObject<{type.FullName}>(), typeof({type.FullName}), type),");
 
         cSharpCode.AppendLine(@"
-            _ => null
+            _ => Tuple.Create((Msg)null, (Type)null, type)
         };
     }
 }");

@@ -5,5 +5,5 @@ namespace Terra.BigQuery.Roslyn;
 
 public interface IMessageDeserializer
 {
-    Tuple<Msg, Type> Deserialize(string type, JObject json);
+    Tuple<Msg, Type, string> Deserialize(string type, JObject json);
 }
