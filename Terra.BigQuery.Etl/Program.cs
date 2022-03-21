@@ -72,10 +72,12 @@ while (reader.Read())
 
     var messages = data.Tx.Value.Msg
         .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
-        .Select(t => new BigQueryInsertRow
+        .Select(t =>
         {
-            {"Type", t.Item3},
-            {t.Item3, NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1) ?? new BigQueryInsertRow()}
+            var insertRow = NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1);
+            return insertRow == null
+                ? new BigQueryInsertRow {{"Type", t.Item3}}
+                : new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
         })
         .ToList();
 
