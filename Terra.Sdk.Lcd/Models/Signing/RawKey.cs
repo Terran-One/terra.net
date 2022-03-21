@@ -7,7 +7,7 @@ namespace Terra.Sdk.Lcd.Models.Signing
 {
     public class RawKey : Key
     {
-        public byte[] PrivateKey { get; set; }
+        public byte[] PrivateKey { get; }
 
         public RawKey(byte[] privateKey) : base(CreatePublicKey(privateKey))
         {
