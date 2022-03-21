@@ -1,22 +1,15 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using System.Data;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
 using Google.Cloud.BigQuery.V2;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using Npgsql;
 using Terra.BigQuery.Etl;
-using Terra.Sdk.Lcd.Models;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.BankMsg;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.MsgAuthMsg;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg;
 
-void Dump(object value)
-{
-    var jsonSerializerSettings = new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
-    var json = JsonConvert.SerializeObject(value, Formatting.Indented, jsonSerializerSettings);
-    Console.WriteLine(json);
-}
-
-var client = BigQueryClient.Create("minerva-341810", GoogleCredential.FromJson(@"MY_JSON"));
+var client = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "bq.json")));
 var schema = new TableSchema
 {
     Fields = new List<TableFieldSchema>
@@ -49,62 +42,50 @@ var schema = new TableSchema
 };
 
 var table = client.GetOrCreateTable("fcd3", "tx", schema); // the async version sometimes exits before the table is ready...
-table.InsertRow(new BigQueryInsertRow
+
+using var connection = new NpgsqlConnection("host=ec2-52-3-221-55.compute-1.amazonaws.com;database=fcd;user id=fcd;password=terran.one;");
+var command = new NpgsqlCommand("SELECT hash, data FROM public.tx;", connection);
+connection.Open();
+
+var messageDeserializer = MessageDeserializer.Get();
+
+var i = 1;
+var reader = command.ExecuteReader();
+while (reader.Read())
 {
-    { "TxHash", "bc43a6eeb36382ad8e75ac97c9f525404211b3f428a13b0e51aae6149d24de7e" },
-    { "Messages", new[]
+    if (++i % 10 == 0)
+        Console.WriteLine($"{DateTime.Now}: {i} rows processed");
+
+    var dataRecord = (IDataRecord) reader;
+    var hash = (string) dataRecord[0];
+    var data = JsonConvert.DeserializeAnonymousType(
+        (string) dataRecord[1],
+        new {Tx = new {Value = new {Msg = new[] {new {Type = "", Value = new JObject()}}}}},
+        new JsonSerializerSettings
         {
-            new BigQueryInsertRow
+            ContractResolver = new DefaultContractResolver
             {
-                { "Type", "MsgMultiSend" },
-                {
-                    "MsgMultiSend",
-                    NestedField.Create(typeof(MsgMultiSend)).BuildInsertRow(new MsgMultiSend
-                    {
-                        Inputs = new List<MsgMultiSend.Input>
-                        {
-                            new() {Address = "my_address_1", Coins = new List<Coin> {new("uuid", 10M)}},
-                            new() {Address = "my_address_2", Coins = new List<Coin> {new("uuid", 20M)}}
-                        },
-                        Outputs = new List<MsgMultiSend.Output>
-                        {
-                            new() {Address = "my_address_1", Coins = new List<Coin> {new("uuid", 10M)}},
-                            new() {Address = "my_address_2", Coins = new List<Coin> {new("uuid", 20M)}}
-                        },
-                        TypeUrl = "/cosmos.bank.v1beta1.MsgMultiSend"
-                    })
-                }
-            },
-            new BigQueryInsertRow
-            {
-                { "Type", "MsgExecuteContract" },
-                {
-                    "MsgExecuteContract",
-                    NestedField.Create(typeof(MsgExecuteContract)).BuildInsertRow(new MsgExecuteContract
-                    {
-                        Coins = new List<Coin>
-                        {
-                            new("uuid", 10M),
-                            new("uuid", 20M),
-                        },
-                        Contract = "this_is_a_contract",
-                        Sender = "my_sender",
-                        ExecuteMsg = new MsgExecAuthorized
-                        {
-                            Grantee = "my_grantee"
-                        },
-                        TypeUrl = "/terra.wasm.v1beta1.MsgExecuteContract"
-                    })
-                }
+                NamingStrategy = new SnakeCaseNamingStrategy()
             }
-        }
-    },
-    { "Timestamp", DateTime.Now.AsBigQueryDate() },
-});
+        });
 
-var query = "SELECT * FROM `minerva-341810.fcd3.tx` LIMIT 1";
-var job = client.CreateQueryJob(query, null, new QueryOptions { UseQueryCache = false });
-job.PollUntilCompleted();
+    var messages = data.Tx.Value.Msg
+        .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
+        .Where(t => t != null).Select(t => new BigQueryInsertRow
+        {
+            {"Type", t.Item2.Name},
+            {t.Item2.Name, NestedField.Create(t.Item2).BuildInsertRow(t.Item1)}
+        })
+        .ToList();
 
-foreach (var row in client.GetQueryResults(job.Reference))
-    Dump(row);
+    var row = new BigQueryInsertRow
+    {
+        {"TxHash", hash},
+        {"Messages", messages},
+        {"Timestamp", DateTime.Now.AsBigQueryDate()}
+    };
+
+    table.InsertRow(row);
+}
+
+reader.Close();

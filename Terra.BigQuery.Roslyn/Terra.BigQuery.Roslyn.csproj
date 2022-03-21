@@ -10,4 +10,8 @@
       <PackageReference Include="Google.Cloud.BigQuery.V2" Version="2.4.0-beta01" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Terra.Sdk.Lcd\Terra.Sdk.Lcd.csproj" />
+    </ItemGroup>
+
 </Project>
