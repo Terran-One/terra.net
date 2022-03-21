@@ -75,7 +75,7 @@ while (reader.Read())
         .Select(t => new BigQueryInsertRow
         {
             {"Type", t.Item3},
-            {t.Item3, NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1)}
+            {t.Item3, NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1) ?? new BigQueryInsertRow()}
         })
         .ToList();
 
