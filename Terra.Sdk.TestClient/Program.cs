@@ -7,3 +7,7 @@ var mk = new MnemonicKey(new MnemonicKeyOptions
 });
 
 mk.Dump();
+
+Console.WriteLine($"PrivateKey: {Convert.ToBase64String(mk.PrivateKey)}");
+Console.WriteLine("PublicKey:");
+mk.PublicKey.Dump();

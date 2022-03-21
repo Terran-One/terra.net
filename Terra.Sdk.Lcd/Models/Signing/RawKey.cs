@@ -1,12 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using Nethereum.Signer;
+using Newtonsoft.Json;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 
 namespace Terra.Sdk.Lcd.Models.Signing
 {
     public class RawKey : Key
     {
+        [JsonIgnore]
         public byte[] PrivateKey { get; }
 
         public RawKey(byte[] privateKey) : base(CreatePublicKey(privateKey))
