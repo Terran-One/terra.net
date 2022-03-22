@@ -44,7 +44,7 @@ var schema = new TableSchema
 var table = client.GetOrCreateTable("fcd3", "tx", schema); // the async version sometimes exits before the table is ready...
 
 await using var connection = new NpgsqlConnection("host=ec2-52-3-221-55.compute-1.amazonaws.com;database=fcd;user id=fcd;password=terran.one;");
-var offset = args.Length == 0 ? 0 : int.Parse(args[1]);
+var offset = args.Length == 0 ? 0 : int.Parse(args[0]);
 var command = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset};", connection);
 connection.Open();
 
