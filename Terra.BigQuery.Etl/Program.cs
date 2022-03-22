@@ -43,8 +43,9 @@ var schema = new TableSchema
 
 var table = client.GetOrCreateTable("fcd3", "tx", schema); // the async version sometimes exits before the table is ready...
 
-using var connection = new NpgsqlConnection("host=ec2-52-3-221-55.compute-1.amazonaws.com;database=fcd;user id=fcd;password=terran.one;");
-var command = new NpgsqlCommand("SELECT hash, data FROM public.tx;", connection);
+await using var connection = new NpgsqlConnection("host=ec2-52-3-221-55.compute-1.amazonaws.com;database=fcd;user id=fcd;password=terran.one;");
+var offset = args.Length == 0 ? 0 : int.Parse(args[1]);
+var command = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset};", connection);
 connection.Open();
 
 var messageDeserializer = MessageDeserializer.Get();
@@ -89,6 +90,14 @@ while (reader.Read())
             {"Timestamp", DateTime.Now.AsBigQueryDate()}
         };
         table.InsertRow(row);
+
+        if (i % 100000 == 0)
+        {
+            await reader.DisposeAsync();
+            await command.DisposeAsync();
+            command = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset + i};", connection);
+            reader = command.ExecuteReader();
+        }
     }
     catch (Exception e)
     {
