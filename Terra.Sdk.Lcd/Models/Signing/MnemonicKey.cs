@@ -1,5 +1,5 @@
-using Terra.Sdk.Lcd.Extensions;
-using Terra.Sdk.Lcd.SigningUtils;
+using System;
+using Newtonsoft.Json;
 
 namespace Terra.Sdk.Lcd.Models.Signing
 {
@@ -16,8 +16,10 @@ namespace Terra.Sdk.Lcd.Models.Signing
         {
             var seed = MnemonicKeyOptions.Bip39.MnemonicToSeedHex(options.Mnemonic, "");
             var hdPathLuna = $"m/44'/{options.CoinType}'/{options.Account}'/0/{options.Index}";
-            var terraHd = Bip32.CustomDerivePath(hdPathLuna, seed);
-            return terraHd.Key;
+            var masterKey = Bip32.FromSeed(seed);
+            Console.WriteLine($"*** master key ***\n{JsonConvert.SerializeObject(masterKey, Formatting.Indented)}");
+            var terraHd = masterKey.DerivePath(hdPathLuna);
+            return terraHd.PrivateKey;
         }
     }
 }
