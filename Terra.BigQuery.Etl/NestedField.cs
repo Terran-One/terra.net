@@ -7,14 +7,19 @@ namespace Terra.BigQuery.Etl;
 
 public class NestedField
 {
+    private static readonly IDictionary<string, NestedField> Cache = new Dictionary<string, NestedField>();
+
     public static NestedField Create(Type type)
     {
         if (type == null)
             return null;
 
+        if (Cache.TryGetValue(type.Name, out var nestedField))
+            return nestedField;
+
         // Build schema
         var rowGenerators = new Dictionary<string, string>();
-        var nestedField = new NestedField {Schema = new TableSchema {Fields = new List<TableFieldSchema>()}};
+        nestedField = new NestedField {Schema = new TableSchema {Fields = new List<TableFieldSchema>()}};
         Populate(nestedField.Schema, type, rowGenerators);
 
         // Build row generation code
@@ -43,6 +48,7 @@ public class NestedField
 
         // Nested field successfully built
         nestedField.Success = true;
+        Cache[type.Name] = nestedField;
         return nestedField;
     }
 

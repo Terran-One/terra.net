@@ -10,40 +10,48 @@ using Terra.BigQuery.Etl;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
 var client = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "bq.json")));
-var schema = new TableSchema
+
+BigQueryTable table;
+if (Environment.GetEnvironmentVariable("ASSUME_CREATED")?.ToLowerInvariant() == "true")
 {
-    Fields = new List<TableFieldSchema>
+    var schema = new TableSchema
     {
-        new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
-        new()
+        Fields = new List<TableFieldSchema>
         {
-            Name = "Messages", Type = "RECORD", Mode = "REPEATED",
-            Fields = new[]
-                {
-                    new TableFieldSchema
+            new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
+            new()
+            {
+                Name = "Messages", Type = "RECORD", Mode = "REPEATED",
+                Fields = new[]
                     {
-                        Name = "Type",
-                        Type = "STRING",
-                        Mode = "REQUIRED"
-                    }
-                }.Concat(typeof(Msg).Assembly.GetTypes()
-                    .Where(type => type.IsSubclassOf(typeof(Msg)))
-                    .Select(type => new TableFieldSchema
-                    {
-                        Name = type.Name,
-                        Type = "RECORD",
-                        Mode = "NULLABLE",
-                        Fields = NestedField.Create(type).Schema.Fields
-                    }))
-                .ToList()
-        },
-        new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
-    }
-};
+                        new TableFieldSchema
+                        {
+                            Name = "Type",
+                            Type = "STRING",
+                            Mode = "REQUIRED"
+                        }
+                    }.Concat(typeof(Msg).Assembly.GetTypes()
+                        .Where(type => type.IsSubclassOf(typeof(Msg)))
+                        .Select(type => new TableFieldSchema
+                        {
+                            Name = type.Name,
+                            Type = "RECORD",
+                            Mode = "NULLABLE",
+                            Fields = NestedField.Create(type).Schema.Fields
+                        }))
+                    .ToList()
+            },
+            new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
+        }
+    };
+    table = await client.GetOrCreateTableAsync("fcd3", "tx", schema);
+}
+else
+{
+    table = await client.GetTableAsync("fcd3", "tx");
+}
 
-var table = client.GetOrCreateTable("fcd3", "tx", schema); // the async version sometimes exits before the table is ready...
-
-await using var connection = new NpgsqlConnection("host=ec2-52-3-221-55.compute-1.amazonaws.com;database=fcd;user id=fcd;password=terran.one;");
+await using var connection = new NpgsqlConnection($"host={Environment.GetEnvironmentVariable("FCD_HOST")};database=fcd;user id=fcd;password=terran.one;");
 var offset = args.Length == 0 ? 0 : int.Parse(args[0]);
 var command = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset};", connection);
 connection.Open();
@@ -90,14 +98,6 @@ while (reader.Read())
             {"Timestamp", DateTime.Now.AsBigQueryDate()}
         };
         table.InsertRow(row);
-
-        if (i % 100000 == 0)
-        {
-            await reader.DisposeAsync();
-            await command.DisposeAsync();
-            command = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset + i};", connection);
-            reader = command.ExecuteReader();
-        }
     }
     catch (Exception e)
     {
