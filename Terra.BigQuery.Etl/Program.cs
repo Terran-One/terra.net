@@ -105,4 +105,6 @@ while (reader.Read())
     }
 }
 
-reader.Close();
+await reader.DisposeAsync();
+await command.DisposeAsync();
+await connection.DisposeAsync();
