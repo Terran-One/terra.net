@@ -74,8 +74,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     [JsonSubtypes.KnownSubType(typeof(MsgUpdateContractAdmin), "/terra.wasm.v1beta1.MsgUpdateContractAdmin")]
     // Additional types from db
     [JsonSubtypes.KnownSubType(typeof(MsgExchangeRateVote), "/terra.oracle.v1beta1.MsgExchangeRateVote")]
-    [JsonSubtypes.KnownSubType(typeof(MsgExchangeRateVote), "/terra.oracle.v1beta1.MsgExchangeRatePrevote")]
-    [JsonSubtypes.KnownSubType(typeof(MsgExchangeRateVote), "/cosmos.distribution.v1beta1.MsgWithdrawDelegationReward")]
+    [JsonSubtypes.KnownSubType(typeof(MsgExchangeRatePrevote), "/terra.oracle.v1beta1.MsgExchangeRatePrevote")]
+    [JsonSubtypes.KnownSubType(typeof(MsgWithdrawDelegationReward), "/cosmos.distribution.v1beta1.MsgWithdrawDelegationReward")]
     public abstract class Msg
     {
         protected Msg()
