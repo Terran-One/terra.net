@@ -65,12 +65,15 @@ while (reader.Read())
     if (++i % 10 == 0)
         Console.WriteLine($"{DateTime.Now}: {i} rows processed");
 
+    string json = null;
     try
     {
         var dataRecord = (IDataRecord) reader;
         var hash = (string) dataRecord[0];
+        json = (string) dataRecord[1];
+
         var data = JsonConvert.DeserializeAnonymousType(
-            (string) dataRecord[1],
+            json,
             new {Tx = new {Value = new {Msg = new[] {new {Type = "", Value = new JObject()}}}}},
             new JsonSerializerSettings
             {
@@ -102,6 +105,7 @@ while (reader.Read())
     catch (Exception e)
     {
         Console.WriteLine(e);
+        Console.WriteLine($"Data: {json}");
     }
 }
 
