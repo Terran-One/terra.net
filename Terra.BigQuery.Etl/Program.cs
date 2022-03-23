@@ -66,7 +66,6 @@ while (reader.Read())
         Console.WriteLine($"{DateTime.Now}: {i} rows processed");
 
     string json = null;
-    string cSharpCode = null;
     try
     {
         var dataRecord = (IDataRecord) reader;
@@ -88,10 +87,7 @@ while (reader.Read())
             .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
             .Select(t =>
             {
-                var nestedField = NestedField.Create(t.Item2);
-                cSharpCode = nestedField?.GeneratedCode;
-
-                var insertRow = nestedField?.BuildInsertRow(t.Item1);
+                var insertRow = NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1);
                 return insertRow == null
                     ? new BigQueryInsertRow {{"Type", t.Item3}}
                     : new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
@@ -110,7 +106,6 @@ while (reader.Read())
     {
         Console.WriteLine(e);
         Console.WriteLine($"Data: {json}");
-        Console.WriteLine($"C#: {cSharpCode}");
     }
 }
 

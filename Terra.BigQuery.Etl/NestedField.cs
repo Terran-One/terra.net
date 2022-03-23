@@ -35,6 +35,7 @@ public class NestedField
             cSharpCode.AppendLine(rowGenerator.Value);
 
         nestedField.GeneratedCode = cSharpCode.ToString();
+        Console.WriteLine(nestedField.GeneratedCode);
 
         var assembly = RoslynHelpers.LoadIntoCurrentAssembly(nestedField.GeneratedCode);
         if (assembly == null)
