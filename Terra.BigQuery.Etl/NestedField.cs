@@ -40,7 +40,6 @@ public class NestedField
         var assembly = RoslynHelpers.LoadIntoCurrentAssembly(nestedField.GeneratedCode);
         if (assembly == null)
         {
-            Console.WriteLine(nestedField.GeneratedCode);
             nestedField.Success = false;
             return nestedField;
         }
