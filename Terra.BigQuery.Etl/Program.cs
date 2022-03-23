@@ -88,9 +88,13 @@ while (reader.Read())
             .Select(t =>
             {
                 var insertRow = NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1);
-                return insertRow == null
-                    ? new BigQueryInsertRow {{"Type", t.Item3}}
-                    : new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
+                if (insertRow == null)
+                {
+                    Console.WriteLine($"No message class defined for {t.Item2.Name}");
+                    return new BigQueryInsertRow {{"Type", t.Item3}};
+                }
+
+                return new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
             })
             .ToList();
 
