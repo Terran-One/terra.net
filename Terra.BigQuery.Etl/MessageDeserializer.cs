@@ -14,6 +14,7 @@ public static class MessageDeserializer
         cSharpCode.AppendLine("using System.Linq;");
         cSharpCode.AppendLine("using Google.Cloud.BigQuery.V2;");
         cSharpCode.AppendLine("using Newtonsoft.Json;");
+        cSharpCode.AppendLine("using Newtonsoft.Json.Serialization;");
         cSharpCode.AppendLine("using Newtonsoft.Json.Linq;");
         cSharpCode.AppendLine("using Terra.BigQuery.Roslyn;");
         cSharpCode.AppendLine("using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;");
