@@ -34,11 +34,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg
             set
             {
                 _executeMsg = value;
-                _protoExecuteMsg = new Any
-                {
-                    TypeUrl = value.TypeUrl,
-                    Value = Any.EncodeDynamic(value)
-                };
+                _protoExecuteMsg = Any.EncodeDynamic(value);
             }
         }
         private dynamic _executeMsg;
