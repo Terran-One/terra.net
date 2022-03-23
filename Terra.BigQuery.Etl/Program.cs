@@ -58,6 +58,8 @@ connection.Open();
 
 var messageDeserializer = MessageDeserializer.Get();
 
+var noMessageDefined = new HashSet<string>();
+
 var i = 1;
 var reader = command.ExecuteReader();
 while (reader.Read())
@@ -88,13 +90,17 @@ while (reader.Read())
             .Select(t =>
             {
                 var insertRow = NestedField.Create(t.Item2)?.BuildInsertRow(t.Item1);
-                if (insertRow == null)
+                if (insertRow != null)
+                    return new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
+
+                if (!noMessageDefined.Contains(t.Item3))
                 {
                     Console.WriteLine($"No message class defined for {t.Item3}");
-                    return new BigQueryInsertRow {{"Type", t.Item3}};
+                    noMessageDefined.Add(t.Item3);
                 }
 
-                return new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
+                return new BigQueryInsertRow {{"Type", t.Item3}};
+
             })
             .ToList();
 
