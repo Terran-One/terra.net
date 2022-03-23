@@ -140,7 +140,7 @@ public class {type.Name}RowGenerator : IRowGenerator
                 if (prop.PropertyType.IsCollection())
                     return $"{{ \"{prop.Name}\", msg.{prop.Name}.Select(x => new {prop.PropertyType.GetListElementType().Name}RowGenerator().GenerateRow(x)).ToList() }}";
 
-                return $"{{ \"{prop.Name}\", new {prop.PropertyType.Name}RowGenerator().GenerateRow(msg) }}";
+                return $"{{ \"{prop.Name}\", new {prop.PropertyType.Name}RowGenerator().GenerateRow(msg.{prop.Name}) }}";
             }))}
         }};
     }}   
