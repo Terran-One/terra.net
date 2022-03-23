@@ -96,6 +96,7 @@ while (reader.Read())
                 if (!noMessageDefined.Contains(t.Item3))
                 {
                     Console.WriteLine($"No message class defined for {t.Item3}");
+                    Console.WriteLine($"Data: {json}");
                     noMessageDefined.Add(t.Item3);
                 }
 
