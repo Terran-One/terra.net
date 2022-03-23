@@ -9,60 +9,75 @@ using Npgsql;
 using Terra.BigQuery.Etl;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
+if (args.Length < 2)
+{
+    Console.WriteLine("Usage:");
+    Console.WriteLine("  dotnet run create|insert DB_HOST [OFFSET]");
+    return;
+}
+
 var client = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "bq.json")));
 
-BigQueryTable table;
-if (Environment.GetEnvironmentVariable("ASSUME_CREATED")?.ToLowerInvariant() == "true")
+var command = args[0];
+var host = args[1];
+var offset = args.Length >= 3 ? int.Parse(args[3]) : 0;
+
+switch (command)
 {
-    var schema = new TableSchema
-    {
-        Fields = new List<TableFieldSchema>
+    case "create":
+        var schema = new TableSchema
         {
-            new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
-            new()
+            Fields = new List<TableFieldSchema>
             {
-                Name = "Messages", Type = "RECORD", Mode = "REPEATED",
-                Fields = new[]
-                    {
-                        new TableFieldSchema
+                new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
+                new()
+                {
+                    Name = "Messages", Type = "RECORD", Mode = "REPEATED",
+                    Fields = new[]
                         {
-                            Name = "Type",
-                            Type = "STRING",
-                            Mode = "REQUIRED"
-                        }
-                    }.Concat(typeof(Msg).Assembly.GetTypes()
-                        .Where(type => type.IsSubclassOf(typeof(Msg)))
-                        .Select(type => new TableFieldSchema
-                        {
-                            Name = type.Name,
-                            Type = "RECORD",
-                            Mode = "NULLABLE",
-                            Fields = NestedField.Create(type).Schema.Fields
-                        }))
-                    .ToList()
-            },
-            new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
-        }
-    };
-    table = await client.GetOrCreateTableAsync("fcd3", "tx", schema);
-}
-else
-{
-    table = await client.GetTableAsync("fcd3", "tx");
+                            new TableFieldSchema
+                            {
+                                Name = "Type",
+                                Type = "STRING",
+                                Mode = "REQUIRED"
+                            }
+                        }.Concat(typeof(Msg).Assembly.GetTypes()
+                            .Where(type => type.IsSubclassOf(typeof(Msg)))
+                            .Select(type => new TableFieldSchema
+                            {
+                                Name = type.Name,
+                                Type = "RECORD",
+                                Mode = "NULLABLE",
+                                Fields = NestedField.Create(type).Schema.Fields
+                            }))
+                        .ToList()
+                },
+                new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
+            }
+        };
+        await client.CreateTableAsync("fcd3", "tx", schema);
+        return;
+
+    case "insert":
+        break;
+
+    default:
+        Console.WriteLine("Valid commands are create, insert");
+        return;
 }
 
-await using var connection = new NpgsqlConnection($"host={Environment.GetEnvironmentVariable("FCD_HOST")};database=fcd;user id=fcd;password=terran.one;");
-var offset = args.Length == 0 ? 0 : int.Parse(args[0]);
-var command = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset};", connection);
-connection.Open();
+await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
+var pgCommand = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset};", pgConnection);
+pgConnection.Open();
 
 var messageDeserializer = MessageDeserializer.Get();
-
 var noMessageDefined = new HashSet<string>();
 
+var bqTable = await client.GetTableAsync("fcd3", "tx");
+
 var i = 1;
-var reader = command.ExecuteReader();
-while (reader.Read())
+var pgReader = pgCommand.ExecuteReader();
+while (pgReader.Read())
 {
     if (++i % 10 == 0)
         Console.WriteLine($"{DateTime.Now}: {i} rows processed");
@@ -70,7 +85,7 @@ while (reader.Read())
     string json = null;
     try
     {
-        var dataRecord = (IDataRecord) reader;
+        var dataRecord = (IDataRecord) pgReader;
         var hash = (string) dataRecord[0];
         json = (string) dataRecord[1];
 
@@ -111,7 +126,7 @@ while (reader.Read())
             {"Messages", messages},
             {"Timestamp", DateTime.Now.AsBigQueryDate()}
         };
-        table.InsertRow(row);
+        bqTable.InsertRow(row);
     }
     catch (Exception e)
     {
@@ -120,6 +135,6 @@ while (reader.Read())
     }
 }
 
-await reader.DisposeAsync();
-await command.DisposeAsync();
-await connection.DisposeAsync();
+await pgReader.DisposeAsync();
+await pgCommand.DisposeAsync();
+await pgConnection.DisposeAsync();
