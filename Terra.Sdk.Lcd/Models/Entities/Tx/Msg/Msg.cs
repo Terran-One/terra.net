@@ -76,7 +76,8 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg
     {
         protected Msg()
         {
-            TypeUrl = typeof(Msg).GetTypeToUrlMap()[Type.Name];
+            if (typeof(Msg).GetTypeToUrlMap().TryGetValue(Type.Name, out var typeUrl))
+                TypeUrl = typeUrl;
         }
 
         [JsonProperty("@type")]
