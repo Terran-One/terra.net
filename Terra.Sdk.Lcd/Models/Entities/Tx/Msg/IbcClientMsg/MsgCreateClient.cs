@@ -27,7 +27,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg
             set
             {
                 _clientState = value;
-                _protoClientState = Any.EncodeDynamic(value);
+                _protoClientState = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _clientState;
@@ -51,7 +51,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg
             set
             {
                 _consensusState = value;
-                _protoConsensusState = Any.EncodeDynamic(value);
+                _protoConsensusState = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _consensusState;

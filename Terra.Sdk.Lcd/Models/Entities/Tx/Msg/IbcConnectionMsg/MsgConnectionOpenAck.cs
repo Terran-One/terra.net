@@ -37,7 +37,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcConnectionMsg
             set
             {
                 _clientState = value;
-                _protoClientState = Any.EncodeDynamic(value);
+                _protoClientState = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _clientState;

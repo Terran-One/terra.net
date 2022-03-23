@@ -30,7 +30,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg
             set
             {
                 _header = value;
-                _protoHeader = Any.EncodeDynamic(value);
+                _protoHeader = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _header;

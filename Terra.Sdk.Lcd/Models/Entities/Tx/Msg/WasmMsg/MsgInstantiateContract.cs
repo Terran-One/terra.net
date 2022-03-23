@@ -37,7 +37,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg
             set
             {
                 _initMsg = value;
-                _protoInitMsg = Any.EncodeDynamic(value);
+                _protoInitMsg = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _initMsg;

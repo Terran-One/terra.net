@@ -30,7 +30,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.IbcClientMsg
             set
             {
                 _misbehaviour = value;
-                _protoMisbehaviour = Any.EncodeDynamic(value);
+                _protoMisbehaviour = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _misbehaviour;

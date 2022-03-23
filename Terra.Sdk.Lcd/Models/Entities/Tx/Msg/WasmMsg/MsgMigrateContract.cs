@@ -36,7 +36,7 @@ namespace Terra.Sdk.Lcd.Models.Entities.Tx.Msg.WasmMsg
             set
             {
                 _migrateMsg = value;
-                _protoMigrateMsg = Any.EncodeDynamic(value);
+                _protoMigrateMsg = new Any {Value = Any.EncodeDynamic(value)};
             }
         }
         private dynamic _migrateMsg;
