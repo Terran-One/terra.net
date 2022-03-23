@@ -96,7 +96,7 @@ while (pgReader.Read())
             {
                 ContractResolver = new DefaultContractResolver
                 {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
+                    NamingStrategy = new CamelCaseNamingStrategy()
                 }
             });
 
