@@ -95,6 +95,8 @@ public class NestedField
         if (isList)
             type = type.GetListElementType();
 
+        // ToDo: check cache for type
+
         var nestedSchema = new TableSchema {Fields = new List<TableFieldSchema>()};
 
         if (!rowGenerators.ContainsKey(type.Name))
