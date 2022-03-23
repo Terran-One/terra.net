@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
 using Google.Cloud.BigQuery.V2;
@@ -126,7 +127,24 @@ while (pgReader.Read())
             {"Messages", messages},
             {"Timestamp", DateTime.Now.AsBigQueryDate()}
         };
-        bqTable.InsertRow(row);
+
+        var success = true;
+        for (var retries = 0; retries < 5; retries++)
+        {
+            try
+            {
+                bqTable.InsertRow(row);
+                break;
+            }
+            catch (GoogleApiException e)
+            {
+                Console.WriteLine($"Insert failed ({e.Message}) - retry {retries + 1} of 5...");
+                success = false;
+            }
+        }
+
+        if (!success)
+            Console.WriteLine("No more retries");
     }
     catch (Exception e)
     {
