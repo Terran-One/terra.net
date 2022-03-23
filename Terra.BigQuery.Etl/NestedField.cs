@@ -35,7 +35,6 @@ public class NestedField
             cSharpCode.AppendLine(rowGenerator.Value);
 
         nestedField.GeneratedCode = cSharpCode.ToString();
-        Console.WriteLine(nestedField.GeneratedCode);
 
         var assembly = RoslynHelpers.LoadIntoCurrentAssembly(nestedField.GeneratedCode);
         if (assembly == null)
@@ -77,7 +76,7 @@ public class NestedField
             }
             else if (prop.PropertyType.IsEnum)
             {
-                AddEnum(schema, prop.Name, prop.PropertyType);
+                AddEnum(schema, prop.Name);
             }
             else if (prop.PropertyType.IsCollection())
             {
@@ -162,7 +161,7 @@ public class {type.Name}RowGenerator : IRowGenerator
         });
     }
 
-    private static void AddEnum(TableSchema schema, string name, Type type)
+    private static void AddEnum(TableSchema schema, string name)
     {
         schema.Fields.Add(new TableFieldSchema
         {
