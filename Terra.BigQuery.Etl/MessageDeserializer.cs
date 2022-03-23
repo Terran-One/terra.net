@@ -27,7 +27,7 @@ public class Deserializer : IMessageDeserializer
         {");
 
         foreach (var type in typeof(Msg).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Msg))))
-            cSharpCode.AppendLine(@$"            ""{type.Name}"" => Tuple.Create((Msg)json.ToObject<{type.FullName}>(), typeof({type.FullName}), type),");
+            cSharpCode.AppendLine(@$"            ""{type.Name}"" => Tuple.Create((Msg)json.ToObject<{type.FullName}>(JsonSerializer.Create(new JsonSerializerSettings {{ContractResolver = new DefaultContractResolver {{NamingStrategy = new SnakeCaseNamingStrategy()}}}})), typeof({type.FullName}), type),");
 
         cSharpCode.AppendLine(@"
             _ => Tuple.Create((Msg)null, (Type)null, type)
