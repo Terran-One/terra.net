@@ -23,9 +23,11 @@ namespace Terra.Sdk.Lcd.Models.Signing
         {
             var publicKey = GetPublicKey(privateKey); //new ECPublicKey(ECCurve.Secp256k1.CreatePoint(new BigInteger(privateKey), true), ECCurve.Secp256k1);
             Console.WriteLine($"pubKey: {string.Join(" ", publicKey.Item2)}");
+            var fullPubKey = string.Join("", publicKey.Item1) + string.Join("", publicKey.Item2);
             return new SimplePublicKey
             {
-                Key = Convert.ToBase64String(publicKey.ToString().HexStringToByteArray())
+
+                Key = Convert.ToBase64String(fullPubKey.HexStringToByteArray())
             };
         }
 
