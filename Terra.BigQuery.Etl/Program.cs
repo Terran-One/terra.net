@@ -1,29 +1,26 @@
 ﻿using Terra.BigQuery.Etl;
-using Terra.BigQuery.Etl.Test;
 
-if (args.Length < 2)
+if (args.Length < 3)
 {
     Console.WriteLine("Usage:");
-    Console.WriteLine("  dotnet run create|insert DB_HOST [OFFSET]");
+    Console.WriteLine("  dotnet run create|insert DB_HOST BQ_DB [OFFSET] [LIMIT]");
     return;
 }
 
 var command = args[0];
 var host = args[1];
-var offset = args.Length >= 3 ? int.Parse(args[3]) : 0;
+var db = args[2];
+var offset = args.Length >= 4 ? int.Parse(args[3]) : (int?)null;
+var limit = args.Length >= 5 ? int.Parse(args[4]) : (int?)null;
 
 switch (command)
 {
     case "create":
-        await Etl.CreateTable();
+        await Etl.CreateTable(db);
         break;
 
     case "insert":
-        await Etl.InsertData(host, offset);
-        break;
-
-    case "profile":
-        EtlBenchmarks.Run();
+        await Etl.InsertData(host, db, offset, limit);
         break;
 
     default:

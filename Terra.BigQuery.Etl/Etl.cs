@@ -15,7 +15,7 @@ public static class Etl
 {
     private static BigQueryClient BigQueryClient { get; } = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "bq.json")));
 
-    public static async Task CreateTable()
+    public static async Task CreateTable(string db)
     {
         var schema = new TableSchema
         {
@@ -47,19 +47,23 @@ public static class Etl
                 new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
             }
         };
-        await BigQueryClient.CreateTableAsync("fcd3", "tx", schema);
+        await BigQueryClient.CreateTableAsync(db, "tx", schema);
     }
 
-    public static async Task InsertData(string host, int offset)
+    public static async Task InsertData(string host, string db, int? offset, int? limit)
     {
         await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
-        var pgCommand = new NpgsqlCommand($"SELECT hash, data FROM public.tx OFFSET {offset};", pgConnection);
+
+        var offsetClause = offset.HasValue ? $" OFFSET {offset}" : "";
+        var limitClause = limit.HasValue ? $" LIMIT {limit}" : "";
+        var pgCommand = new NpgsqlCommand($"SELECT hash, data FROM public.tx {offsetClause}{limitClause};", pgConnection);
+
         pgConnection.Open();
 
         var messageDeserializer = MessageDeserializer.Get();
         var noMessageDefined = new HashSet<string>();
 
-        var bqTable = await BigQueryClient.GetTableAsync("fcd3", "tx");
+        var bqTable = await BigQueryClient.GetTableAsync(db, "tx");
 
         var i = 1;
         var pgReader = pgCommand.ExecuteReader();
