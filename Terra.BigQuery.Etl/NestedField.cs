@@ -1,6 +1,7 @@
 using System.Text;
 using Google.Apis.Bigquery.v2.Data;
 using Google.Cloud.BigQuery.V2;
+using Terra.BigQuery.Etl.Utils;
 using Terra.BigQuery.Roslyn;
 
 namespace Terra.BigQuery.Etl;

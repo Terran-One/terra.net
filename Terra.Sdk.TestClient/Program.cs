@@ -1,13 +1,11 @@
-﻿using Terra.Sdk.Lcd.Models.Signing;
+﻿using Terra.Sdk.Lcd;
 using Terra.Sdk.TestClient;
 
-var mk = new MnemonicKey(new MnemonicKeyOptions
+var client = new LcdClient(new LcdClientConfig
 {
-    Mnemonic = "wonder caution square unveil april art add hover spend smile proud admit modify old copper throw crew happy nature luggage reopen exhibit ordinary napkin"
+    //Url = "https://bombay-lcd.terra.dev"
+    Url = "https://fcd.terra.dev"
 });
 
-// mk.Dump();
-//
-// Console.WriteLine($"PrivateKey: {Convert.ToBase64String(mk.PrivateKey)}");
-// Console.WriteLine("PublicKey:");
-// mk.PublicKey.Dump();
+var txInfo = await client.Tx.GetTxInfo("6E0C34D677D49E7D17A37D6866F9914172E6AFBE2E6E36DC181B7170F106AB20");
+txInfo.Dump();

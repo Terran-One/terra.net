@@ -1,4 +1,5 @@
 using System.Text;
+using Terra.BigQuery.Etl.Utils;
 using Terra.BigQuery.Roslyn;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 

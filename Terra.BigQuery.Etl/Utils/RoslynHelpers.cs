@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Terra.BigQuery.Roslyn;
 using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
-namespace Terra.BigQuery.Etl;
+namespace Terra.BigQuery.Etl.Utils;
 
 public static class RoslynHelpers
 {

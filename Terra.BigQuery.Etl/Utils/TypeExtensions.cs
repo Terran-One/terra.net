@@ -1,7 +1,7 @@
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace Terra.BigQuery.Etl;
+namespace Terra.BigQuery.Etl.Utils;
 
 public static class TypeExtensions
 {
