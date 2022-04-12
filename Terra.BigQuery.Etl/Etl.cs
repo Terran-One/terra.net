@@ -51,16 +51,19 @@ public static class Etl
                 }
                 catch (GoogleApiException e)
                 {
-                    Console.WriteLine($"Insert failed ({e.Message}) - retrying with smaller batches...");
-                    foreach (var row in batch)
+                    Console.WriteLine($"Batch insert failed ({e.Message}) - retrying with smaller batches...");
+
+                    var smallBatchSize = batchSize.Value / 10;
+                    for (var j = 0; j <= batchSize / smallBatchSize; j += smallBatchSize)
                     {
+                        Console.WriteLine($"Inserting mini-batch {j + 1}...");
                         try
                         {
-                            await bqTable.InsertRowAsync(row);
+                            await bqTable.InsertRowsAsync(batch.Skip(i * smallBatchSize).Take(smallBatchSize));
                         }
                         catch (GoogleApiException ee)
                         {
-                            Console.WriteLine($"Individual row insert failed ({ee.Message}) - retrying with smaller batches...");
+                            Console.WriteLine($"Mini-batch insert failed ({ee.Message}) - retrying with smaller batches...");
                         }
                     }
                 }
