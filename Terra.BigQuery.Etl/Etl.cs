@@ -45,26 +45,27 @@ public static class Etl
         {
             if (++i % batchSize == 0)
             {
-                var success = true;
-                for (var retries = 0; retries < 5; retries++)
+                try
                 {
-                    try
+                    await bqTable.InsertRowsAsync(batch);
+                }
+                catch (GoogleApiException e)
+                {
+                    Console.WriteLine($"Insert failed ({e.Message}) - retrying with smaller batches...");
+                    foreach (var row in batch)
                     {
-                        await bqTable.InsertRowsAsync(batch);
-                        break;
-                    }
-                    catch (GoogleApiException e)
-                    {
-                        Console.WriteLine($"Insert failed ({e.Message}) - retry {retries + 1} of 5...");
-                        success = false;
+                        try
+                        {
+                            await bqTable.InsertRowAsync(row);
+                        }
+                        catch (GoogleApiException ee)
+                        {
+                            Console.WriteLine($"Individual row insert failed ({ee.Message}) - retrying with smaller batches...");
+                        }
                     }
                 }
 
                 batch.Clear();
-
-                if (!success)
-                    Console.WriteLine("No more retries");
-
                 Console.WriteLine($"{DateTime.Now}: {i} rows processed");
             }
 
