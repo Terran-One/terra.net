@@ -1,5 +1,4 @@
 using System.Data;
-using System.Diagnostics;
 using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
@@ -70,8 +69,8 @@ public static class Etl
         var i = 1;
         var batch = new List<BigQueryInsertRow>();
 
-        var pgReader = Profile("Postgres", () => pgCommand.ExecuteReader());
-        while (Profile("Postgres", () => pgReader.Read()))
+        var pgReader = pgCommand.ExecuteReader();
+        while (pgReader.Read())
         {
             if (++i % batchSize == 0)
             {
@@ -80,7 +79,7 @@ public static class Etl
                 {
                     try
                     {
-                        await ProfileAsync("BigQuery", () => bqTable.InsertRowsAsync(batch));
+                        await bqTable.InsertRowsAsync(batch);
                         break;
                     }
                     catch (GoogleApiException e)
@@ -105,7 +104,7 @@ public static class Etl
                 var hash = (string) dataRecord[0];
                 json = (string) dataRecord[1];
 
-                var data = Profile("Deserialize JSON", () => JsonConvert.DeserializeAnonymousType(
+                var data = JsonConvert.DeserializeAnonymousType(
                     json,
                     new {Tx = new {Value = new {Msg = new[] {new {Type = "", Value = new JObject()}}}}},
                     new JsonSerializerSettings
@@ -114,14 +113,14 @@ public static class Etl
                         {
                             NamingStrategy = new SnakeCaseNamingStrategy()
                         }
-                    }));
+                    });
 
                 var messages = data.Tx.Value.Msg
                     .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
                     .Select(t =>
                     {
-                        var nestedField = Profile("Row builder codegen", () => NestedField.Create(t.Item2));
-                        var insertRow = Profile("Row builder execution", () => nestedField?.BuildInsertRow(t.Item1));
+                        var nestedField = NestedField.Create(t.Item2);
+                        var insertRow = nestedField?.BuildInsertRow(t.Item1);
                         if (insertRow != null)
                             return new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
 
@@ -155,51 +154,51 @@ public static class Etl
         await pgCommand.DisposeAsync();
         await pgConnection.DisposeAsync();
 
-        Console.WriteLine();
-        Console.WriteLine("| Step                    | Average Duration per batch (ms) |");
-        Console.WriteLine("|-------------------------| --------------------------------|");
-        foreach (var (step, durations) in ProfileResults)
-        {
-            var durationPerIteration = Math.Round(durations.Aggregate((a, b) => a + b) / (decimal) durations.Count, 4);
-            var durationPerBatch = step == "BigQuery" ? durationPerIteration : durationPerIteration * batchSize;
-            Console.WriteLine($"| {step,-23} | {durationPerBatch, -31} |");
-        }
-        Console.WriteLine();
+        // Console.WriteLine();
+        // Console.WriteLine("| Step                    | Average Duration per batch (ms) |");
+        // Console.WriteLine("|-------------------------| --------------------------------|");
+        // foreach (var (step, durations) in ProfileResults)
+        // {
+        //     var durationPerIteration = Math.Round(durations.Aggregate((a, b) => a + b) / (decimal) durations.Count, 4);
+        //     var durationPerBatch = step == "BigQuery" ? durationPerIteration : durationPerIteration * batchSize;
+        //     Console.WriteLine($"| {step,-23} | {durationPerBatch, -31} |");
+        // }
+        // Console.WriteLine();
     }
 
-    private static readonly IDictionary<string, List<long>> ProfileResults = new Dictionary<string, List<long>>();
+    // private static readonly IDictionary<string, List<long>> ProfileResults = new Dictionary<string, List<long>>();
 
-    private static T Profile<T>(string key, Func<T> func)
-    {
-        var sw = new Stopwatch();
-        sw.Start();
-        var result = func();
-        sw.Stop();
-
-        if (!ProfileResults.TryGetValue(key, out var durations))
-        {
-            durations = new List<long>();
-            ProfileResults.Add(key, durations);
-        }
-
-        durations.Add(sw.ElapsedMilliseconds);
-        return result;
-    }
-
-    private static async Task<T> ProfileAsync<T>(string key, Func<Task<T>> func)
-    {
-        var sw = new Stopwatch();
-        sw.Start();
-        var result = await func();
-        sw.Stop();
-
-        if (!ProfileResults.TryGetValue(key, out var durations))
-        {
-            durations = new List<long>();
-            ProfileResults.Add(key, durations);
-        }
-
-        durations.Add(sw.ElapsedMilliseconds);
-        return result;
-    }
+    // private static T Profile<T>(string key, Func<T> func)
+    // {
+    //     var sw = new Stopwatch();
+    //     sw.Start();
+    //     var result = func();
+    //     sw.Stop();
+    //
+    //     if (!ProfileResults.TryGetValue(key, out var durations))
+    //     {
+    //         durations = new List<long>();
+    //         ProfileResults.Add(key, durations);
+    //     }
+    //
+    //     durations.Add(sw.ElapsedMilliseconds);
+    //     return result;
+    // }
+    //
+    // private static async Task<T> ProfileAsync<T>(string key, Func<Task<T>> func)
+    // {
+    //     var sw = new Stopwatch();
+    //     sw.Start();
+    //     var result = await func();
+    //     sw.Stop();
+    //
+    //     if (!ProfileResults.TryGetValue(key, out var durations))
+    //     {
+    //         durations = new List<long>();
+    //         ProfileResults.Add(key, durations);
+    //     }
+    //
+    //     durations.Add(sw.ElapsedMilliseconds);
+    //     return result;
+    // }
 }
