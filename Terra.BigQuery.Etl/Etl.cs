@@ -3,11 +3,7 @@ using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
 using Google.Cloud.BigQuery.V2;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using Npgsql;
-using Terra.Sdk.Lcd.Models.Entities.Tx.Msg;
 
 namespace Terra.BigQuery.Etl;
 
@@ -22,28 +18,7 @@ public static class Etl
             Fields = new List<TableFieldSchema>
             {
                 new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
-                new()
-                {
-                    Name = "Messages", Type = "RECORD", Mode = "REPEATED",
-                    Fields = new[]
-                        {
-                            new TableFieldSchema
-                            {
-                                Name = "Type",
-                                Type = "STRING",
-                                Mode = "REQUIRED"
-                            }
-                        }.Concat(typeof(Msg).Assembly.GetTypes()
-                            .Where(type => type.IsSubclassOf(typeof(Msg)))
-                            .Select(type => new TableFieldSchema
-                            {
-                                Name = type.Name,
-                                Type = "RECORD",
-                                Mode = "NULLABLE",
-                                Fields = NestedField.Create(type).Schema.Fields
-                            }))
-                        .ToList()
-                },
+                new() {Name = "Messages", Type = "JSON", Mode = "NULLABLE"},
                 new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
             }
         };
@@ -52,22 +27,18 @@ public static class Etl
 
     public static async Task InsertData(string host, string db, int? batchSize, int? offset, int? limit)
     {
-        await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
-
-        var offsetClause = offset.HasValue ? $" OFFSET {offset}" : "";
-        var limitClause = limit.HasValue ? $" LIMIT {limit}" : "";
-        var pgCommand = new NpgsqlCommand($"SELECT hash, data FROM public.tx {offsetClause}{limitClause};", pgConnection);
-
-        pgConnection.Open();
-
-        var messageDeserializer = MessageDeserializer.Get();
-        var noMessageDefined = new HashSet<string>();
-
         var bqTable = await BigQueryClient.GetTableAsync(db, "tx");
 
         batchSize ??= 1;
         var i = 1;
         var batch = new List<BigQueryInsertRow>();
+
+        await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
+        pgConnection.Open();
+
+        var offsetClause = offset.HasValue ? $" OFFSET {offset}" : "";
+        var limitClause = limit.HasValue ? $" LIMIT {limit}" : "";
+        var pgCommand = new NpgsqlCommand($"SELECT hash, data FROM public.tx {offsetClause}{limitClause};", pgConnection);
 
         var pgReader = pgCommand.ExecuteReader();
         while (pgReader.Read())
@@ -104,42 +75,10 @@ public static class Etl
                 var hash = (string) dataRecord[0];
                 json = (string) dataRecord[1];
 
-                var data = JsonConvert.DeserializeAnonymousType(
-                    json,
-                    new {Tx = new {Value = new {Msg = new[] {new {Type = "", Value = new JObject()}}}}},
-                    new JsonSerializerSettings
-                    {
-                        ContractResolver = new DefaultContractResolver
-                        {
-                            NamingStrategy = new SnakeCaseNamingStrategy()
-                        }
-                    });
-
-                var messages = data.Tx.Value.Msg
-                    .Select(m => messageDeserializer.Deserialize(m.Type.Split('/')[1], m.Value))
-                    .Select(t =>
-                    {
-                        var nestedField = NestedField.Create(t.Item2);
-                        var insertRow = nestedField?.BuildInsertRow(t.Item1);
-                        if (insertRow != null)
-                            return new BigQueryInsertRow {{"Type", t.Item3}, {t.Item3, insertRow}};
-
-                        if (!noMessageDefined.Contains(t.Item3))
-                        {
-                            Console.WriteLine($"No message class defined for {t.Item3}");
-                            Console.WriteLine($"Data: {json}");
-                            noMessageDefined.Add(t.Item3);
-                        }
-
-                        return new BigQueryInsertRow {{"Type", t.Item3}};
-
-                    })
-                    .ToList();
-
                 batch.Add(new BigQueryInsertRow
                 {
                     {"TxHash", hash},
-                    {"Messages", messages},
+                    {"Messages", json},
                     {"Timestamp", DateTime.Now.AsBigQueryDate()}
                 });
             }
