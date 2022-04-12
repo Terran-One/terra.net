@@ -18,7 +18,7 @@ public static class Etl
             Fields = new List<TableFieldSchema>
             {
                 new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
-                new() {Name = "Messages", Type = "JSON", Mode = "NULLABLE"},
+                new() {Name = "Messages", Type = "STRING", Mode = "REQUIRED"},
                 new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
             }
         };
