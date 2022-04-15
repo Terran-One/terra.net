@@ -92,11 +92,11 @@ public static class Etl
             try
             {
                 var dataRecord = (IDataRecord) pgReader;
-                var pgId = (long) dataRecord[0];
-                var chainId = (string) dataRecord[1];
-                var blockId = (string) dataRecord[2];
-                var hash = (string) dataRecord[3];
-                var messages = (string) dataRecord[4];
+                var pgId = dataRecord[0];
+                var chainId = dataRecord[1];
+                var blockId = dataRecord[2];
+                var hash = dataRecord[3];
+                var messages = dataRecord[4];
 
                 batch.Add(new BigQueryInsertRow
                 {
