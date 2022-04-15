@@ -1,4 +1,5 @@
 using System.Data;
+using System.Globalization;
 using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Bigquery.v2.Data;
@@ -17,6 +18,9 @@ public static class Etl
         {
             Fields = new List<TableFieldSchema>
             {
+                new() {Name = "PgId", Type = "INT64", Mode = "REQUIRED"},
+                new() {Name = "ChainId", Type = "STRING", Mode = "REQUIRED"},
+                new() {Name = "BlockId", Type = "INT64", Mode = "REQUIRED"},
                 new() {Name = "TxHash", Type = "STRING", Mode = "REQUIRED"},
                 new() {Name = "Messages", Type = "STRING", Mode = "REQUIRED"},
                 new() {Name = "Timestamp", Type = "DATETIME", Mode = "REQUIRED"}
@@ -25,7 +29,7 @@ public static class Etl
         await BigQueryClient.CreateTableAsync(db, "tx", schema);
     }
 
-    public static async Task InsertData(string host, string db, int? batchSize, DateTime? dateAfter)
+    public static async Task InsertData(string host, string db, int? batchSize)
     {
         var bqTable = await BigQueryClient.GetTableAsync(db, "tx");
 
@@ -36,15 +40,21 @@ public static class Etl
         await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
         pgConnection.Open();
 
+        var dtQuery = await BigQueryClient.ExecuteQueryAsync($"SELECT MAX(PgId) AS Id FROM {bqTable.Reference.ProjectId}.{bqTable.Reference.DatasetId}.{bqTable.Reference.TableId}", Array.Empty<BigQueryParameter>());
+        var dtEnumerator = dtQuery.GetRowsAsync().GetAsyncEnumerator();
+        var maxId = await dtEnumerator.MoveNextAsync()
+            ? dtEnumerator.Current["Id"] as long?
+            : null;
+
         NpgsqlCommand pgCommand;
-        if (dateAfter.HasValue)
+        if (maxId.HasValue)
         {
-            pgCommand = new NpgsqlCommand("SELECT hash, data FROM public.tx WHERE timestamp > $timestamp;", pgConnection);
-            pgCommand.Parameters.AddWithValue("timestamp", dateAfter.Value);
+            pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx WHERE id > $max_id;", pgConnection);
+            pgCommand.Parameters.AddWithValue("max_id", maxId);
         }
         else
         {
-            pgCommand = new NpgsqlCommand("SELECT hash, data FROM public.tx;", pgConnection);
+            pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx;", pgConnection);
         }
 
         var pgReader = pgCommand.ExecuteReader();
@@ -79,76 +89,33 @@ public static class Etl
                 Console.WriteLine($"{DateTime.Now}: {i} rows processed");
             }
 
-            string json = null;
             try
             {
                 var dataRecord = (IDataRecord) pgReader;
-                var hash = (string) dataRecord[0];
-                json = (string) dataRecord[1];
+                var pgId = (long) dataRecord[0];
+                var chainId = (string) dataRecord[1];
+                var blockId = (string) dataRecord[2];
+                var hash = (string) dataRecord[3];
+                var messages = (string) dataRecord[4];
 
                 batch.Add(new BigQueryInsertRow
                 {
+                    {"PgId", pgId},
+                    {"ChainId", chainId},
+                    {"BlockId", blockId},
                     {"TxHash", hash},
-                    {"Messages", json},
-                    {"Timestamp", DateTime.Now.AsBigQueryDate()}
+                    {"Messages", messages},
+                    {"Timestamp", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture)}
                 });
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                Console.WriteLine($"Data: {json}");
             }
         }
 
         await pgReader.DisposeAsync();
         await pgCommand.DisposeAsync();
         await pgConnection.DisposeAsync();
-
-        // Console.WriteLine();
-        // Console.WriteLine("| Step                    | Average Duration per batch (ms) |");
-        // Console.WriteLine("|-------------------------| --------------------------------|");
-        // foreach (var (step, durations) in ProfileResults)
-        // {
-        //     var durationPerIteration = Math.Round(durations.Aggregate((a, b) => a + b) / (decimal) durations.Count, 4);
-        //     var durationPerBatch = step == "BigQuery" ? durationPerIteration : durationPerIteration * batchSize;
-        //     Console.WriteLine($"| {step,-23} | {durationPerBatch, -31} |");
-        // }
-        // Console.WriteLine();
     }
-
-    // private static readonly IDictionary<string, List<long>> ProfileResults = new Dictionary<string, List<long>>();
-
-    // private static T Profile<T>(string key, Func<T> func)
-    // {
-    //     var sw = new Stopwatch();
-    //     sw.Start();
-    //     var result = func();
-    //     sw.Stop();
-    //
-    //     if (!ProfileResults.TryGetValue(key, out var durations))
-    //     {
-    //         durations = new List<long>();
-    //         ProfileResults.Add(key, durations);
-    //     }
-    //
-    //     durations.Add(sw.ElapsedMilliseconds);
-    //     return result;
-    // }
-    //
-    // private static async Task<T> ProfileAsync<T>(string key, Func<Task<T>> func)
-    // {
-    //     var sw = new Stopwatch();
-    //     sw.Start();
-    //     var result = await func();
-    //     sw.Stop();
-    //
-    //     if (!ProfileResults.TryGetValue(key, out var durations))
-    //     {
-    //         durations = new List<long>();
-    //         ProfileResults.Add(key, durations);
-    //     }
-    //
-    //     durations.Add(sw.ElapsedMilliseconds);
-    //     return result;
-    // }
 }

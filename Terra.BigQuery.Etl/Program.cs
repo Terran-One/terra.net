@@ -15,7 +15,7 @@ switch (appArgs.Command)
         break;
 
     case "insert":
-        await Etl.InsertData(appArgs.Host, appArgs.Db, appArgs.BatchSize, appArgs.DateAfter);
+        await Etl.InsertData(appArgs.Host, appArgs.Db, appArgs.BatchSize);
         break;
 
     default:

@@ -10,18 +10,16 @@ public readonly struct AppArgs
         Host = default;
         Db = default;
         BatchSize = default;
-        DateAfter = default;
 
         _error = new Lazy<StringBuilder>();
     }
 
-    private AppArgs(string command, string host, string db, int? batchSize, DateTime? dateAfter)
+    private AppArgs(string command, string host, string db, int? batchSize)
     {
         Command = command;
         Host = host;
         Db = db;
         BatchSize = batchSize;
-        DateAfter = dateAfter;
 
         _error = new Lazy<StringBuilder>();
     }
@@ -30,7 +28,6 @@ public readonly struct AppArgs
     public string Host { get; }
     public string Db { get; }
     public int? BatchSize { get; }
-    public DateTime? DateAfter { get; }
 
     public string Error => _error.Value.Length == 0 ? null : _error.Value.ToString().TrimEnd(Environment.NewLine.ToCharArray());
     private readonly Lazy<StringBuilder> _error;
@@ -50,7 +47,6 @@ public readonly struct AppArgs
         var options = args.Skip(3).ToArray();
 
         int? batchSize = null;
-        DateTime? dateAfter = null;
         for (var i = 0; i <= options.Length - 1; i += 2)
         {
             switch (options[i])
@@ -75,26 +71,6 @@ public readonly struct AppArgs
 
                     batchSize = b;
                     break;
-                case "-d":
-                case "--date-after":
-                    if (i == options.Length - 1)
-                    {
-                        var appArgs = new AppArgs();
-                        appArgs.Usage();
-                        appArgs.ArgRequired(options[i]);
-                        return appArgs;
-                    }
-
-                    if (!DateTime.TryParse(options[i + 1], out var d))
-                    {
-                        var appArgs = new AppArgs();
-                        appArgs.Usage();
-                        appArgs.InvalidArg(options[i],options[i + 1]);
-                        return appArgs;
-                    }
-
-                    dateAfter = d;
-                    break;
                 default:
                     {
                         var appArgs = new AppArgs();
@@ -105,7 +81,7 @@ public readonly struct AppArgs
             }
         }
 
-        return new AppArgs(command, host, db, batchSize, dateAfter);
+        return new AppArgs(command, host, db, batchSize);
     }
 
     private void Usage()
