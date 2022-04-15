@@ -25,7 +25,7 @@ public static class Etl
         await BigQueryClient.CreateTableAsync(db, "tx", schema);
     }
 
-    public static async Task InsertData(string host, string db, int? batchSize, int? offset, int? limit)
+    public static async Task InsertData(string host, string db, int? batchSize, DateTime? dateAfter)
     {
         var bqTable = await BigQueryClient.GetTableAsync(db, "tx");
 
@@ -36,9 +36,16 @@ public static class Etl
         await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
         pgConnection.Open();
 
-        var offsetClause = offset.HasValue ? $" OFFSET {offset}" : "";
-        var limitClause = limit.HasValue ? $" LIMIT {limit}" : "";
-        var pgCommand = new NpgsqlCommand($"SELECT hash, data FROM public.tx {offsetClause}{limitClause};", pgConnection);
+        NpgsqlCommand pgCommand;
+        if (dateAfter.HasValue)
+        {
+            pgCommand = new NpgsqlCommand("SELECT hash, data FROM public.tx WHERE timestamp > $timestamp;", pgConnection);
+            pgCommand.Parameters.AddWithValue("timestamp", dateAfter.Value);
+        }
+        else
+        {
+            pgCommand = new NpgsqlCommand("SELECT hash, data FROM public.tx;", pgConnection);
+        }
 
         var pgReader = pgCommand.ExecuteReader();
         while (pgReader.Read())
