@@ -49,8 +49,8 @@ public static class Etl
         NpgsqlCommand pgCommand;
         if (maxId.HasValue)
         {
-            pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx WHERE id > $max_id;", pgConnection);
-            pgCommand.Parameters.AddWithValue("max_id", maxId);
+            pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx WHERE id > (:MAX_ID);", pgConnection);
+            pgCommand.Parameters.AddWithValue("MAX_ID", maxId);
         }
         else
         {
