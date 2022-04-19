@@ -54,7 +54,7 @@ public static class Etl
 
         if (minId.HasValue)
         {
-            clauses.Add("id >= (:MIN_ID)");
+            clauses.Add("id > (:MIN_ID)");
             pgCommand.Parameters.AddWithValue("MIN_ID", minId);
         }
 
