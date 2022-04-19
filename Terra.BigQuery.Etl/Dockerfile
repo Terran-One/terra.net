@@ -5,7 +5,7 @@ ENV DEB_HOST=localhost
 ENV BQ_DB=fcd3
 ENV BATCH_SIZE=500
 
-USER 1001
+#USER 1001 # Kaniko does not like this
 
 WORKDIR /app
 COPY *.csproj ./
