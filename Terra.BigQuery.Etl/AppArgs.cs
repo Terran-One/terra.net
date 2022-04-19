@@ -10,16 +10,20 @@ public readonly struct AppArgs
         Host = default;
         Db = default;
         BatchSize = default;
+        MinId = default;
+        MaxId = default;
 
         _error = new Lazy<StringBuilder>();
     }
 
-    private AppArgs(string command, string host, string db, int? batchSize)
+    private AppArgs(string command, string host, string db, int? batchSize, long? minId, long? maxId)
     {
         Command = command;
         Host = host;
         Db = db;
         BatchSize = batchSize;
+        MinId = minId;
+        MaxId = maxId;
 
         _error = new Lazy<StringBuilder>();
     }
@@ -28,6 +32,8 @@ public readonly struct AppArgs
     public string Host { get; }
     public string Db { get; }
     public int? BatchSize { get; }
+    public long? MinId { get; }
+    public long? MaxId { get; }
 
     public string Error => _error.Value.Length == 0 ? null : _error.Value.ToString().TrimEnd(Environment.NewLine.ToCharArray());
     private readonly Lazy<StringBuilder> _error;
@@ -47,11 +53,11 @@ public readonly struct AppArgs
         var options = args.Skip(3).ToArray();
 
         int? batchSize = null;
+        long? minId = null, maxId = null;
         for (var i = 0; i <= options.Length - 1; i += 2)
         {
             switch (options[i])
             {
-                case "-b":
                 case "--batch-size":
                     if (i == options.Length - 1)
                     {
@@ -71,6 +77,44 @@ public readonly struct AppArgs
 
                     batchSize = b;
                     break;
+                case "--min-id":
+                    if (i == options.Length - 1)
+                    {
+                        var appArgs = new AppArgs();
+                        appArgs.Usage();
+                        appArgs.ArgRequired(options[i]);
+                        return appArgs;
+                    }
+
+                    if (!int.TryParse(options[i + 1], out var min))
+                    {
+                        var appArgs = new AppArgs();
+                        appArgs.Usage();
+                        appArgs.InvalidArg(options[i],options[i + 1]);
+                        return appArgs;
+                    }
+
+                    minId = min;
+                    break;
+                case "--max-id":
+                    if (i == options.Length - 1)
+                    {
+                        var appArgs = new AppArgs();
+                        appArgs.Usage();
+                        appArgs.ArgRequired(options[i]);
+                        return appArgs;
+                    }
+
+                    if (!int.TryParse(options[i + 1], out var max))
+                    {
+                        var appArgs = new AppArgs();
+                        appArgs.Usage();
+                        appArgs.InvalidArg(options[i],options[i + 1]);
+                        return appArgs;
+                    }
+
+                    maxId = max;
+                    break;
                 default:
                     {
                         var appArgs = new AppArgs();
@@ -81,7 +125,7 @@ public readonly struct AppArgs
             }
         }
 
-        return new AppArgs(command, host, db, batchSize);
+        return new AppArgs(command, host, db, batchSize, minId, maxId);
     }
 
     private void Usage()

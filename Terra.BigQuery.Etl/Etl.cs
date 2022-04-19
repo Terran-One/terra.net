@@ -29,7 +29,7 @@ public static class Etl
         await BigQueryClient.CreateTableAsync(db, "tx", schema);
     }
 
-    public static async Task InsertData(string host, string db, int? batchSize)
+    public static async Task InsertData(string host, string db, int? batchSize, long? minId, long? maxId)
     {
         var bqTable = await BigQueryClient.GetTableAsync(db, "tx");
 
@@ -40,22 +40,34 @@ public static class Etl
         await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
         pgConnection.Open();
 
-        var dtQuery = await BigQueryClient.ExecuteQueryAsync($"SELECT MAX(PgId) AS Id FROM {bqTable.Reference.ProjectId}.{bqTable.Reference.DatasetId}.{bqTable.Reference.TableId}", Array.Empty<BigQueryParameter>());
-        var dtEnumerator = dtQuery.GetRowsAsync().GetAsyncEnumerator();
-        var maxId = await dtEnumerator.MoveNextAsync()
-            ? dtEnumerator.Current["Id"] as long?
-            : null;
+        if (!minId.HasValue)
+        {
+            var dtQuery = await BigQueryClient.ExecuteQueryAsync($"SELECT MAX(PgId) AS Id FROM {bqTable.Reference.ProjectId}.{bqTable.Reference.DatasetId}.{bqTable.Reference.TableId}", Array.Empty<BigQueryParameter>());
+            var dtEnumerator = dtQuery.GetRowsAsync().GetAsyncEnumerator();
+            minId = await dtEnumerator.MoveNextAsync()
+                ? dtEnumerator.Current["Id"] as long?
+                : null;
+        }
 
-        NpgsqlCommand pgCommand;
+        var pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx", pgConnection);
+        var clauses = new List<string>();
+
+        if (minId.HasValue)
+        {
+            clauses.Add("id >= (:MIN_ID)");
+            pgCommand.Parameters.AddWithValue("MIN_ID", minId);
+        }
+
         if (maxId.HasValue)
         {
-            pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx WHERE id > (:MAX_ID);", pgConnection);
+            clauses.Add("id < (:MAX_ID)");
             pgCommand.Parameters.AddWithValue("MAX_ID", maxId);
         }
+
+        if (clauses.Any())
+            pgCommand.CommandText += $" WHERE {string.Join(" AND ", clauses)};";
         else
-        {
-            pgCommand = new NpgsqlCommand("SELECT id, chain_id, block_id, hash, data FROM public.tx;", pgConnection);
-        }
+            pgCommand.CommandText += ";";
 
         var pgReader = pgCommand.ExecuteReader();
         while (pgReader.Read())
