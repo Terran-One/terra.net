@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    a8r.io/description: "BigQuery ETL"
+    a8r.io/owner: Luke Wilson
+    a8r.io/chat: dev
+    #a8r.io/bugs: Link to external bug tracker.
+    #a8r.io/logs: Link to external log viewer.
+    a8r.io/documentation: https://www.notion.so/terran-one/
+    a8r.io/repository: https://github.com/Terran-One/terra.net/tree/main/Terra.BigQuery.Etl
+    #a8r.io/support: Link to external support center.
+    #a8r.io/runbook: Link to external project runbook.
+    #a8r.io/incidents: Link to external incident dashboard.
+    #a8r.io/uptime: Link to external uptime dashboard.
+    #a8r.io/performance: Link to external performance dashboard.
+    #a8r.io/dependencies: Unstructured text description of the service dependencies for humans.
+  labels:
+    app: bigquery-etl
+  name: bigquery-etl
+  namespace: default
+spec:
+  schedule: "@daily"
+  concurrencyPolicy: Forbid
+  suspend: true # Until backfill is ready
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: bigquery-etl
+              image: 878119842990.dkr.ecr.us-east-1.amazonaws.com/bigquery-etl
+              imagePullPolicy: IfNotPresent
+              env:
+              volumeMounts:
+                - mountPath: /app/bq.json
+                  name: etl-gcp-sa-key
+                  subPath: bq.json
+                  readOnly: true
+              securityContext:
+                seccompProfile:
+                  type: Unconfined
+          volumes:
+          - name: etl-gcp-sa-key
+            secret: 
+              secretName: etl-gcp-sa-key
+              optional: false
