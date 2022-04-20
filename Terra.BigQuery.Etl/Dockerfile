@@ -4,6 +4,7 @@ ENV DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
 ENV DEB_HOST=localhost
 ENV BQ_DB=fcd3
 ENV BATCH_SIZE=500
+ENV BQ_KEY_PATH=/home/.auth/bq.json
 
 #USER 1001 # Kaniko does not like this
 
