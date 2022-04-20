@@ -10,7 +10,8 @@ namespace Terra.BigQuery.Etl;
 
 public static class Etl
 {
-    private static BigQueryClient BigQueryClient { get; } = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "bq.json")));
+    private static readonly string BqKeyDirectory = Environment.GetEnvironmentVariable("BQ_KEY_DIR") ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private static BigQueryClient BigQueryClient { get; } = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(Path.Combine(BqKeyDirectory, "bq.json")));
 
     public static async Task CreateTable(string db)
     {
