@@ -10,6 +10,9 @@ namespace Terra.BigQuery.Etl;
 
 public static class Etl
 {
+    private static readonly string PgDb = Environment.GetEnvironmentVariable("PG_DB") ?? "fcd";
+    private static readonly string PgUser = Environment.GetEnvironmentVariable("PG_USER") ?? "fcd";
+    private static readonly string PgPwd = Environment.GetEnvironmentVariable("PG_PWD");
     private static readonly string BqKeyPath = Environment.GetEnvironmentVariable("BQ_KEY_PATH") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "bq.json");
     private static BigQueryClient BigQueryClient { get; } = BigQueryClient.Create("minerva-341810", GoogleCredential.FromFile(BqKeyPath));
 
@@ -38,7 +41,7 @@ public static class Etl
         var i = 1;
         var batch = new List<BigQueryInsertRow>();
 
-        await using var pgConnection = new NpgsqlConnection($"host={host};database=fcd;user id=fcd;password=terran.one;");
+        await using var pgConnection = new NpgsqlConnection($"host={host};database={PgDb};user id={PgUser};password={PgPwd};");
         pgConnection.Open();
 
         if (!minId.HasValue)
