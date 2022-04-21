@@ -130,6 +130,19 @@ public static class Etl
             }
         }
 
+        if (batch.Any())
+        {
+            try
+            {
+                Console.WriteLine($"Inserting remaining {batch.Count} rows...");
+                await bqTable.InsertRowsAsync(batch);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Batch insert failed ({e.Message})");
+            }
+        }
+
         await pgReader.DisposeAsync();
         await pgCommand.DisposeAsync();
         await pgConnection.DisposeAsync();
