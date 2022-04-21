@@ -18,11 +18,10 @@ metadata:
   labels:
     app: bigquery-etl
   name: bigquery-etl
-  namespace: default
+  namespace: etl
 spec:
   schedule: "@daily"
   concurrencyPolicy: Forbid
-  suspend: true # Until backfill is ready
   jobTemplate:
     spec:
       template:
@@ -30,17 +29,31 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: bigquery-etl
-              image: 878119842990.dkr.ecr.us-east-1.amazonaws.com/bigquery-etl
+              image: 878119842990.dkr.ecr.us-east-1.amazonaws.com/bigquery-etl:eb8cbc1ef742c6d5f2a954ede9b5b96ac907677f
               imagePullPolicy: IfNotPresent
               env:
+                - name: DEB_HOST
+                  value: ec2-52-3-221-55.compute-1.amazonaws.com
+                - name: PG_DB
+                  valueFrom:
+                    secretKeyRef:
+                      name: etl-db-config
+                      key: database
+                - name: PG_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: etl-db-config
+                      key: username
+                - name: PG_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: etl-db-config
+                      key: password
               volumeMounts:
-                - mountPath: /app/bq.json
+                - mountPath: /home/.auth/bq.json
                   name: etl-gcp-sa-key
                   subPath: bq.json
                   readOnly: true
-              securityContext:
-                seccompProfile:
-                  type: Unconfined
           volumes:
           - name: etl-gcp-sa-key
             secret: 
