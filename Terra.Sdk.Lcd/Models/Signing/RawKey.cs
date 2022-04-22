@@ -4,6 +4,7 @@ using Nethereum.Signer;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Math;
+using Org.BouncyCastle.Utilities.Encoders;
 using Terra.Sdk.Lcd.Extensions;
 using Terra.Sdk.Lcd.Models.Entities.PubKey;
 
@@ -22,10 +23,10 @@ namespace Terra.Sdk.Lcd.Models.Signing
         private static SimplePublicKey CreatePublicKey(byte[] privateKey)
         {
             var publicKey = GetPublicKey(privateKey); //new ECPublicKey(ECCurve.Secp256k1.CreatePoint(new BigInteger(privateKey), true), ECCurve.Secp256k1);
-            Console.WriteLine($"pubKey: {string.Join(" ", publicKey.Item2)}");
+            Console.WriteLine($"pubKey: {string.Join(" ", publicKey)}");
             return new SimplePublicKey
             {
-                Key = Convert.ToBase64String(publicKey.ToString().HexStringToByteArray())
+                Key = Convert.ToBase64String(publicKey.HexStringToByteArray())
             };
         }
 
@@ -41,17 +42,16 @@ namespace Terra.Sdk.Lcd.Models.Signing
             return Task.FromResult(EcdsaSign(payload).Item1);
         }
 
-        private static Tuple<byte[], byte[]> GetPublicKey(byte[] privateKey)
+        private static string GetPublicKey(byte[] privateKey)
         {
             var privKeyInt = new BigInteger(+1, privateKey);
 
             var parameters = SecNamedCurves.GetByName("secp256k1");
             var qa = parameters.G.Multiply(privKeyInt).Normalize();
 
-            byte[] pubKeyX = qa.XCoord.ToBigInteger().ToByteArrayUnsigned();
-            byte[] pubKeyY = qa.YCoord.ToBigInteger().ToByteArrayUnsigned();
-
-            return Tuple.Create(pubKeyX, pubKeyY);
+            var bytes = qa.GetEncoded();
+            var str = Hex.ToHexString(bytes);
+            return str;
         }
     }
 }
